@@ -3,10 +3,6 @@ layout: post
 status: publish
 published: true
 title: Problems assigning a work item to a Group
-author:
-  display_name: Dave Shaw
-  email: dave@taeguk.co.uk
-  url: http://taeguk.co.uk
 date: '2013-01-08 20:25:00 +0000'
 date_gmt: '2013-01-08 20:25:00 +0000'
 categories:

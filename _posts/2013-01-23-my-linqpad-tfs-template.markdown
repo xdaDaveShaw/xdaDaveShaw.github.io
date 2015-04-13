@@ -3,10 +3,6 @@ layout: post
 status: publish
 published: true
 title: My Linqpad TFS Template
-author:
-  display_name: Dave Shaw
-  email: dave@taeguk.co.uk
-  url: http://taeguk.co.uk
 date: '2013-01-23 21:49:00 +0000'
 date_gmt: '2013-01-23 21:49:00 +0000'
 categories:
@@ -21,13 +17,11 @@ To make my life easier and to enable me to spin up these queries as quick as pos
 
 The important code is as follows and the "linq" file has all the references and namespaces I could ever need:
 {% highlight c# %}
-{<br />
-    const String CollectionAddress = "http://tfsserver:8080/tfs/MyCollection";
-    using (var tfs = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(new Uri(CollectionAddress)))
-    {
-        tfs.EnsureAuthenticated();
-        var server = tfs.GetService<>();
-    }
+const String CollectionAddress = "http://tfsserver:8080/tfs/MyCollection";
+using (var tfs = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(new Uri(CollectionAddress)))
+{
+	tfs.EnsureAuthenticated();
+	var server = tfs.GetService<>();
 }
 {% endhighlight %}
 
@@ -39,11 +33,13 @@ Once I have the cloned copy I insert the name of the service I plan to call into
  - `IBuildServer` for Builds
  - `VersionControlServer` for Source Control
  - `WorkItemStore` for Work Items
-<p>In the downloaded file there are also some `XNamespace` declarations at the top, which are used when I have to update `IBuildDetail.BuildDefinition.ProcessParameters` using Linq to Xml. These are the common three I found myself having to declare each time, so I just made them part of the template.
+
+In the downloaded file there are also some `XNamespace` declarations at the top, which are used when I have to update `IBuildDetail.BuildDefinition.ProcessParameters` using Linq to Xml. These are the common three I found myself having to declare each time, so I just made them part of the template.
 
 ### Download
 
 You can download the "linq" file for Linqpad from my OneDrive:
+
  - TFS2010: [Download](http://sdrv.ms/14azPrs)
  - TFS2012: [Download](http://sdrv.ms/ZvvXgZ)
  - TFS2013: [Download](http://sdrv.ms/149bA0S)
