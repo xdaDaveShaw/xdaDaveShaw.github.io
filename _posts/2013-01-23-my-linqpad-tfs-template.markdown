@@ -20,7 +20,7 @@ I regularly find myself wanting to get information out of our TFS Collection via
 To make my life easier and to enable me to spin up these queries as quick as possible I came up with a "Template" Linqpad script that I can always use as a baseline.
 
 The important code is as follows and the "linq" file has all the references and namespaces I could ever need:
-{% highlight cshparp %}
+{% highlight c# %}
 {<br />
     const String CollectionAddress = "http://tfsserver:8080/tfs/MyCollection";
     using (var tfs = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(new Uri(CollectionAddress)))
