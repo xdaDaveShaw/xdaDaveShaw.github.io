@@ -9,8 +9,9 @@ categories:
 - Linqpad
 - Geocaching
 ---
-This post covers a combination of two the things I love, [Linqpad](http://linqpad.net) and [Geocaching](www.geocaching.com)
-<p>If you're not familiar with Geocaching, but have any love for the outdoors, then I heartily recommend you try it. It's pretty much treasure hunting for grown-ups and using grown-up toys. It's also great for the family, I never go without my son.
+This post covers a combination of two the things I love, [Linqpad](http://linqpad.net) and [Geocaching](www.geocaching.com). 
+
+If you're not familiar with Geocaching, but have any love for the outdoors, then I heartily recommend you try it. It's pretty much treasure hunting for grown-ups and using grown-up toys. It's also great for the family, I never go without my son.
 
 If you're not familiar with Linqpad, go get acquainted, I use it for so many different roles, in this case, scripting C#.
 
