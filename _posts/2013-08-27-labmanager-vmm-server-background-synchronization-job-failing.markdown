@@ -16,7 +16,7 @@ I upgraded our TFS 2010 instance to TFS 2012 four month ago and, slowly, I have 
 
 The problem we were seeing was that the Job Monitoring graph was reporting about 50% of all jobs as failures. And nearly all the failures were for one job type, the "LabManager VMM Server Background Synchronization" job. This runs every few minutes and tries to keep the LabManager server up to date. The problem is that we setup LabManager on our TFS 2010 instance, and then tore down the VMM Lab Management Server without allowing TFS to de-register it. The TFS Administrator console did not offer any options to remove the server.
 
-I posted on the MSDN Forums but sadly, the [suggestions]http://social.msdn.microsoft.com/Forums/vstudio/en-US/f32faf76-c9ca-4ec0-a1f2-2cb09c965ced/labmanager-vmm-server-background-synchronization-job-failing) from Microsoft didn't help.
+I posted on the MSDN Forums but sadly, the [suggestions](http://social.msdn.microsoft.com/Forums/vstudio/en-US/f32faf76-c9ca-4ec0-a1f2-2cb09c965ced/labmanager-vmm-server-background-synchronization-job-failing) from Microsoft didn't help.
 
 In the end I turned to ILSpy and started disassembling the TFS Server Side Assemblies and found references to a "Registry" that contained the settings for Lab Management. This Registry turned out to be stored in the TFS database.
 
