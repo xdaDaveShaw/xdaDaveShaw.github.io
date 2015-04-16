@@ -20,8 +20,8 @@ The important code is as follows and the "linq" file has all the references and 
 const String CollectionAddress = "http://tfsserver:8080/tfs/MyCollection";
 using (var tfs = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(new Uri(CollectionAddress)))
 {
-	tfs.EnsureAuthenticated();
-	var server = tfs.GetService<>();
+  tfs.EnsureAuthenticated();
+  var server = tfs.GetService<>();
 }
 {% endhighlight %}
 
