@@ -24,17 +24,17 @@ Here's a loc file for just one Cache (from today's outing):
 {% highlight xml %}
 <?xml version="1.0" encoding="UTF-8"?>
 <loc version="1.0" src="Groundspeak">
-    <waypoint>
-        <name id="GC37092">
-            <![CDATA[A Longer Dog Walk #1 by The Briar Rose]]>
-        </name>
-        <coord lat="53.602717" lon="-1.79085"/>
-        <type>Geocache</type>
-        <link text="Cache Details">http://www.geocaching.com/seek/cache_details.aspx?wp=GC37092</link>
-        <difficulty>1.5</difficulty>
-        <terrain>1</terrain>
-        <container>2</container>
-    </waypoint>
+  <waypoint>
+    <name id="GC37092">
+      <![CDATA[A Longer Dog Walk #1 by The Briar Rose]]>
+    </name>
+    <coord lat="53.602717" lon="-1.79085"/>
+    <type>Geocache</type>
+    <link text="Cache Details">http://www.geocaching.com/seek/cache_details.aspx?wp=GC37092</link>
+    <difficulty>1.5</difficulty>
+    <terrain>1</terrain>
+    <container>2</container>
+  </waypoint>
 </loc>
 {% endhighlight %}
 
@@ -50,7 +50,7 @@ var locationElements =
   Directory
   .EnumerateFiles(folderPath, "*.loc")
   .SelectMany(path => new LocFile(path).GetElements());
- {% endhighlight %} 
+{% endhighlight %} 
  
 There's a bit going on here. We start by grabbing any file with the "loc" extension in the folder stored in the `folderPath` variable &ndash; `Downloads\GC` in my case &ndash; Creating a new instance of the `LocFile` class calling `GetElements()` and combining all the results together. I'm using `SelectMany` instead of `Select` because I am assuming there could be more than one "waypoint" element in a loc file. What we are left with is an `IEnumerable<XElement>` containing all the "waypoint" elements from all the files.
 
@@ -58,10 +58,10 @@ There's a bit going on here. We start by grabbing any file with the "loc" extens
 {% highlight c# %}
 var combinedLocFiles =
   new XDocument(
-    new XElement("loc",
-        new XAttribute("version", "1.0"),
-        new XAttribute("src", "Groundspeak"),
-        locationElements))
+  new XElement("loc",
+    new XAttribute("version", "1.0"),
+    new XAttribute("src", "Groundspeak"),
+    locationElements))
   .Dump();
 {% endhighlight %} 
   
@@ -71,22 +71,22 @@ Here we are creating a new `XDocument` with a root element of "loc" with the att
 {% highlight c# %}
 class LocFile
 {
-    readonly String _filePath;
-    public LocFile(String filePath)
-    {
-        _filePath = filePath;
-    }
+  readonly String _filePath;
+  public LocFile(String filePath)
+  {
+    _filePath = filePath;
+  }
 
-    public ReadOnlyCollection<XElement> GetElements()
-    {
-        return
-            XDocument
-            .Load(_filePath)
-            .Root
-            .Elements()
-            .ToList()
-            .AsReadOnly();
-    }
+  public ReadOnlyCollection<XElement> GetElements()
+  {
+    return
+      XDocument
+      .Load(_filePath)
+      .Root
+      .Elements()
+      .ToList()
+      .AsReadOnly();
+  }
 }
 {% endhighlight %} 
 
