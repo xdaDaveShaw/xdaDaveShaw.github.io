@@ -8,6 +8,7 @@ date_gmt: '2013-08-29 23:40:54 +0100'
 categories:
 - TFS
 - Windows Azure
+---
 
 In today's post I'm going to go through the process for setting up the TFS Hands on Labs (HOLs) in Windows Azure.
 
