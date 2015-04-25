@@ -9,3 +9,4 @@ github_username:  xdaDaveShaw
 
 # Build settings
 markdown: kramdown
+contenturl: "/content/"
