@@ -6,6 +6,7 @@ baseurl: ""
 url: http://xdaDaveShaw.github.io
 twitter_username: xdaDaveShaw
 github_username:  xdaDaveShaw
+stackoverflow_link: users/383710/daveshaw
 
 # Build settings
 markdown: kramdown
