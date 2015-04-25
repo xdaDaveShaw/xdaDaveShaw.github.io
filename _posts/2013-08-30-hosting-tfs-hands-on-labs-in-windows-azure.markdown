@@ -34,8 +34,7 @@ Prerequisites
 
 To follow this guide you will need a Windows Azure account and a basic understanding of Consoles (Command Prompt / PowerShell) and know a little bit about setting up Windows Servers.
 
-1. Creating a "Downloader" VM
------------------------------
+# 1. Creating a "Downloader" VM
 
 The first thing you need to do is create a "Downloader" Virtual Machine on Windows Azure to perform the download, unpack and re-upload process. Once you have completed this process and you have your Labs up and running you can delete this "Downloader" VM to save your money.
 
@@ -53,8 +52,7 @@ The first thing you need to do is create a "Downloader" Virtual Machine on Windo
  - When the status turns to "Running", select it from your VM list and click the ">< Connect" button at the bottom of the screen.
  - This will download a remote desktop profile for your VM and you can login using the username and password you supplied.
   
-2. Downloading, unpacking and re-uploading the VHD
---------------------------------------------------
+# 2. Downloading, unpacking and re-uploading the VHD
 
 These next steps will be performed on the new VM over remote desktop.
 
@@ -65,8 +63,7 @@ These next steps will be performed on the new VM over remote desktop.
  - Once the download is completed. Run the "VisualStudio2013.Preview.part01.exe" file on the server and click through the options to start the extraction. I did this on a Small VM and it took even longer than the download (that's why I am suggesting a Medium VM).
  - Whilst it is unpacking now is a good time to get the "Downloader" VM and Windows Azure setup ready to upload the VHD.
 
-2.1 Preparing to Upload a VHD to Azure.
----------------------------------------
+# 2.1 Preparing to Upload a VHD to Azure.
 
  - First, grab a copy of [Web Platform Installer](http://www.microsoft.com/web/downloads/platform.aspx) and install it on the Server. Again, you may want to download it locally and copy it up to bypass Internet Explorer.
  - Open Web Platform Installer and install "Windows Azure PowerShell" along with any dependencies.
@@ -98,8 +95,7 @@ Set-AzureSubscription 'SubscriptionName'
 Get-AzureSubscription
 {% endhighlight %}
 
-2.2 Creating your Storage
--------------------------
+# 2.2 Creating your Storage
 
 Now that you have PowerShell ready, you need somewhere to upload the VHD to on Azure.
 
@@ -117,8 +113,7 @@ Now that you have PowerShell ready, you need somewhere to upload the VHD to on A
  - Give the Container a name and leave the access as "Private".
  - You now should have everything setup to upload the VHD
 
-2.3 Uploading the VHD
----------------------
+# 2.3 Uploading the VHD
 
  - Back on the Downloader VM, wait for the installer to complete, this may take some time.
  - Now that the installation is complete you can start the upload process.
@@ -137,8 +132,7 @@ Add-AzureVhd
  - This upload will take a few hours, so keep and eye on the progress &ndash; I left mine overnight.
  - When this is complete, you can create your Hands on Lab VM.
 
-3. Creating the Disk and Hands on Lab VM
-----------------------------------------
+# 3. Creating the Disk and Hands on Lab VM
 
 Now you should have everything you need to create your Hands on Lab VM.
 
