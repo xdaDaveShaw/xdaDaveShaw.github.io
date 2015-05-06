@@ -86,7 +86,7 @@ Setting up Visual Studio based on [this blog post](http://en.code-bude.net/2013/
 
 This was the same set of changes needed for Visual Studio, except with the `WebPlatformInstaller.exe.config` file, which I again obtained from the shortcut properties using "Open File Location".
 
- # Thanks
+# Thanks
  
 Big thanks to [Eric Cain](https://twitter.com/arcain) and [Raffael Herrmann](https://twitter.com/pinguinmann) for enabling me to connect to the internet again :).
 
