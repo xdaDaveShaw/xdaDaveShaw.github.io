@@ -25,4 +25,4 @@ The entire website was setup in my VS Online account and linked to my Azure site
 
 The site works by making a quick AJAX HTTP GET when you click the Convert button to a ASP.NET MVC site to use the [`URI`](http://msdn.microsoft.com/en-us/library/system.uri(v=vs.110).aspx) class in .NET. That's about it.
     
-Here's the link to anyone who want's to use it: http://pathconverter.azurewebsites.net/
+Here's the link to anyone who want's to use it: [http://pathconverter.azurewebsites.net/](http://pathconverter.azurewebsites.net/)
