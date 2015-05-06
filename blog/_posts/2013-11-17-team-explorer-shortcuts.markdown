@@ -32,9 +32,9 @@ From Work Items you can get to "New Query"
 # My Work
 From My Work you can get to Request Review
 
-![Storage]({{ site.contenturl }}TE-MyWork.png)
+![My Work]({{ site.contenturl }}TE-MyWork.png)
 
 # Team Members
 If you have the TFS 2013 Power Tools installed, then even the Team Members gets the right-click treatment with access to "Team Utilities"
 
-![Storage]({{ site.contenturl }}TE-TeamUtils.png)
+![Team Utils]({{ site.contenturl }}TE-TeamUtils.png)
