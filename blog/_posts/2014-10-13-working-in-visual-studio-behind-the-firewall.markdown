@@ -89,4 +89,3 @@ This was the same set of changes needed for Visual Studio, except with the `WebP
 # Thanks
  
 Big thanks to [Eric Cain](https://twitter.com/arcain) and [Raffael Herrmann](https://twitter.com/pinguinmann) for enabling me to connect to the internet again :).
-
