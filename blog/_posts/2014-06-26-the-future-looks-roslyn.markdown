@@ -48,11 +48,11 @@ So if I select a few statements in a block of code and do Alt + . get the option
 
 The interface for renaming has changed too to include live preview and errors.
 
-![Remove Usings]({{ site.contenturl }}Roslyn-NewMethod.png)
+![New Method]({{ site.contenturl }}Roslyn-NewMethod.png)
 
 Above you can see a New Method I've extracted and the Live Preview of renaming. If I decided to call "NewMethod" "Foo" I'd get this error because I already have method called Foo.
 
-![Remove Usings]({{ site.contenturl }}Roslyn-NewMethodError.png)
+![New Method Error]({{ site.contenturl }}Roslyn-NewMethodError.png)
 
 Code Lens
 ---
