@@ -15,7 +15,8 @@ For example:
 
 > "Have you checked in A1 yet?"
 
-is easier to ask and understand than 
+is easier to ask and understand than
+
 > "Have you checked in 177484?"
 
 The problem that arises with this approach, is been able to find a work item by its External Requirement ID.
