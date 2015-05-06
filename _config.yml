@@ -11,4 +11,4 @@ stackoverflow_link: users/383710/daveshaw
 # Build settings
 markdown: kramdown
 contenturl: "blog/Content/"
-permalink: "title"
+permalink: :title
