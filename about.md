@@ -4,8 +4,20 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+I work full-time as a lead developer for a large software firm, working with C#, WinForms and Microsoft SQL Server on an enterprise scale. I am also the “Accidental TFS Admin” for TFS 2012 within the company. I plan to share some of my experience that I hope you will find useful.
 
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
+Topics that I have in mind for coverage:
 
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+ - Team Foundation Server/Service (including the API).
+ - Useful Linqpad snippets.
+ - Windows Phone 8 Development Journey – as I write this, I have not left port, so I will share useful facts as I find them.
+ - C#.
+ - Unit Testing.
+
+I live in the [Holme Valley](http://en.wikipedia.org/wiki/Holme_Valley) / Huddersfield area of Yorkshire in the United Kingdom.
+
+Contact
+---
+I’m not a fan of [blog comments](http://www.joelonsoftware.com/items/2007/07/20.html) (although I actively use them when people offer them, call me a hypocrite).
+
+If you want to contact me about a blog post, or in general, you can find me on social media (see the links at the top), or e-mail dave [at] this site.
