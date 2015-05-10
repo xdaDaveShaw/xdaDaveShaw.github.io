@@ -35,7 +35,7 @@
     border: 1px solid #D4D4D4;
     border-radius: 4px;
     padding-left: 10px;
-
+    position: relative;
     .menu-icon {
         display: none;
     }
@@ -49,6 +49,21 @@
             margin-left: 20px;
         }
     }
+    .social-list {
+        position: absolute;
+        right: 4px;
+        top: 3px;
+        a {
+            margin-left: 4px;
+            &:hover {
+                svg {
+                    -webkit-filter: drop-shadow( 0px 0px 3px #fff);
+                    filter: drop-shadow( 0px 0px 3px #fff);
+                    }
+                text-decoration: none;
+                }
+            }
+        }
 
     @include media-query($on-palm) {
         position: absolute;
