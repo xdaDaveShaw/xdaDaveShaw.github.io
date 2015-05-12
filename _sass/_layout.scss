@@ -200,6 +200,34 @@
     > li {
         margin-bottom: $spacing-unit;
     }
+     &.archive {
+        > ul {
+            list-style: none;
+            margin-left: 0;
+            > li {
+                margin-bottom: 5px;
+                &.year {
+                    margin-bottom: 10px;
+                    &:not(:first-of-type) {
+                        margin-top: 20px;
+                    }
+                }
+                h2 {
+                    margin-bottom: 0;
+                }
+            }
+        }
+        .post-link {
+            display: inline;
+            font-size: 16px;
+            font-weight: normal;
+        }
+        .post-meta {
+            display: inline-block;
+            width: 100px;
+            margin-bottom: 0;
+        }
+    }
 }
 
 .post-meta {
