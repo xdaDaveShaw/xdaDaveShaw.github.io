@@ -59,7 +59,7 @@ Code Lens
 
 Code Lens is a heads up display that is already available in VS2013 Ultimate and is powered by Roslyn to provide code and source control information inline in the editor. I've only played with this during the CTP of VS2013, but it seemed really promising &ndash; I'm now waiting on Microsoft to move it from the Ultimate SKU to Premium.
 
-![CodeLens](https://x2jsrq.blu.livefilestore.com/y2pHvnYw8ZovzeKdsT9oEAT-NasfcccvLTyqpUAZWrmBdGTwNgO85YBV3QkWXgmi_I7BUC4pMIDUbEiLgeVImTwFsQxjfOZ9Y-7MrZR10256Ew/codelens2.png?psid=2)
+![CodeLens]({{ site.contenturl }}Roslyn-Codelens.png)
 
 # Visual Studio 14
 	
