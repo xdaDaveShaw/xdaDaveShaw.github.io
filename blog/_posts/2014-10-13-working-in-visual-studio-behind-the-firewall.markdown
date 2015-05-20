@@ -14,7 +14,7 @@ Working in an "Enterprise" type environment means lots of *fun * obstacles getti
 
 Since giving up on CNTLM Proxy, I haven't been able to connect to nuget.org from the package manager, view the Visual Studio Extension Gallery or even get any extension&#47;product updates from Visual Studio.
 
-This is a quick post with the changes I needed to get Visual Studio 2013 Update 4, NuGet 2.8 and Web Platform (Web PI) 5 to see past the corporate Squid proxy[http://www.squid-cache.org]
+This is a quick post with the changes I needed to get Visual Studio 2013 Update 4, NuGet 2.8 and Web Platform (Web PI) 5 to see past the corporate [Squid proxy](http://www.squid-cache.org).
 
 # NuGet
 
