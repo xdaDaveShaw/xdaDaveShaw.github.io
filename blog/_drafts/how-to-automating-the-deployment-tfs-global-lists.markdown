@@ -27,7 +27,7 @@ I won’t go into detail on the process of removing activities because there wer
 
 # Removing Process Parameters
 
-To remove the unnecessary process parameters appear when editing a build definition is not straight forward, so I thought it would be worth a mention.
+To remove the unnecessary process parameters that were appear when editing a build definition is not straight forward, so I thought it would be worth a mention.
 
 There are two places where process parameters are defined. 
 
@@ -35,7 +35,7 @@ The first is in the Arguments.
 
 Select the outer most part of the process and select the Arguments tab at the bottom:
 
-PICTURE HERE
+![List of the Arguments]({{ site.contenturl }}GlobalList-Arguments.png)
 
 Removing from here will get rid of them from the Build Definition. I removed quite a few for this template: Test Specs, Solution Specific Build Outputs, Run Code Analysis, Source and Symbol Server Settings, Associate Changeset and Work Items, Anything with "MSBuild", Perform Test Impact Analysis, Disable Tests, Private Drop Location. What remained was enough for the activity to run and checkout some code.
 
@@ -45,21 +45,12 @@ Remove all the parameters from here because you don’t need them.
 
 Metadata
 
-
+![View of the metadata]({{ site.contenturl }}GlobalList-Metadata.png)
 
 # Removing Activities
 
-You can see the final process template with all activities removed below (click for the fill size version bigger version):
+You can see the final process template with all activities removed [here].({{ site.contenturl }}GlobalList-Sequence.png)
 
-PICTURE HERE
-
-
-
-asda
-
-asd
-
-asd
 
 # Adding the WITAdmin Import Activity
 
