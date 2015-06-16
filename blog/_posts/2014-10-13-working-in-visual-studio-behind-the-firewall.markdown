@@ -10,7 +10,7 @@ categories:
 - Visual Studio
 - nuget
 ---
-Working in an "Enterprise" type environment means lots of *fun * obstacles getting in the way of your day to day work &ndash; the corporate proxy is one of my challenges.
+Working in an "Enterprise" type environment means lots of *fun* obstacles getting in the way of your day to day work &ndash; the corporate proxy is one of my challenges.
 
 Since giving up on CNTLM Proxy, I haven't been able to connect to nuget.org from the package manager, view the Visual Studio Extension Gallery or even get any extension&#47;product updates from Visual Studio.
 
