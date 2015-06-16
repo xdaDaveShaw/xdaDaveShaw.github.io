@@ -103,12 +103,12 @@
             clear: both;
 
             //Hamburger Click CSS
-            transition: visibility 0.5s;
+            transition: width 0.5s, height 0.5s;
             z-index: 1;
             opacity: 0;
             visibility: hidden;
-            //width: 20px;
-            //height: 0px;
+            width: 20px;
+            height: 0px;
         }
 
         &:focus {
@@ -122,8 +122,8 @@
             pointer-events: auto;
             opacity: 1;
             visibility: visible;
-            //width: auto;
-            //height: auto;
+            width: auto;
+            height: auto;
         }
 
         .page-link {
