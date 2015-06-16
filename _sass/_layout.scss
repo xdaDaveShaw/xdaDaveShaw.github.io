@@ -95,18 +95,35 @@
             }
         }
 
-        .trigger {
-            clear: both;
-            display: none;
-        }
-
         .social-list {
             display: none;
         }
         
+        .trigger {
+            clear: both;
+
+            //Hamburger Click CSS
+            transition: width 0.5s, height 0.5s;
+            z-index: 1;
+            opacity: 0;
+            visibility: hidden;
+            width: 20px;
+            height: 0px;
+        }
+
+        &:focus {
+            pointer-events: none;
+        }
+
         &:focus .trigger {
-            display: block;
             padding-bottom: 5px;
+            
+            //Hamburger Click CSS
+            pointer-events: auto;
+            opacity: 1;
+            visibility: visible;
+            width: auto;
+            height: auto;
         }
 
         .page-link {
