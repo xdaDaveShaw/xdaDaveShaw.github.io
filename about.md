@@ -26,6 +26,10 @@ I’m not a fan of [blog comments](http://www.joelonsoftware.com/items/2007/07/2
 
 If you want to contact me about a blog post, or in general, you can find me on social media (see the links at the top), or e-mail dave [at] this site.
 
+Site
+---
+This site is hosted on [Github Pages](https://github.com/xdaDaveShaw/xdaDaveShaw.github.io), you can see my *thanks* and inspiration in the readme.
+
 Disclaimer
 ---
 The opinions expressed herein are my own personal opinions and do not represent my employer's view in any way.
