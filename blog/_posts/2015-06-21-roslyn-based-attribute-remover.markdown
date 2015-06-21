@@ -138,7 +138,7 @@ Using Roslyn was a bit of a steep learning curve to start with, but once I found
  
    [1]: http://xunit.github.io
    [2]: http://blog.codinghorror.com/regular-expressions-now-you-have-two-problems/
-   [3]: {{ site.contenturl }}attributes-perl-problems.png
+   [3]: {{ site.contenturl }}attributes-perl-problems.png (To generate #1 albums, 'jay --help' recommends the -z flag.)
    [4]: https://xkcd.com/1171/
    [5]: https://www.nuget.org/packages/Microsoft.CodeAnalysis
    [6]: https://gist.github.com/xdaDaveShaw/87643170e5fa97b7da3b
