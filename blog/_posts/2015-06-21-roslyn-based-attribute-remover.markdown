@@ -39,9 +39,9 @@ namespace P
         [TestCategory(""Atomic"")]
         public void SeparateAttribute() { }
         
-		//snip...
+        //snip...
         //And so on down to, right down to...
-		        
+                
         [TestMethod, TestCategory(""Atomic""), TestCategory(""Atomic"")]
         public void TwoAttributesOneLineAndOneThatDoesntMatch() { }
     }
@@ -57,8 +57,8 @@ To get some C# code into a syntax tree, there is the obviously named `CSharpSynt
 {% highlight c# %}
 var tree = CSharpSyntaxTree.ParseText(code);
 var rewriter = new AttributeRemoverRewriter(
-	attributeName: "TestCategory", 
-	attributeValue: "Atomic");
+    attributeName: "TestCategory", 
+    attributeValue: "Atomic");
 
 var rewrittenRoot = rewriter.Visit(tree.GetRoot());
 
@@ -70,32 +70,32 @@ The interesting part of the `AttributeRemoverRewriter` class is the `VisitAttrib
 {% highlight c# %}
 public override SyntaxNode VisitAttributeList(AttributeListSyntax attributeList)
 {
-	var nodesToRemove = 
-		attributeList
-		.Attributes
-		.Where(
-			attribute => 
-				AttributeNameMatches(attribute)
-				&&
-				HasMatchingAttributeValue(attribute))
-		.ToArray();
+    var nodesToRemove = 
+        attributeList
+        .Attributes
+        .Where(
+            attribute => 
+                AttributeNameMatches(attribute)
+                &&
+                HasMatchingAttributeValue(attribute))
+        .ToArray();
 
-	if (nodesToRemove.Length == 1 && attributeList.Attributes.Count == 1)
-	{
-		//Remove the entire attribute
-		return 
-			attributeList.RemoveNode(attributeList, SyntaxRemoveOptions.KeepNoTrivia);
-	}
-	else
-	{
-		//Remove just the matching ones recursively
-		foreach (var node in nodesToRemove)
-			return 
-				VisitAttributeList(attributeList.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia));
-	}
-	
-	return 
-		base.VisitAttributeList(attributeList);
+    if (nodesToRemove.Length == 1 && attributeList.Attributes.Count == 1)
+    {
+        //Remove the entire attribute
+        return 
+            attributeList.RemoveNode(attributeList, SyntaxRemoveOptions.KeepNoTrivia);
+    }
+    else
+    {
+        //Remove just the matching ones recursively
+        foreach (var node in nodesToRemove)
+            return
+                VisitAttributeList(attributeList.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia));
+    }
+    
+    return 
+        base.VisitAttributeList(attributeList);
 }
 {% endhighlight %}
 
