@@ -15,7 +15,8 @@ I'm a big fan of [XUnit][1] as a replacement for MSTest and use it extensively i
 
 This post looks at one of the obstacles I had to overcome, namely the use of `[TestCategory("Atomic")]` on all tests that are run on TFS as part of the build. The use of this attribute came about because the MSTest test runner did not support a concept of "run all tests without a category", so we came up with an explicit category called "Atomic" - probably not the best decision in hindsight. The XUnit test runner does not support test categories, so I needed to find a way to remove the `TestCategory` attribute with the value of `Atomic` from any method. I'm sure I could have used regex to solve this, and I'm sure that would have caused [more problems][2]:
 
-[![To generate #1 albums, 'jay --help' recommends the -z flag.][3]][4]
+![To generate #1 albums, 'jay --help' recommends the -z flag.][3]
+*via [xkcd][4]*
 
 Instead I created a Linqpad script and used the syntactic analyser from the [Microsoft.CodeAnalysis][5] package.
 
@@ -138,7 +139,7 @@ Using Roslyn was a bit of a steep learning curve to start with, but once I found
  
    [1]: http://xunit.github.io
    [2]: http://blog.codinghorror.com/regular-expressions-now-you-have-two-problems/
-   [3]: {{ site.contenturl }}attributes-perl-problems.png (To generate #1 albums, 'jay --help' recommends the -z flag.)
+   [3]: {{ site.contenturl }}attributes-perl-problems.png
    [4]: https://xkcd.com/1171/
    [5]: https://www.nuget.org/packages/Microsoft.CodeAnalysis
    [6]: https://gist.github.com/xdaDaveShaw/87643170e5fa97b7da3b
