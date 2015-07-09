@@ -21,7 +21,7 @@ This post looks at one of the obstacles I had to overcome, namely the use of `[T
 
 Instead I created a Linqpad script and used the syntactic analyser from the [Microsoft.CodeAnalysis][5] package.
 
-> Install-Package Microsoft.CodeAnalysis -Pre
+    PM> Install-Package Microsoft.CodeAnalysis -Pre
 
 I found that the syntactic analyser allowed me to input some C# source code, and by writing my own `CSharpSyntaxRewriter`, remove any attributes I didn't want.
 
@@ -34,17 +34,17 @@ namespace P
     {
         public void NoAttributes() { }
 
-        [TestMethod, TestCategory(""Atomic"")]
+        [TestMethod, TestCategory("Atomic")]
         public void OnOneLine() { }
 
         [TestMethod]
-        [TestCategory(""Atomic"")]
+        [TestCategory("Atomic")]
         public void SeparateAttribute() { }
         
         //snip...
         //And so on down to, right down to...
                 
-        [TestMethod, TestCategory(""Atomic""), TestCategory(""Atomic"")]
+        [TestMethod, TestCategory("Atomic"), TestCategory("Atomic")]
         public void TwoAttributesOneLineAndOneThatDoesntMatch() { }
     }
 }
@@ -113,18 +113,18 @@ If all the attributes match, remove the entire attribute node. For example:
 
 {% highlight c# %}
 [TestMethod]
-[TestCategory(""Atomic"")]
+[TestCategory("Atomic")]
 public void SeparateAttribute() { }
 {% endhighlight %}
 
-When the visitor reaches the `[TestCategory(""Atomic"")]` attribute, the entire attribute node should be removed, if not then the attribute is removed but the `[]` remains.
+When the visitor reaches the `[TestCategory("Atomic")]` attribute, the entire attribute node should be removed, if not then the attribute is removed but the `[]` remains.
 
 **Remove just the matching attributes**
 
 If there are some attributes that do not need removing, then just the matching one should be removed. For example:
 
 {% highlight c# %}
-[TestMethod, TestCategory(""Atomic"")]
+[TestMethod, TestCategory("Atomic")]
 public void OnOneLine() { }
 {% endhighlight %}
 
