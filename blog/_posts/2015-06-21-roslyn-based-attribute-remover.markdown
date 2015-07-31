@@ -21,7 +21,7 @@ This post looks at one of the obstacles I had to overcome, namely the use of `[T
 
 Instead I created a Linqpad script and used the syntactic analyser from the [Microsoft.CodeAnalysis][5] package.
 
-    PM> Install-Package Microsoft.CodeAnalysis -Pre
+    PM> Install-Package Microsoft.CodeAnalysis
 
 I found that the syntactic analyser allowed me to input some C# source code, and by writing my own `CSharpSyntaxRewriter`, remove any attributes I didn't want.
 
@@ -136,7 +136,7 @@ Using Roslyn was a bit of a steep learning curve to start with, but once I found
  - You can get the full Gist [here][6]. 
 
  If you paste this into a Linqpad "program" and then just install the NuGet Package you should be able to try it out. 
- **Note** this was built against the RC2 version of the package.
+ **Note** this was built against the 1.0.0 version of the package.
  
    [1]: http://xunit.github.io
    [2]: http://blog.codinghorror.com/regular-expressions-now-you-have-two-problems/
