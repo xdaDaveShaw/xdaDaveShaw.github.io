@@ -11,6 +11,8 @@ categories:
 - Roslyn
 ---
 
+**Major Update 1-Aug-2015**: Changed `VisitAttributeList` to `VisitMethodDeclaration` to fix some bugs with the help of [Josh Varty][7].
+
 I'm a big fan of [XUnit][1] as a replacement for MSTest and use it extensively in my home projects, but I'm still struggling to find a way to integrate it into my work projects.
 
 This post looks at one of the obstacles I had to overcome, namely the use of `[TestCategory("Atomic")]` on all tests that are run on TFS as part of the build. The use of this attribute came about because the MSTest test runner did not support a concept of "run all tests without a category", so we came up with an explicit category called "Atomic" - probably not the best decision in hindsight. The XUnit test runner does not support test categories, so I needed to find a way to remove the `TestCategory` attribute with the value of `Atomic` from any method. I'm sure I could have used regex to solve this, and I'm sure that would have caused [more problems][2]:
@@ -52,7 +54,7 @@ namespace P
 
 You can see all the examples I tested against in the [Gist][6].
 
-The `CSharpSyntaxRewriter` took a lot of messing around with to get right, but I eventually figured that by overriding the `VisitAttributeList` method I could remove attributes from the syntax tree as they were visited.
+The `CSharpSyntaxRewriter` took a lot of messing around with to get right, but I eventually figured that by overriding the `VisitMethodDeclaration` method I could remove attributes from the syntax tree as they were visited.
 
 To get some C# code into a syntax tree, there is the obviously named `CSharpSyntaxTree.ParseText(String)` method. You can then get a `CSharpSyntaxRewriter` (in my case my own `AttributeRemoverRewriter` class) to visit everything by calling `Visit()`. Because this is all immutable, you need to grab the result, which can now be converted into a string and dumped out. 
 
@@ -67,37 +69,43 @@ var rewrittenRoot = rewriter.Visit(tree.GetRoot());
 rewrittenRoot.GetText().ToString().Dump();
 {% endhighlight %}
 
-The interesting part of the `AttributeRemoverRewriter` class is the `VisitAttributeList` method which finds and removes attribute nodes that are not needed:
+The interesting part of the `AttributeRemoverRewriter` class is the `VisitMethodDeclaration` method which finds and removes attribute nodes that are not needed:
 
 {% highlight c# %}
-public override SyntaxNode VisitAttributeList(AttributeListSyntax attributeList)
+public override SyntaxNode VisitMethodDeclaration(MethodDeclarationSyntax node)
 {
-    var nodesToRemove = 
-        attributeList
-        .Attributes
-        .Where(
-            attribute => 
-                AttributeNameMatches(attribute)
-                &&
-                HasMatchingAttributeValue(attribute))
-        .ToArray();
+    var newAttributes = new SyntaxList<AttributeListSyntax>();
 
-    if (nodesToRemove.Length == 1 && attributeList.Attributes.Count == 1)
+    foreach (var attributeList in node.AttributeLists)
     {
-        //Remove the entire attribute
-        return 
-            attributeList.RemoveNode(attributeList, SyntaxRemoveOptions.KeepNoTrivia);
+        var nodesToRemove =
+            attributeList
+            .Attributes
+            .Where(
+                attribute =>
+                    AttributeNameMatches(attribute)
+                    &&
+                    HasMatchingAttributeValue(attribute))
+            .ToArray();
+
+        //If the lists are the same length, we are removing all attributes and can just avoid populating newAttributes.
+        if (nodesToRemove.Length != attributeList.Attributes.Count)
+        {
+            var newAttribute =
+                (AttributeListSyntax)VisitAttributeList(
+                    attributeList.RemoveNodes(nodesToRemove, SyntaxRemoveOptions.KeepNoTrivia));
+
+            newAttributes = newAttributes.Add(newAttribute);
+        }
     }
-    else
-    {
-        //Remove just the matching ones recursively
-        foreach (var node in nodesToRemove)
-            return
-                VisitAttributeList(attributeList.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia));
-    }
-    
-    return 
-        base.VisitAttributeList(attributeList);
+
+    //Get the leading trivia (the newlines and comments)
+    var leadTriv = node.GetLeadingTrivia();
+    node = node.WithAttributeLists(newAttributes);
+
+    //Append the leading trivia to the method
+    node = node.WithLeadingTrivia(leadTriv);
+    return node;
 }
 {% endhighlight %}
 
@@ -105,19 +113,7 @@ The `AttributeNameMatches` method is implemented to find an attribute that *star
 
 The `HasMatchingAttributeValue` pretty much does what it says, it looks for the value of the attribute been just `Atomic` and nothing else.
 
-Once the nodes that match are found, there were 2 choices:
-
-**Remove the whole attribute**
-
-If all the attributes match, remove the entire attribute node. For example:
-
-{% highlight c# %}
-[TestMethod]
-[TestCategory("Atomic")]
-public void SeparateAttribute() { }
-{% endhighlight %}
-
-When the visitor reaches the `[TestCategory("Atomic")]` attribute, the entire attribute node should be removed, if not then the attribute is removed but the `[]` remains.
+Once the nodes that match are found, it checks if the number of attributes on a method is equal to the number it wants to remove, if so the `newAttributes` list is not populated and the method is updated to keep its trivia, but without any attributes. This shouldn't be the case for this specific scenario because just a `TestCategory` on its own  doesn't make sense.
 
 **Remove just the matching attributes**
 
@@ -128,10 +124,12 @@ If there are some attributes that do not need removing, then just the matching o
 public void OnOneLine() { }
 {% endhighlight %}
 
-When the visitor reaches the attribute on this method, it should only remove the attribute that matches, the `TestMethod` should be left alone. It then recursively checks the attribute again incase there is more than one, and removes any others that match.
+When the visitor reaches the attributes on this method, it will populate the `newAttributes` list with just the attributes we want to keep and then update the method so that it has just the remaining attributes its trivia.
 
 # Conclusion
-Using Roslyn was a bit of a steep learning curve to start with, but once I found out what I was doing, I knew I could rely on the Roslyn team to have dealt with all the different ways of implementing attributes in C#. If I were to try and use regex to find and remove some of the more complicated ones, and deal with the other edge cases I'd have gone mad by now.
+Using Roslyn was a bit of a steep learning curve to start with, but once I found out what I was doing, I knew I could rely on the Roslyn team to have dealt with all the different ways of implementing attributes in C#. That didn't stop me from finding what appears to be a bug causing me to re-write bits of the script and this post, and some more edge cases when I ran it across a > 500 test classes.
+
+However, if I were to try and use regex to find and remove some of the more complicated ones, and deal with the other edge cases, I'd have gone mad by now.
 
  - You can get the full Gist [here][6]. 
 
@@ -144,3 +142,4 @@ Using Roslyn was a bit of a steep learning curve to start with, but once I found
    [4]: https://xkcd.com/1171/
    [5]: https://www.nuget.org/packages/Microsoft.CodeAnalysis
    [6]: https://gist.github.com/xdaDaveShaw/87643170e5fa97b7da3b
+   [7]: http://stackoverflow.com/questions/31749997/how-to-remove-all-member-attribute-but-leave-an-empty-line/31756034#31756034
