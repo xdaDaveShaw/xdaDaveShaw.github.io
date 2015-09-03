@@ -7,8 +7,8 @@
 
     .c     { color: #998; font-style: italic } // Comment
     .err   { color: #a61717; background-color: #e3d2d2 } // Error
-    // .k     { font-weight: bold } // Keyword
-    // .o     { font-weight: bold } // Operator
+    .k     { color: #0000AA; } // Keyword
+    .o     { color: #0000AA; } // Operator
     .cm    { color: #998; font-style: italic } // Comment.Multiline
     .cp    { color: #999 } // Comment.Preproc
     .c1    { color: #998; font-style: italic } // Comment.Single
@@ -22,13 +22,13 @@
     .gi .x { color: #000; background-color: #afa } // Generic.Inserted.Specific
     .go    { color: #888 } // Generic.Output
     .gp    { color: #555 } // Generic.Prompt
-    // .gs    { font-weight: bold } // Generic.Strong
+    .gs    { color: #0000AA; } // Generic.Strong
     .gu    { color: #aaa } // Generic.Subheading
     .gt    { color: #a00 } // Generic.Traceback
-    // .kc    { font-weight: bold } // Keyword.Constant
-    // .kd    { font-weight: bold } // Keyword.Declaration
-    // .kp    { font-weight: bold } // Keyword.Pseudo
-    // .kr    { font-weight: bold } // Keyword.Reserved
+    .kc    { color: #0000AA; } // Keyword.Constant
+    .kd    { color: #0000AA; } // Keyword.Declaration
+    .kp    { color: #0000AA; } // Keyword.Pseudo
+    .kr    { color: #0000AA; } // Keyword.Reserved
     .kt    { color: #458 } // Keyword.Type
     .m     { color: #099 } // Literal.Number
     .s     { color: #d14 } // Literal.String
@@ -42,7 +42,7 @@
     .nn    { color: #555 } // Name.Namespace
     .nt    { color: #000080 } // Name.Tag
     .nv    { color: #008080 } // Name.Variable
-    // .ow    { font-weight: bold } // Operator.Word
+    .ow    { color: #0000AA; } // Operator.Word
     .w     { color: #bbb } // Text.Whitespace
     .mf    { color: #099 } // Literal.Number.Float
     .mh    { color: #099 } // Literal.Number.Hex
