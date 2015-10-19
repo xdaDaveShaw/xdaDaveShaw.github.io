@@ -7,6 +7,15 @@ Shut the Box is my first attempt at a Windows Store Application. It runs on both
 
 ###Image Here
 
+##Download
+The game is **free** in both app stores, and has no adverts. I have no plans to monetise the application 
+any more than the Donate links in the about page in the App.  
+
+|||
+|---|---|---|
+|![Windows Store Download][2]||![Windows Phone Download][2]| 
+|Download for Windows |&nbsp;&nbsp;&nbsp;&nbsp;| Download for Windows Phone|
+
 The rules of the game are quite simple, roll the dice and shut any number of flaps that add up to the 
 total on the dice, shut all the flaps, Win, run out of move, Lose. You can read more about the game on 
 [Wikipedia][1]. At the moment I have only implemented the most basic of game types, but I hope to add 
@@ -30,3 +39,4 @@ UI is both intentional and necessary.
 It has Internet access only for Application Insights at the moment.
 
  [1]:https://en.wikipedia.org/wiki/Shut_the_Box
+ [2]:store-icon.png
