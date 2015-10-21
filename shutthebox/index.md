@@ -13,7 +13,7 @@ less task to do later :).
 
 Shut the Box is my first attempt at a Windows Store Application. It runs on both Windows 8.1 Store and Phone.
 
-###Image Here
+![Screenshot][3]
 
 ##Download
 The game is **free** in both app stores, and has no adverts. I have no plans to monetise the application 
@@ -48,3 +48,4 @@ It has Internet access only for Application Insights at the moment.
 
  [1]:https://en.wikipedia.org/wiki/Shut_the_Box
  [2]:store-icon.png
+ [3]:screenshot.png
