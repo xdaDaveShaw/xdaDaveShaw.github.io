@@ -19,10 +19,9 @@ Shut the Box is my first attempt at a Windows Application. It runs on both Windo
 The game is **free** in both app stores, and has no adverts. I have no plans to monetise the application 
 any more than the Donate links in the about page in the App.  
 
-|||
+|[Windows Store][4]|&nbsp;&nbsp;&nbsp;&nbsp;|[Windows Phone][5]|
 |---|---|---|
 |[![Windows Store Download][2]][4]||[![Windows Phone Download][2]][5]| 
-|[Windows Store][4]|&nbsp;&nbsp;&nbsp;&nbsp;|[Windows Phone][5]|
 
 ##Rules
 
