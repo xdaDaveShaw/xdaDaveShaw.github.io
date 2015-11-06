@@ -10,13 +10,14 @@ I work full-time as a lead developer for a large software firm, working with C#,
 
 [![F#](/images/fsharp.png) F# Foundation Member](http://foundation.fsharp.org/daveshaw)
 
+[![MCSD](/images/mcsd-logo.png) MCSD: Application Lifecycle Management.](https://www.microsoft.com/en-us/learning/mcsd-application-lifecycle-management.aspx)
+
 I plan to share some of my experience that I hope you will find useful. Topics that I have in mind for coverage:
 
  - Team Foundation Server/Service (including the API).
  - Useful Linqpad snippets.
- - Windows Phone 8 Development Journey – as I write this, I have not left port, so I will share useful facts as I find them.
- - C#.
- - Unit Testing.
+ - Windows Application (UWP / Phone / Store) Development Journey – as I write this, I have not left port, so I will share useful facts as I find them.
+ - C# & F#.
 
 I live in the [Holme Valley](http://en.wikipedia.org/wiki/Holme_Valley) / Huddersfield area of Yorkshire in the United Kingdom.
 
