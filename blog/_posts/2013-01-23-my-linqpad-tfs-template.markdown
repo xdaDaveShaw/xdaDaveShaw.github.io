@@ -40,6 +40,13 @@ In the downloaded file there are also some `XNamespace` declarations at the top,
 
 You can download the "linq" file for Linqpad from my OneDrive:
 
+The latest version is based on the TFS Nuget Packages: [Microsoft.TeamFoundationServer.ExtendedClient][1] (Version 14.83.2 at time of upload).
+
+ - [Download](http://1drv.ms/1lfA3vg) 
+
+**Older Versions**
  - TFS2010: [Download](http://sdrv.ms/14azPrs)
  - TFS2012: [Download](http://sdrv.ms/ZvvXgZ)
  - TFS2013: [Download](http://sdrv.ms/149bA0S)
+
+ [1]:https://www.nuget.org/packages/Microsoft.TeamFoundationServer.ExtendedClient/
