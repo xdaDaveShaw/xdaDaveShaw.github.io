@@ -9,7 +9,7 @@ categories:
 - TFS
 - Linqpad
 ---
-I am a massive fan of [Linqpad](http://linqpad.net), especially as a code scratch pad, but it is also very useful for performing queries against the [Team Foundation Server SDK](http://msdn.microsoft.com/en-us/library/bb130146(v=vs.110).aspx).
+I am a massive fan of [Linqpad](http://linqpad.net), especially as a code scratch pad, but it is also very useful for performing queries against the [Team Foundation Server SDK](http://msdn.microsoft.com/en-us/library/bb130146.aspx).
 
 I regularly find myself wanting to get information out of our TFS Collection via the API, whether it be Build Information, Work Item Queries, Version Information, etc. Occasionally, I also need to update Build Definitions' Process XML en-mass.
 
@@ -26,7 +26,7 @@ using (var tfs = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(new Ur
 {% endhighlight %}
 
 ### Using
-I have this in "My Linqpad Queries" and as soon as I open the file I press Ctrl+Shift+C to clone it to a new query so I don't save change to the "template". Linqpad doesn't yet support "Templates", there is a UserVoice [request](http://linqpad.uservoice.com/forums/18302-linqpad-feature-suggestions/suggestions/1567811-define-query-templates) for it however.
+I have this in "My Linqpad Queries" and open it via a right click and "Use as Template for New Query", or sometimes, if I accidentally open the file I press Ctrl+Shift+C to clone it to a new query so I don't save change to the "template".
 
 Once I have the cloned copy I insert the name of the service I plan to call into `GetService<>`, and then go to work. The API is quite easy to use, and the MSDN documentation is pretty comprehensive. The common services I use are:
 
