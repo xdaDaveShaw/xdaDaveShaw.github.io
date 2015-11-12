@@ -28,6 +28,7 @@ of new things I've explorer whilst working on this are:
  - Git
  - Visual Studio Online Kanban for planning and tracking work (up until now I've only used TFS 2012.4).
  - TFS Build vNext.
+ - Application Insights.
  - Custom MSBuild Project to encapsulate all restore/build/test workflows.
  - xUnit.net for Universal Apps (lots of beta's to test).
 
