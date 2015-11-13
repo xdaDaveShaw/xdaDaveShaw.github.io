@@ -2,15 +2,6 @@
 layout: page
 title: Shut The Box
 ---
-
-##Currently Work In Progress
-<font color="red">I'm in the process of compiling all the visual assets and then I plan to submit it to the Stores.
-
-I'll update this page and publish a blog post when finished. This page is just up here so I have one 
-less task to do later :). </font>
-
-----
-
 Shut the Box is my first attempt at a Windows Application. It runs on both Windows 8.1/10 and Windows Phone 8.1.
 
 ![Screenshot][3]
