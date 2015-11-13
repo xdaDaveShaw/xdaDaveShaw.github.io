@@ -13,9 +13,10 @@ Today I've just published my first App into the Windows and Windows Phone Store.
 
 ![Screenshot][3] 
 
-Download link below, if you want to check it out. It's 100% free and no ads.
+You can download using the image below, if you want to check it out. It's 100% **free** and no ads.
 
-[![Windows Store Download][2]][4] 
+[![Windows Store Download][2]][4]
+
 
 It is a simple version of the pub game Shut the Box, I have page [here][1] with more information about game.
 

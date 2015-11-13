@@ -6,11 +6,11 @@ Shut the Box is my first attempt at a Windows Application. It runs on both Windo
 
 ![Screenshot][3]
 
-##Download
+##[Download][2]
 The game is **free** in both app stores, and has no adverts. I have no plans to monetise the application 
 any more than the Donate links in the about page in the App.  
 
-[![Download Here][2]][4] 
+[![Download Here][2]][4]
 
 ##Rules
 
