@@ -9,7 +9,9 @@ categories:
 - Azure
 ---
 
-I've recently just deployed a new Azure Linux VM for hosting a [Discourse][1] instance I run and noticed that is didn't have a DNS entry on cloudapp.net. Lasttime I deployed one it was instantly given one in the format `server-name.cloudapp.net`, but this time it wasn't and I had to set it up by myself.	
+I've recently just deployed a new Azure Linux VM for hosting a [Discourse][1] instance I run and noticed that is didn't have a DNS entry on cloudapp.net. Last time I deployed one it was instantly given one in the format `server-name.cloudapp.net`, but this time it wasn't and I had to set it up by myself.
+
+I suspect it is something new for [Resource Managed][12] deployments.	
 
 Here's a list of the steps you need to follow if you ever need to do the same.
 
@@ -57,12 +59,14 @@ Click on **IP Addresses** from the **Settings** blade:
 
 ![network intefaces ip addresses][9]
 
-Click on **Enable** then click on the **IP Address Configure Required...** and select the default (highlighted
-Public IP Address.
+Click on **Enable** then click on the **IP Address Configure Required...** and select the default (highlighted)
+Public IP Address from the list.
 
 ![select public ip][10].
 
 Then click **Save**.
+
+#Validation and Testing
 
 Now if you close and re-open the VM blade you should see a new Public IP address appear. 
 
@@ -79,6 +83,10 @@ To Test, try SSH onto the VM and check it works.
 
 The requests will timeout because Azure has ICMP disabled, but so long as the DNS resolves, you've done it.
 
+#Conclusion
+
+This seems to be a change that I can't find a source for to do with Resource Managed VM's instead of Classic VM's. It used to work OK on classic VM's.
+
  [1]:https://discourse.org
  [2]:{{ site.contenturl }}azure-dns-new-vm.png
  [3]:{{ site.contenturl }}azure-dns-public-ip.png
@@ -90,3 +98,4 @@ The requests will timeout because Azure has ICMP disabled, but so long as the DN
  [9]:{{ site.contenturl }}azure-dns-nic-ip-addresses.png
  [10]:{{ site.contenturl }}azure-dns-enable-public-ip.png
  [11]:{{ site.contenturl }}azure-dns-new-dns.png
+ [12]:https://azure.microsoft.com/en-gb/features/resource-manager/
