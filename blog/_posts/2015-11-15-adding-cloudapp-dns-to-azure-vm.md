@@ -75,7 +75,7 @@ and a **Copy to clipboard** button when you hover on it:
 
 ![vm with new dns][11]
 
-To Test, try SSH onto the VM and check it works.
+To test, ping the VM and see if the DNS resolves:
 
     C:\> ping taeguk-test-dns.northeurope.cloudapp.azure.com
 
@@ -86,6 +86,8 @@ The requests will timeout because Azure has ICMP disabled, but so long as the DN
 #Conclusion
 
 This seems to be a change that I can't find a source for to do with Resource Managed VM's instead of Classic VM's. It used to work OK on classic VM's.
+
+**Note**: I have deleted the VM in this post now. 
 
  [1]:https://discourse.org
  [2]:{{ site.contenturl }}azure-dns-new-vm.png
