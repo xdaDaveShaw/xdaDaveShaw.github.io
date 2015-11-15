@@ -47,7 +47,7 @@ it, but I'm glad it's finally published, now to try and release some updates and
 If you enjoy the game, please feel free to leave me a rood rating / comment in the Store.
 
 
- [1]:\shutthebox
- [2]:\shutthebox\store-icon.png
- [3]:\shutthebox\screenshot.png
+ [1]:{{ site.url }}shutthebox
+ [2]:{{ site.url }}shutthebox\store-icon.png
+ [3]:{{ site.url }}shutthebox\screenshot.png
  [4]:https://www.microsoft.com/en-us/store/apps/shut-the-box/9nblggh690qb
