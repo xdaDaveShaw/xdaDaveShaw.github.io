@@ -49,15 +49,15 @@ Now you need to reassociate the Public IP with the VM.
 
 From the VM Screen (First Image) click **All Settings**, then **Network Interfaces**:
 
-![vm network intefaces][7]
+![vm network interfaces][7]
 
 Click on the Interface listed:
 
-![all vm network intefaces][8]
+![all vm network interfaces][8]
 
 Click on **IP Addresses** from the **Settings** blade:
 
-![network intefaces ip addresses][9]
+![network interfaces ip addresses][9]
 
 Click on **Enable** then click on the **IP Address Configure Required...** and select the default (highlighted)
 Public IP Address from the list.
