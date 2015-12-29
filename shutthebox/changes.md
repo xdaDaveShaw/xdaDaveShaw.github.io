@@ -1,6 +1,5 @@
 ---
 layout: page
-title: Shut The Box Change Log
 ---
 This is the Changelog for [Shut The Box](\shutthebox)
 
