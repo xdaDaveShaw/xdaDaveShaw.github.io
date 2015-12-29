@@ -2,7 +2,7 @@
 layout: page
 title: Shut The Box
 ---
-Shut the Box is my first attempt at a Windows Application. It runs on both Windows 8.1/10 and Windows Phone 8.1.
+Shut the Box is my first attempt at a Windows Application. It runs on both Windows 8.1/10 and Windows Phone 8.1/10.
 
 ![Screenshot][3]
 
