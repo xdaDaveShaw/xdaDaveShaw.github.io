@@ -12,6 +12,9 @@ any more than the Donate links in the about page in the App.
 
 [![Download Here][2]][4]
 
+##Changes
+You can view a list of versions and changes made [here][6].
+
 ##Rules
 
 The rules of the game are quite simple, roll the dice and shut any number of flaps that add up to the 
@@ -39,3 +42,4 @@ It has Internet access only for [Application Insights][5] at the moment, I have 
  [3]:screenshot.png
  [4]:https://www.microsoft.com/en-us/store/apps/shut-the-box/9nblggh690qb
  [5]:https://azure.microsoft.com/en-gb/services/application-insights/
+ [6]:changes.html
