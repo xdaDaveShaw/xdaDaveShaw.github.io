@@ -4,6 +4,9 @@ layout: page
 This is the Changelog for [Shut The Box](\shutthebox)
 
 #Version 1.1.0
+ - Fixed some display issues on Phones.
+
+#Version 1.1.0
  - Fixed a performance issue when played on lower spec. devices.
  - Added a mute all sound icon.
  - Changed about to use an icon.
