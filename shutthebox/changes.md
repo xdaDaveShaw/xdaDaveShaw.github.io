@@ -3,7 +3,7 @@ layout: page
 ---
 This is the Changelog for [Shut The Box](\shutthebox)
 
-#Version 1.1.0
+#Version 1.1.1
  - Fixed some display issues on Phones.
 
 #Version 1.1.0
