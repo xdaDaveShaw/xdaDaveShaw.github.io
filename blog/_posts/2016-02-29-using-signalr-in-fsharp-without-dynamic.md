@@ -24,7 +24,7 @@ Turns out that the `FSharp.Interop.Dynamic` package is dependant on `FSharp.Core
 So this turned into a challenge of how do I use SignalR without Dynamic. After a bit of googling I landed on
 [this page][4] that showed Strongly Typed Hubs. So I knew it was possible...
 
-#Removing Dependencies
+# Removing Dependencies
 
 The first step to fixing this was to remove the `FSharp.Core` dependencies I no longer needed, these were:
 
@@ -36,7 +36,7 @@ Uninstall-Package FSharp.Core
    
 I then just browsed through the source and removed all the `open` declarations.
 
-#Re-adding FSharp Core
+# Re-adding FSharp Core
 
 Slight problem now, I no longer had any FSharp Core references, so I needed to add one in. 
 I'm not sure if this is the best way to solve this, but I just copied and pasted these lines 
@@ -52,7 +52,7 @@ from a empty FSharp project I just created:
 <Reference Include="Newtonsoft.Json">
 {% endhighlight %}
    
-#Changing the Hub
+# Changing the Hub
 
 Now all I had to do was update the code to use the statically typed hub.
 
@@ -80,7 +80,7 @@ to
 
      Clients.All.Message message
      
-#Getting the Context
+# Getting the Context
 
 With SignalR you cannot just `new` up an instance of a `Hub`, you have to use `GlobalHost.ConnectionManager.GetHubContext<THub>`. The problem is that this gives you
 and `IHubContext` which only exposes the dynamic interface again. A bit more googling and I found that
@@ -96,7 +96,7 @@ Becomes:
      
 Now you can call `Context.Clients.All.BroadcastPerformance` and not worry about that pesky dynamic any more.
 
-#Conclusion
+# Conclusion
 
 The documentation on SignalR isn't very good, it was easy enough to find out about the statically typed version, but finding out how to get one out of the context was a right pain.
 
