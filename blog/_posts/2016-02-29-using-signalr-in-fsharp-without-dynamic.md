@@ -58,7 +58,7 @@ Now all I had to do was update the code to use the statically typed hub.
 
 First step was to create an interface for the `metricsHub`:
 
-{% highlight fsharp %}
+{% highlight F# %}
 type IMetricsHub = 
     abstract member AddMessage: string -> unit
     abstract member BroadcastPerformance: PerfModel seq -> unit
@@ -66,7 +66,7 @@ type IMetricsHub =
     
 Then change our `Hub` to inherit from the generic `Hub<T>`:
     
-{% highlight fsharp %}
+{% highlight F# %}
 [<HubName("metricsHub")>]
 type metricsHub() = 
     inherit Hub<IMetricsHub>() // < Generic version of our interface.
@@ -88,12 +88,16 @@ you need to pass our interface as a second generic parameter and you will get an
 
 So this:
 
-     let context = GlobalHost.ConnectionManager.GetHubContext<metricsHub>()
+{% highlight F# %}
+let context = GlobalHost.ConnectionManager.GetHubContext<metricsHub>()
+{% endhighlight %}
      
 Becomes:
 
-     let context = GlobalHost.ConnectionManager.GetHubContext<metricsHub, IMetricsHub>()
-     
+{% highlight F# %}
+let context = GlobalHost.ConnectionManager.GetHubContext<metricsHub, IMetricsHub>()
+{% endhighlight %}     
+
 Now you can call `Context.Clients.All.BroadcastPerformance` and not worry about that pesky dynamic any more.
 
 # Conclusion
