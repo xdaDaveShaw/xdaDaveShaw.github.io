@@ -19,7 +19,7 @@ Assuming you have just deployed a VM and it doesn't have a DNS on cloudapp.net y
 
 ![newly deployed vm][2]
 
-##Dissociate Public IP
+## Dissociate Public IP
 
 First you need to Dissociate the Public IP so you can make changes.
 
@@ -33,7 +33,7 @@ Then click **Dissociate** and confirm when prompted.
 
 > You cannot change any settings whilst the Public IP is in use.
 
-##Configuring the DNS
+## Configuring the DNS
 
 From the Public IP page, click **All Settings** then **Configuration** to open up the settings:
 
@@ -43,7 +43,7 @@ Then you can enter a new DNS prefix for *datacentre*.cloudapp.azure.net:
 
 ![public ip configuration new dns][6]
 
-##Reassociate the Public IP
+## Reassociate the Public IP
 
 Now you need to reassociate the Public IP with the VM.
 
@@ -66,7 +66,7 @@ Public IP Address from the list.
 
 Then click **Save**.
 
-#Validation and Testing
+# Validation and Testing
 
 Now if you close and re-open the VM blade you should see a new Public IP address appear. 
 
@@ -83,7 +83,7 @@ To test, ping the VM and see if the DNS resolves:
 
 The requests will timeout because Azure has ICMP disabled, but so long as the DNS resolves, you've done it.
 
-#Conclusion
+# Conclusion
 
 This seems to be a change that I can't find a source for to do with Resource Managed VM's instead of Classic VM's. It used to work OK on classic VM's.
 
