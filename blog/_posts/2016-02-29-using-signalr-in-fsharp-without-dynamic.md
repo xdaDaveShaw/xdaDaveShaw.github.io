@@ -62,13 +62,15 @@ First step was to create an interface for the `metricsHub`:
 type IMetricsHub = 
     abstract member AddMessage: string -> unit
     abstract member BroadcastPerformance: PerfModel seq -> unit
+{% endhighlight %}
     
 Then change our `Hub` to inherit from the generic `Hub<T>`:
     
+{% highlight fsharp %}
 [<HubName("metricsHub")>]
 type metricsHub() = 
     inherit Hub<IMetricsHub>() // < Generic version of our interface.
- {% endhighlight %}
+{% endhighlight %}
  
 And changed all the calls from:
  
