@@ -28,11 +28,11 @@ So this turned into a challenge of how do I use SignalR without Dynamic. After a
 
 The first step to fixing this was to remove the `FSharp.Core` dependencies I no longer needed, these were:
 
-{% highlight powershell %}
+```posh
 Uninstall-Package FSharp.Interop.Dynamic 
 Uninstall-Package Dynamitey
 Uninstall-Package FSharp.Core
-{% endhighlight %}
+```
    
 I then just browsed through the source and removed all the `open` declarations.
 
@@ -42,7 +42,7 @@ Slight problem now, I no longer had any FSharp Core references, so I needed to a
 I'm not sure if this is the best way to solve this, but I just copied and pasted these lines 
 from a empty FSharp project I just created:
 
-{% highlight xml %}
+```xml
 <Reference Include="mscorlib" />
 <!--Add this bit-->
 <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -50,7 +50,7 @@ from a empty FSharp project I just created:
 </Reference>
 <!--End-->
 <Reference Include="Newtonsoft.Json">
-{% endhighlight %}
+```
    
 # Changing the Hub
 
@@ -58,28 +58,32 @@ Now all I had to do was update the code to use the statically typed hub.
 
 First step was to create an interface for the `metricsHub`:
 
-{% highlight fsharp %}
+```fsharp
 type IMetricsHub = 
     abstract member AddMessage: string -> unit
     abstract member BroadcastPerformance: PerfModel seq -> unit
-{% endhighlight %}
+```
     
 Then change our `Hub` to inherit from the generic `Hub<T>`:
     
-{% highlight fsharp %}
+```fsharp
 [<HubName("metricsHub")>]
 type metricsHub() = 
     inherit Hub<IMetricsHub>() // < Generic version of our interface.
-{% endhighlight %}
+```
  
 And changed all the calls from:
  
-     Clients.All?message(message)
+```fsharp
+Clients.All?message(message)
+```
 
 to
 
-     Clients.All.Message message
-     
+```fsharp
+Clients.All.Message message
+```
+
 # Getting the Context
 
 With SignalR you cannot just `new` up an instance of a `Hub`, you have to use `GlobalHost.ConnectionManager.GetHubContext<THub>`. The problem is that this gives you
@@ -88,12 +92,16 @@ you need to pass our interface as a second generic parameter and you will get an
 
 So this:
 
-     let context = GlobalHost.ConnectionManager.GetHubContext<metricsHub>()
-     
+```fsharp
+let context = GlobalHost.ConnectionManager.GetHubContext<metricsHub>()
+```
+
 Becomes:
 
-     let context = GlobalHost.ConnectionManager.GetHubContext<metricsHub, IMetricsHub>()
-     
+```fsharp
+let context = GlobalHost.ConnectionManager.GetHubContext<metricsHub, IMetricsHub>()
+```
+
 Now you can call `Context.Clients.All.BroadcastPerformance` and not worry about that pesky dynamic any more.
 
 # Conclusion
