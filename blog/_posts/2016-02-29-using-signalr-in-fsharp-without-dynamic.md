@@ -87,8 +87,7 @@ Clients.All.Message message
 # Getting the Context
 
 With SignalR you cannot just `new` up an instance of a `Hub`, you have to use `GlobalHost.ConnectionManager.GetHubContext<THub>`. The problem is that this gives you
-and `IHubContext` which only exposes the dynamic interface again. A bit more googling and I found that
-you need to pass our interface as a second generic parameter and you will get an `IHubContext<IMetricsHub>`.
+and `IHubContext` which only exposes the dynamic interface again. A bit more googling and I found that you need to pass our interface as a second generic parameter and you will get an `IHubContext<IMetricsHub>`.
 
 So this:
 
@@ -108,8 +107,7 @@ Now you can call `Context.Clients.All.BroadcastPerformance` and not worry about 
 
 The documentation on SignalR isn't very good, it was easy enough to find out about the statically typed version, but finding out how to get one out of the context was a right pain.
 
- I've published a fork of Louies GitHub repo with four commits that show the steps needed to move from dynamic to 
- statically typed SignalR [here][5] so you can see the changes I needed to make.
+I've published a fork of Louies GitHub repo with four commits that show the steps needed to move from dynamic to statically typed SignalR [here][5] so you can see the changes I needed to make.
 
 
  [1]:http://coding.fitness/f-powered-realtime-dashboard/
