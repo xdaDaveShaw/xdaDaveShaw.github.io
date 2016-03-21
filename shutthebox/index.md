@@ -41,4 +41,4 @@ It has Internet access only for [Application Insights][5] at the moment, I have 
  [3]:screenshot.png
  [4]:https://www.microsoft.com/en-us/store/apps/shut-the-box/9nblggh690qb
  [5]:https://azure.microsoft.com/en-gb/services/application-insights/
- [6]:changes.html
+ [6]:changes
