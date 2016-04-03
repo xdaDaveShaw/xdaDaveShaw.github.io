@@ -13,7 +13,7 @@ Today I've changed over to using SSL by default.
 
 ![SSL in Chrome][3]
 
-The main reason for moving is that SSL [gives better SEO][4] - and that my old blog was SSL so I'm sure there will be some SSL links scattered about the web. It also prevents and silly public networks injecting anything into any of my pages.
+The main reason for moving is that SSL [gives better SEO][4] - and that my old blog was SSL so I'm sure there will be some SSL links scattered about the web. It also prevents any silly public networks injecting anything into any of my pages.
 
 I'm using CloudFlare to secure to the communications from your browser to them. Thanks to Sheharyar Naseer for his [excellent guide][1] that got me up and running in no time, and to [DNSimple][2] for their excellent DNS Service that made it a piece of cake changing my Nameservers.
 
