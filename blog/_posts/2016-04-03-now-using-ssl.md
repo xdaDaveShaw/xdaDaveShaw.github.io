@@ -11,7 +11,7 @@ categories:
 
 Today I've changed over to using SSL by default.
 
-![SSL in Chrome][2]
+![SSL in Chrome][3]
 
 The main reason for moving is that SSL [gives better SEO][4] - and that my old blog was SSL so I'm sure there will be some SSL links scattered about the web. It also prevents and silly public networks injecting anything into any of my pages.
 
