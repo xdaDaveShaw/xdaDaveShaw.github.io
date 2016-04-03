@@ -2,7 +2,8 @@
 title: Taeguk.co.uk
 email: dave@taeguk.co.uk
 description: Dave Shaw's Development Blog
-url: http://taeguk.co.uk
+url: https://taeguk.co.uk
+enforce_ssl: taeguk.co.uk 
 twitter_username: xdaDaveShaw
 github_username:  xdaDaveShaw
 stackoverflow_link: users/383710/daveshaw

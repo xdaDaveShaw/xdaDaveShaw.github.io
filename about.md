@@ -6,7 +6,7 @@ permalink: /about/
 
 I work full-time as a lead developer for a large software firm, working with C#, WinForms and Microsoft SQL Server on an enterprise scale. I am also the “Accidental TFS Admin” for TFS 2012 within the company. I'm currently learning F# and finding excuses to use it at work.
 
-[![StackOverflow](http://stackoverflow.com/users/flair/383710.png)](http://stackoverflow.com/users/383710/daveshaw)
+[![StackOverflow](https://stackoverflow.com/users/flair/383710.png)](http://stackoverflow.com/users/383710/daveshaw)
 
 [![F#](/images/fsharp.png) F# Foundation Member](http://foundation.fsharp.org/daveshaw)
 
