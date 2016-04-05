@@ -1,6 +1,6 @@
-This is the repository for my blog on [taeguk.co.uk](http://taeguk.co.uk).
+This is the repository for my blog on [taeguk.co.uk](https://taeguk.co.uk).
 
-It is rendered via Jekyll and hosted on [GitHub pages](http://xdadaveshaw.github.io).
+It is rendered via Jekyll and hosted on [GitHub pages](https://xdadaveshaw.github.io).
 
 Thanks
 ---
