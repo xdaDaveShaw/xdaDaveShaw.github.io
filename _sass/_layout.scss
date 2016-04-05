@@ -203,6 +203,7 @@
 
     > li {
         margin-bottom: $spacing-unit;
+        border-bottom: 6px double $brand-color-dark;
     }
      &.archive {
         > ul {
