@@ -44,7 +44,7 @@ out how to complete the certification seemed like too much work. I may look into
 This application has been a long time coming, mostly down to my lack of free time and/or willingness to work on
 it, but I'm glad it's finally published, now to try and release some updates and add some more nice features.
 
-If you enjoy the game, please feel free to leave me a rood rating / comment in the Store.
+If you enjoy the game, please feel free to leave me a good rating / comment in the Store.
 
 
  [1]:{{ site.url }}\shutthebox
