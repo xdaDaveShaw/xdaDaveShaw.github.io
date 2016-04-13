@@ -56,7 +56,7 @@ Visual Studio Code is a tricky one to setup because it isn't .NET, it's all Java
 ```JSON
 // Place your settings in this file to overwrite the default settings
 {
-	"http.proxy": "http://DOMAIN%5CUser%20Name%3AP%40ssword!@proxy-cluster.fqdn.local:8881",
+    "http.proxy": "http://DOMAIN%5CUser%20Name%3AP%40ssword!@proxy-cluster.fqdn.local:8881"
 }
 ```
 There are a lot of ways to mess this up, I almost gave up on VS Code after weeks of messing about, the removal of C# from base product made it "make or break time". If you are struggling I suggest you re-read the GitHub issue. The main tip I found useful was to pop-open the Developer Tools in VS Code (under Help) and in the JavaScript Console run: `require('url').parse('YOUR PROXY URL')` and check the output. 
