@@ -45,26 +45,26 @@ Be sure to make a note of the column configuration before you start.
 
 First step is to find your `TeamId` from the Collection Database. Team Ids can be found in the `ADObjects` table.
 
-{% highlight sql %}
+```sql
 select * from ADObjects
 where SamAccountName like '%MyTeamName%';
-{% endhighlight %}
+```
 
 The `TeamFoundationId` GUID in this table is the value we are interest in.
 
 You can find the Board and Columns in the `tbl_Board` and `tbl_BoardColumn` tables using the following SQL:
 
-{% highlight sql %}
+```sql
 select * from tbl_Board b
 join tbl_BoardColumn bc on b.Id = bc.BoardId
 where TeamId = 'YouTeamId';
-{% endhighlight %}
+```
     
 Once you are happy that you have the found the rows for the team, you can then delete them from those two tables. You should probably copy the results into Excel just in case things go wrong.
 
 To delete you can use the following SQL Queries:
 
-{% highlight sql %}
+```sql
 delete bc
 from tbl_Board b
 join tbl_BoardColumn bc on b.Id = bc.BoardId
@@ -72,7 +72,7 @@ where TeamId = 'YouTeamId';
 
 delete tbl_Board
 where TeamId = 'YouTeamId';
-{% endhighlight %}
+```
     
 Now if you refresh the board it should report that there is no configuration and needs to be setup again from scratch.
 
