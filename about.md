@@ -14,7 +14,7 @@ I work full-time as a lead developer for a large software firm, working with C#,
 
 I plan to share some of my experience that I hope you will find useful. Topics that I have in mind for coverage:
 
- - Team Foundation Server/Service (including the API).
+ - Team Foundation Server/Visual Studio Team Services (including the API).
  - Useful Linqpad snippets.
  - Windows Application (UWP / Phone / Store) Development Journey – as I write this, I have not left port, so I will share useful facts as I find them.
  - C# & F#.
