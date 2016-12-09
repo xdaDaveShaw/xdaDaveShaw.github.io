@@ -128,7 +128,7 @@ document
 .Descendants(bookNs + "Name")
 .Select(book => Convert.ToInt32(book.Attribute("id").Value))
 .Dump();
-``` c#
+```
 
 This will return an `IEnumerable<Int32>`:
   
