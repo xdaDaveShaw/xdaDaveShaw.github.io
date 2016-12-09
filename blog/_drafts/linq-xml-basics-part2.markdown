@@ -22,7 +22,7 @@ Many XML documents will contain namespaces (you can google if you want to know w
 
 Here is a sample Document that we will be querying:
 
-{% highlight xml %}
+``` xml
 <?xml version="1.0" encoding="UTF-8"?>
 <Library xmlns="http://taeguk.co.uk/People/" xmlns:b="http://taeguk.co.uk/Books/">
   <Person id="1">
@@ -40,18 +40,18 @@ Here is a sample Document that we will be querying:
     </b:Books>
   </Person>
 </Library>
-{% endhighlight %}
+```
 
 It represents an XML response from some imaginary library system, and is probably not the best way to represent data, but it will serve the needs of this post, and you can find allsorts of weird XML schemas the wild.
 
 Continuing from Part 1, you could be forgiven for thinking that the following query would list all the "Name" elements in the document:
 
-{% highlight c# %}
+``` c#
 document
 .Descendants("Name")
 .Select(name => name.Value)
 .Dump();
-{% endhighlight %}
+```
 
 This doesn’t return anything however.
 
@@ -59,7 +59,7 @@ This is probably a good thing, the document has two elements called "Name". One 
 
 We can remedy this by declaring an `XNamespace` variable and using it as part of the name we pass to the `Elements()` method:
 
-{% highlight c# %}
+``` c#
 //Cannot use 'var' because it would be a string.
 //You need to use XNamespace, then string gets implicitly 
 //converted to the correct type
@@ -68,7 +68,7 @@ document
 .Descendants(ns + "Name")        //Addition of XNamespace and string produces an XName.
 .Select(name => name.Value)
 .Dump();
-{% endhighlight %}
+```
 
 This will now return:
 
@@ -80,17 +80,17 @@ As you can see from the comments, you cannot use `var` for type inference for an
 
 When you need to traverse down the document you have to use the namespace on all the element declarations. To get the element that contains the books rented by Bob:
 
-{% highlight c# %}
+``` c#
 document
 .Root
 .Elements(ns + "Person")		
 .Where(xe => xe.Element(ns + "Name").Value == "Bob")
 .Dump();
-{% endhighlight %}
+```
 
 Returns the following `XElement`:
 
-{% highlight xml %}
+``` xml
 <Person id="2" xmlns="http://taeguk.co.uk/People/">
   <Name>Bob</Name>
   <b:Books xmlns:b="http://taeguk.co.uk/Books/">
@@ -98,17 +98,17 @@ Returns the following `XElement`:
     <b:Name id="4">Goblet of Fire</b:Name>
   </b:Books>
 </Person>
-{% endhighlight %}
+```
 
 To get information about the books you just use the namespace of `b:` which is `http://taeguk.co.uk/Books/`. This example gets the value of the `name` attribute of all the books in the document:
 
-{% highlight c# %}
+``` c#
 XNamespace bookNs = "http://taeguk.co.uk/Books/";
 document
 .Descendants(bookNs + "Name")
 .Select(name => name.Value)
 .Dump();
-{% endhighlight %}
+```
 
     IEnumerable<String> (4 items) 
     Philosopher's Stone 
@@ -122,13 +122,13 @@ This section will show you how to write less code to get values out of elements 
 
 To get all the values from the `id` attribute you can use the following code which should seem familiar to the previous examples:
 
-{% highlight c# %}
+``` c#
 document
 .Root
 .Descendants(bookNs + "Name")
 .Select(book => Convert.ToInt32(book.Attribute("id").Value))
 .Dump();
-{% endhighlight %}
+``` c#
 
 This will return an `IEnumerable<Int32>`:
   
@@ -142,7 +142,7 @@ But what about getting the values from the `rating` attribute, where we there is
   
  One attempt might be to check the attribute is not null and only call `Convert.ToInt32` on the value of those, and default the others to `null`:
  
- {% highlight c# %}
+ ``` c#
  var avgRating= 
 	document
 	.Root
@@ -152,11 +152,11 @@ But what about getting the values from the `rating` attribute, where we there is
 avgRating.Dump();
 
 //prints 5
-{% endhighlight %}
+```
 
 This is a little verbose and isn't very readable, but it does do the job. Those of you who like to keep their code "DRY" might try to avoid reading the `book.Attribute("rating")` by creating an anonymous method instead: 
 
-{% highlight c# %}
+``` c#
 avgRating= 
 	document
 	.Root
@@ -172,13 +172,13 @@ avgRating=
 avgRating.Dump();
 
 //prints 5
-{% endhighlight %}
+```
 
 OK, this has reduced the duplicate call to get the value from the `book.Attribute`, but has made the code even more verbose, surely there must be a better way.
 
 And there is, you can just cast the `XAttribute` to the type you want. If it's a value type like in our example, you can make it nullable to handle missing attributes:
 
-{% highlight c# %}
+``` c#
 avgRating = 
 	document
 	.Root
@@ -188,7 +188,7 @@ avgRating =
 avgRating.Dump();
 
 //prints 5
-{% endhighlight %}
+```
 
 That's lot better. The same technique can be applied to other types such as `DateTime`.
 
