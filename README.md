@@ -8,3 +8,4 @@ Thanks
  - [Mark Seeman](https://github.com/ploeh/ploeh.github.com) who's site I've also been using as a reference.
  
  If you would like to help squash any bugs in my blog or notify of problems, you can raise an issue, leave a comment or create [Pull Request](https://github.com/xdaDaveShaw/xdaDaveShaw.github.io).
+ 
