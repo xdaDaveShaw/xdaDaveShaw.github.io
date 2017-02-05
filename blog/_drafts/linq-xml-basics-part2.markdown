@@ -2,19 +2,19 @@
 layout: post
 status: draft
 published: false
-title: Linq to Xml Basics (part 2)
+title: LINQ to Xml Basics (part 2)
 date: '2015-05-18 20:25:00 +0000'
 date_gmt: '2015-05-18 20:25:00 +0000'
 categories:
-- Linqpad
+- LINQpad
 - Series
 ---
 
-This is the second part of my mini-series on getting started with Linq to XML, you can find [Part 1 here].({% post_url ####-##-##-linq-xml-basics-part1 %}) 
+This is the second part of my mini-series on getting started with LINQ to XML, you can find [Part 1 here].({% post_url ####-##-##-LINQ-xml-basics-part1 %})
 
 In this post I’ll go through a few tricks to make querying easier and dealing with namespaces.
 
-All the samples will be available as [Linqpad](http://linqpad.net) scripts so you can download them and experiment.
+All the samples will be available as [LINQpad](http://LINQpad.net) scripts so you can download them and experiment.
 
 # Namespaces
 
@@ -61,9 +61,9 @@ We can remedy this by declaring an `XNamespace` variable and using it as part of
 
 ``` c#
 //Cannot use 'var' because it would be a string.
-//You need to use XNamespace, then string gets implicitly 
+//You need to use XNamespace, then string gets implicitly
 //converted to the correct type
-XNamespace ns = "http://taeguk.co.uk/People/";  //Matches the xmlns from the root element.  
+XNamespace ns = "http://taeguk.co.uk/People/";  //Matches the xmlns from the root element.
 document
 .Descendants(ns + "Name")        //Addition of XNamespace and string produces an XName.
 .Select(name => name.Value)
@@ -72,9 +72,10 @@ document
 
 This will now return:
 
-    IEnumerable<String> (2 items) 
-    Alice 
-    Bob 
+```plain
+Alice
+Bob
+```
 
 As you can see from the comments, you cannot use `var` for type inference for an `XNamespace`.
 
@@ -83,7 +84,7 @@ When you need to traverse down the document you have to use the namespace on all
 ``` c#
 document
 .Root
-.Elements(ns + "Person")		
+.Elements(ns + "Person")
 .Where(xe => xe.Element(ns + "Name").Value == "Bob")
 .Dump();
 ```
@@ -110,11 +111,14 @@ document
 .Dump();
 ```
 
-    IEnumerable<String> (4 items) 
-    Philosopher's Stone 
-    Chamber of Secrets 
-    Prisoner of Azkaban 
-    Goblet of Fire 
+This will return:
+
+``` plain
+Philosopher's Stone
+Chamber of Secrets
+Prisoner of Azkaban
+Goblet of Fire
+```
 
 # Getting Values
 
@@ -131,60 +135,81 @@ document
 ```
 
 This will return an `IEnumerable<Int32>`:
-  
-    IEnumerable<Int32> (4 items) 
-    1 
-    2 
-    3 
-    4 
+
+``` plain
+1
+2
+3
+4
+```
 
 But what about getting the values from the `rating` attribute, where we there is a book without a rating, for example: `<b:Name id=""4"">Goblet of Fire</b:Name>`. Trying to use the `.Value` property of the `XAttribute` will throw a `NullReferenceException` if the attribute is not specified.
-  
- One attempt might be to check the attribute is not null and only call `Convert.ToInt32` on the value of those, and default the others to `null`:
- 
- ``` c#
- var avgRating= 
-	document
-	.Root
-	.Descendants(bookNs + "Name")
-	.Select(book => book.Attribute("rating") != null ? (Int32?)Convert.ToInt32(book.Attribute("rating").Value) : null)
-	.Average();
+One attempt might be to check the attribute is not null and only call `Convert.ToInt32` on the value of those, and default the others to `null`:
+
+``` c#
+var avgRating =
+  document
+  .Root
+  .Descendants(bookNs + "Name")
+  .Select(book => book.Attribute("rating") != null ? (Int32?)Convert.ToInt32(book.Attribute("rating").Value) : null)
+  .Average();
+
 avgRating.Dump();
 
 //prints 5
 ```
 
-This is a little verbose and isn't very readable, but it does do the job. Those of you who like to keep their code "DRY" might try to avoid reading the `book.Attribute("rating")` by creating an anonymous method instead: 
+This is a little verbose and isn't very readable, but it does do the job.
+Those of you who like to keep their code "DRY" might try to avoid reading the `book.Attribute("rating")` by creating an anonymous method instead:
 
 ``` c#
-avgRating= 
-	document
-	.Root
-	.Descendants(bookNs + "Name")
-	.Select(
-		book => 
-			{
-				var att = book.Attribute("rating");
-				return
-					att != null ? (Int32?)Convert.ToInt32(att.Value) : null;
-			})
-	.Average();
+avgRating =
+  document
+  .Root
+  .Descendants(bookNs + "Name")
+  .Select(
+    book =>
+    {
+      var att = book.Attribute("rating");
+      return
+        att != null ? (Int32?)Convert.ToInt32(att.Value) : null;
+    })
+  .Average();
+
 avgRating.Dump();
 
 //prints 5
 ```
 
-OK, this has reduced the duplicate call to get the value from the `book.Attribute`, but has made the code even more verbose, surely there must be a better way.
-
-And there is, you can just cast the `XAttribute` to the type you want. If it's a value type like in our example, you can make it nullable to handle missing attributes:
+OK, this has reduced the duplicate call to get the value from the `book.Attribute`, but has made the code even more verbose,
+surely there must be a better way.
+One solution to avoid a `NullReferenceException` would be to use the [null-conditional operator](https://msdn.microsoft.com/en-us/library/dn986595.aspx),
+but that would be incorrect here because the default for `Int32` is `0`, not `null` so the average would be `3.75` instead of `5`.
 
 ``` c#
-avgRating = 
-	document
-	.Root
-	.Descendants(bookNs + "Name")
-	.Select(book => (Int32?)book.Attribute("rating"))
-	.Average();
+avgRating =
+  document
+  .Root
+  .Descendants(bookNs + "Name")
+  .Select(book => Convert.ToInt32(book.Attribute("rating")?.Value))
+  .Average();
+avgRating.Dump();
+
+//prints 3.75
+```
+
+So, that didn't work, but there is a solution that is both succint and correct.
+Just cast the `XAttribute` to the type you want. If it's a value type like in our example,
+you can make it nullable to handle missing attributes:
+
+``` c#
+avgRating =
+  document
+  .Root
+  .Descendants(bookNs + "Name")
+  .Select(book => (Int32?)book.Attribute("rating"))
+  .Average();
+
 avgRating.Dump();
 
 //prints 5
@@ -196,6 +221,8 @@ That's lot better. The same technique can be applied to other types such as `Dat
 
 In this post we have looked at how to deal with namespaces in documents and how to get data out of attributes without having to write loads of code that we don't need to.
 
-In the 3rd and final part, I'll cover writing and updating XML documents using Linq to XML.
+In the 3rd and final part, I'll cover writing and updating XML documents using LINQ to XML.
 
-**Download: TODO GIT HUB**
+# Download
+
+The LINQpad script for these examples can be found [here on GitHub](https://github.com/xdaDaveShaw/LINQ-Xml-Basics/blob/master/Part2.LINQ).
