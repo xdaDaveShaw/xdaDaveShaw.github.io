@@ -29,6 +29,7 @@ C:\Dave\Source\>
 ```
 
 After a bit of digging through the batch files I found the reason for this is because of this bit code in:
+
 `C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\Tools\vsdevcmd\core\vsdevcmd_end.bat`
 
 ``` batch
