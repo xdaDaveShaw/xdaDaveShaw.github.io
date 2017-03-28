@@ -25,7 +25,7 @@ it was opening in wasn't the current directory that ConEmu was setting, but `C:\
 ** Copyright (c) 2017 Microsoft Corporation
 **********************************************************************
 
-C:\Dave\Source\>
+C:\Dave\Source>
 ```
 
 After a bit of digging through the batch files I found the reason for this is because of this bit code in:
