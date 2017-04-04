@@ -1,35 +1,35 @@
 #TODO: Make work off of git status to only find uncommitted PNGs
-echo ""
+Write-Output ""
 
 Function GetSize {
     (Get-ChildItem *.png -recurse | Measure-Object -property length -sum).Sum
 }
 
-echo 'Compressing all PNG images...'
+Write-Output 'Compressing all PNG images...'
 
 $originalSize = GetSize
 
 if (!(Test-Path -Path tools))
 {
-    md tools > $null
+    mkdir tools > $null
 }
 
 if (!(Test-Path -Path tools\pngout.exe))
 {
-    echo 'Downloading PNGOut...'
+    Write-Output 'Downloading PNGOut...'
     Invoke-WebRequest 'http://advsys.net/ken/util/pngout.exe' -OutFile '.\tools\pngout.exe'
-    echo 'Download Complete.'
+    Write-Output 'Download Complete.'
 }
 
-echo ""
-echo 'Performing Compressing, please wait...'
+Write-Output ""
+Write-Output 'Performing Compressing, please wait...'
 
-gci *.png -Recurse | select FullName | foreach { .\tools\pngout.exe $_.Fullname}
+Get-ChildItem *.png -Recurse | Select-Object FullName | ForEach-Object { .\tools\pngout.exe $_.Fullname /c2 /f0 }
 
 $finalSize = GetSize
 
-echo ""
-echo 'All PNGs Compressed'
-echo "Original Size was: $originalSize bytes."
-echo "Final Size is:     $finalSize bytes."
-echo ""
+Write-Output ""
+Write-Output 'All PNGs Compressed'
+Write-Output "Original Size was: $originalSize bytes."
+Write-Output "Final Size is:     $finalSize bytes."
+Write-Output ""
