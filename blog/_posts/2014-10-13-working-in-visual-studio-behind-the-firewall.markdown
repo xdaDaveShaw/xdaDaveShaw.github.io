@@ -13,12 +13,13 @@ categories:
 ---
 - **Updated 22-Mar-2016** *Added VS Code*
 - **Updated 07-Oct-2016** *Added NPM / Node JS*
+- **Updated 16-Aug-2017** *Highlight VS Code is no longer needed*
 
 Working in an "Enterprise" type environment means lots of *fun* obstacles getting in the way of your day to day work &ndash; the corporate proxy is one of my challenges.
 
 Since giving up on CNTLM Proxy due to instability and account lockouts, I haven't been able to connect to nuget.org from the package manager, view the Visual Studio Extension Gallery or even get any extension/product updates from Visual Studio.
 
-This is a quick post with the changes I needed to get Visual Studio 2013 Update 4 (works on 2015 too), VS Code 0.10.11, NuGet 2.8 and Web Platform (Web PI) 5 to see past the corporate [Squid proxy](http://www.squid-cache.org).
+This is a quick post with the changes I needed to get Visual Studio 2013 Update 4 (works on 2015/17 too), VS Code 0.10.15, NuGet 2.8 and Web Platform (Web PI) 5 to see past the corporate [Squid proxy](http://www.squid-cache.org).
 
 # NuGet
 
@@ -48,13 +49,15 @@ As per the comments on the answer some people might have success without the pas
 
 # Visual Studio Code
 
+**NOTE**: VS Code 1.15 has built in [proxy support](https://code.visualstudio.com/updates/v1_15#_proxy-server-authentication). I'm leaving the below in place as it forms the basis for NPM, and might still be useful in some circumstances.
+
 Visual Studio Code is a tricky one to setup because it isn't .NET, it's all JavaScript based. Most of my information came from the GitHub [issue](https://github.com/microsoft/vscode/issues/69).
 
 - Determine your proxy server and port. When you have a complicated proxy, this is a pain and it took me a while as I use an automatic configuration script. If it is a standard server/port combo, you're on an easier path.
 - I usually configure IE with a script from a URL like this one: `http://proxy-server/script.dat`. This is a plain JS script which, after a bit of looking at, I discovered pointed to `proxy-cluster.fqdn.local:8881`.
 - Now I have a server and port I need my authentication details.
 - Let's assume my NTLM login is `DOMAIN\User Name` and my password is `P@ssword!`
-- The format for the credentials needs to be `DOMAIN\User Name:P@ssword!`, but you need to URL Encode the user name and password. 
+- The format for the credentials needs to be `DOMAIN\User Name:P@ssword!`, but you need to URL Encode the user name and password.
 - A simple online [URL encoded](http://meyerweb.com/eric/tools/dencoder/) can translate your username and password to: `DOMAIN%5CUser%20Name` and `P%40ssword!`.
 - Piece all this info into a single string like so: `http://DOMAIN%5CUser%20Name:P%40ssword!@proxy-cluster.fqdn.local:8881`
 - Then add this into your User Settings in File, Preferences against the `"http.proxy"` value:
@@ -103,8 +106,7 @@ npm install --proxy http://DOMAIN%5CUser%20Name:P%40ssword!@proxy-cluster.fqdn.l
 
 This requires you to know your proxy URI in advance, but if you are storing it in VS Code, you can copy and paste from there.
 
-I'm currently wrapping all NPM operations in Powershell scripts that automate checking of packages on disk, then prompting for 
-authentication details if needed and building the URI on the fly. 
+I'm currently wrapping all NPM operations in Powershell scripts that automate checking of packages on disk, then prompting for authentication details if needed and building the URI on the fly.
 
 # Visual Studio
 
