@@ -21,7 +21,7 @@ This brings us to the problem, each loc file is one Point of Interest in Outdoor
 
 Here's a loc file for just one Cache (from today's outing):
 
-{% highlight xml %}
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <loc version="1.0" src="Groundspeak">
   <waypoint>
@@ -36,7 +36,7 @@ Here's a loc file for just one Cache (from today's outing):
     <container>2</container>
   </waypoint>
 </loc>
-{% endhighlight %}
+```
 
 It's an XML document with a `loc` root element and a `waypoint` for the Point of Interest. After a bit of experimentation I found I could put any number of `waypoint` elements into the document and that Outdoor Navigation would only have to import one file that contained any number of Points of Interest. Bingo!
 
@@ -45,17 +45,21 @@ Now I had a way to import just one file if, but to do that I needed to combine a
 Using a bit of Linq-Xml I was able to load each file, grab the "waypoint" element(s) and then combine them into a new XML document that I could save to disk and even auto upload to OneDrive &ndash; providing I used the OneDrive Application for Windows.
 
 **First. Load all the loc files I have downloaded.**
-{% highlight c# %}
+
+```c#
+
 var locationElements =
   Directory
   .EnumerateFiles(folderPath, "*.loc")
   .SelectMany(path => new LocFile(path).GetElements());
-{% endhighlight %} 
+
+```
  
 There's a bit going on here. We start by grabbing any file with the "loc" extension in the folder stored in the `folderPath` variable &ndash; `Downloads\GC` in my case &ndash; Creating a new instance of the `LocFile` class calling `GetElements()` and combining all the results together. I'm using `SelectMany` instead of `Select` because I am assuming there could be more than one "waypoint" element in a loc file. What we are left with is an `IEnumerable<XElement>` containing all the "waypoint" elements from all the files.
 
 **Second. Creating the new XDocument:**
-{% highlight c# %}
+
+```c#
 var combinedLocFiles =
   new XDocument(
   new XElement("loc",
@@ -63,12 +67,13 @@ var combinedLocFiles =
     new XAttribute("src", "Groundspeak"),
     locationElements))
   .Dump();
-{% endhighlight %} 
-  
+```
+
 Here we are creating a new `XDocument` with a root element of "loc" with the attributes "version" and "src" with the values of "1.0" and "Groundspeak", respectively (the first, second and last lines in the above XML). And then filling the root element with the contents of the `locationElements` &ndash; the "waypoint" elements from the First snippet.
 
 **Finally. The LocFile class.**
-{% highlight c# %}
+
+```c#
 class LocFile
 {
   readonly String _filePath;
@@ -88,7 +93,7 @@ class LocFile
       .AsReadOnly();
   }
 }
-{% endhighlight %} 
+```
 
 This is the class that represents a loc file and knows how to get the relevant Elements from it.
 
