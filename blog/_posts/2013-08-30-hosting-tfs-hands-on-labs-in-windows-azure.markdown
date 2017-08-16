@@ -69,31 +69,31 @@ These next steps will be performed on the new VM over remote desktop.
  - Open Web Platform Installer and install "Windows Azure PowerShell" along with any dependencies.
  - Open up PowerShell and run the following commands: 
 
-{% highlight powershell %}
+```powershell
 Set-ExecutionPolicy RemoteSigned
 Import-Module "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1"
-{% endhighlight %}
+```
 
  - This will setup PowerShell with all the Azure CmdLets.
  - Get a copy of your Publish Settings file from Azure using this PowerShell command. This opens up a browser window to download a file (again I did this locally and uploaded it). 
  
-{% highlight powershell %} 
+```powershell 
 Get-AzurePublishSettingsFile
-{% endhighlight %}
+```
 
  - Now you have your Publish Settings file you need to import them and select your subscription using the following PowerShell commands:
 
-{% highlight powershell %} 
+```powershell 
 Import-AzurePublishSettingsFile 'C:\SubscriptionName-8-27-2013-credentials.publishsettings'
 Set-AzureSubscription 'SubscriptionName'
-{% endhighlight %} 
+``` 
 
  - Replace ***SubscriptionName*** with the name of your subscription.
  - Finally, verify the settings with the following command. You should see your subscription details listed.
 
-{% highlight powershell %} 
+```powershell 
 Get-AzureSubscription
-{% endhighlight %}
+```
 
 # 2.2 Creating your Storage
 
@@ -124,9 +124,9 @@ Now that you have PowerShell ready, you need somewhere to upload the VHD to on A
    - `http://storagename.blob.core.windows.net/containername/TD02WS12SFx64.vhd` &ndash; where ***storagename ***and ***containername*** are the names of your storage and container.
  - In PowerShell on the Downloader VM run the following PowerShell command:
  
-{% highlight powershell %} 
+```powershell 
 Add-AzureVhd
-{% endhighlight %}
+```
 
  - And supply the Destination and LocalFilePath (Source) when prompted.
  - This upload will take a few hours, so keep and eye on the progress &ndash; I left mine overnight.

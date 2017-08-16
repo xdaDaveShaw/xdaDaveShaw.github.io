@@ -28,11 +28,12 @@ In the end I turned to ILSpy and started disassembling the TFS Server Side Assem
 Within the `Tfs_Configuration` database there is a table called `tbl_RegistryItems`. This contains the configuration for Lab Management. Because we do not use Lab Management in any shape of form at the moment, I was happy to delete all our settings relating to it. If you do use Lab Management, then I don't suggest you try this.
 
 After backing up all the data that I was about to delete, I ran the following SQL Script to delete all our Lab Management configuration:
-{% highlight sql %}
+
+```sql
 use Tfs_Configuration;
  
 delete tbl_RegistryItems
 where ParentPath = '#\Configuration\Application\LabManagementSettings\';
-{% endhighlight %} 
+```
 
 The data in this table was cached, so I needed to restart my TFS Services to get it to pick it up, but once that was done. My Lab Manager job no longer reports an error and my Job Monitoring pie chart is nearly 100% green now.
