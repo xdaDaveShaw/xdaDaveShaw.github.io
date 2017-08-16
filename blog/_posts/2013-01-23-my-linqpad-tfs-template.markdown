@@ -16,14 +16,15 @@ I regularly find myself wanting to get information out of our TFS Collection via
 To make my life easier and to enable me to spin up these queries as quick as possible I came up with a "Template" Linqpad script that I can always use as a baseline.
 
 The important code is as follows and the "linq" file has all the references and namespaces I could ever need:
-{% highlight c# %}
+
+```c#
 const String CollectionAddress = "http://tfsserver:8080/tfs/MyCollection";
 using (var tfs = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(new Uri(CollectionAddress)))
 {
   tfs.EnsureAuthenticated();
   var server = tfs.GetService<>();
 }
-{% endhighlight %}
+```
 
 ### Using
 I have this in "My Linqpad Queries" and open it via a right click and "Use as Template for New Query", or sometimes, if I accidentally open the file I press Ctrl+Shift+C to clone it to a new query so I don't save change to the "template".
