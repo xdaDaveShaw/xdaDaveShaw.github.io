@@ -13,7 +13,7 @@ I recently started working on a new project and decided to use xUnit.net as my u
 
 Lets assume I have a test for `MyClass` that looks like this:
 
-{% highlight c# %}
+```c#
 public class MyClassTest
 {
     [Fact]
@@ -23,7 +23,7 @@ public class MyClassTest
         Assert.Equal(1, myClass.MyProperty);
     }
 }
-{% endhighlight %} 
+```
 
 In this version, Code Analysis is complaining because `TestMyProperty` does not uses any instance members from `MyClassTest`. This is all well and good in production code, but I assumed (incorrectly) that you must have instance test methods for the test framework to pick them up. As it turns out, xUnit.net is better than that and works on static methods as well as instance methods.
 
@@ -31,7 +31,7 @@ If these were all the tests I needed, I should mark the method as `static`. If a
 
 So the fixed version will look like:
 
-{% highlight c# %}
+```c#
 public static class MyClassTest
 {
     [Fact]
@@ -41,7 +41,7 @@ public static class MyClassTest
         Assert.Equal(1, myClass.MyProperty);
     }
 }
-{% endhighlight %} 
+```
 
 Now, those of you who have used MSTest and Code Analysis might notice two things here:
 
@@ -52,7 +52,7 @@ To answer #2, I turned to ILSpy, and pulled apart the Code Analysis rule assembl
 
 There is a class for each rule, the one I was interested in was called `MarkMembersAsStatic` with the hack located in this method:
 
-{% highlight c# %}
+```c#
 private static bool IsVSUnitTestMethod(Method method)
 {
     if (method.get_IsStatic() ||
@@ -76,7 +76,7 @@ private static bool IsVSUnitTestMethod(Method method)
     }
     return false;
 }
-{% endhighlight %} 
+```
 
 *Remember, this is disassembled code and has been re-formatted by me*
 

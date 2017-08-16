@@ -10,7 +10,7 @@ categories:
 - Series
 ---
 
-This is the second part of my mini-series on getting started with LINQ to XML, you can find [Part 1 here].({% post_url ####-##-##-LINQ-xml-basics-part1 %})
+This is the second part of my mini-series on getting started with LINQ to XML, you can find [Part 1 here].({% post_url blog/####-##-##-LINQ-xml-basics-part1 %})
 
 In this post I’ll go through a few tricks to make querying easier and dealing with namespaces.
 

@@ -35,4 +35,4 @@ You can download the script from here:
 
 - [VS 2013](https://onedrive.live.com/redir?resid=A1F5F7FF7D7E95C4!7142&authkey=!ANvTu-IAmHCvAQk&ithint=file%2c.linq)
 
-The script is based on [my Linqpad TFS Template]({% post_url 2013-01-23-my-linqpad-tfs-template %}), if you need it for any other version of Visual Studio, download the correct template and copy and paste the body of the script between them.
+The script is based on [my Linqpad TFS Template]({% post_url blog/2013-01-23-my-linqpad-tfs-template %}), if you need it for any other version of Visual Studio, download the correct template and copy and paste the body of the script between them.

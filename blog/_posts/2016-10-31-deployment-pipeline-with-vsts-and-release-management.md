@@ -97,7 +97,7 @@ Whilst this is a massively over engineered solution for such a simple website, i
 how to put a release pipeline together using the VSTS and Azure platforms. I also used it as opportunity to tidy up my resources
 in Azure and consolidate all my related resources into an Azure RM Resource Group, including the Application Insights I use to monitor it.
 
- [1]:{% post_url 2014-07-31-unc-to-uri-path-converter %}
+ [1]:{% post_url blog/2014-07-31-unc-to-uri-path-converter %}
  [2]:https://xunit.github.io/docs/getting-started-dotnet-core.html
  [3]:{{ site.contenturl }}deployment-pipeline-build-steps.png
  [4]:https://docs.asp.net/en/latest/publishing/vsts-continuous-deployment.html

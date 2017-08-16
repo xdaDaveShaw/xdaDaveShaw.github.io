@@ -29,7 +29,7 @@ I found that the syntactic analyser allowed me to input some C# source code, and
 
 I started by creating some C# that had the `TestCategory` attribute applied in as many different ways as possible:
 
-{% highlight c# %}
+```c#
 namespace P
 {
     class Program
@@ -50,7 +50,7 @@ namespace P
         public void TwoAttributesOneLineAndOneThatDoesntMatch() { }
     }
 }
-{% endhighlight %}
+```
 
 You can see all the examples I tested against in the [Gist][6].
 
@@ -58,7 +58,7 @@ The `CSharpSyntaxRewriter` took a lot of messing around with to get right, but I
 
 To get some C# code into a syntax tree, there is the obviously named `CSharpSyntaxTree.ParseText(String)` method. You can then get a `CSharpSyntaxRewriter` (in my case my own `AttributeRemoverRewriter` class) to visit everything by calling `Visit()`. Because this is all immutable, you need to grab the result, which can now be converted into a string and dumped out. 
 
-{% highlight c# %}
+```c#
 var tree = CSharpSyntaxTree.ParseText(code);
 var rewriter = new AttributeRemoverRewriter(
     attributeName: "TestCategory", 
@@ -67,11 +67,11 @@ var rewriter = new AttributeRemoverRewriter(
 var rewrittenRoot = rewriter.Visit(tree.GetRoot());
 
 rewrittenRoot.GetText().ToString().Dump();
-{% endhighlight %}
+```
 
 The interesting part of the `AttributeRemoverRewriter` class is the `VisitMethodDeclaration` method which finds and removes attribute nodes that are not needed:
 
-{% highlight c# %}
+```c#
 public override SyntaxNode VisitMethodDeclaration(MethodDeclarationSyntax node)
 {
     var newAttributes = new SyntaxList<AttributeListSyntax>();
@@ -107,7 +107,7 @@ public override SyntaxNode VisitMethodDeclaration(MethodDeclarationSyntax node)
     node = node.WithLeadingTrivia(leadTriv);
     return node;
 }
-{% endhighlight %}
+```
 
 The `AttributeNameMatches` method is implemented to find an attribute that *starts with* `TestCategory`, this is because attributes in .NET have `Attribute` at the end of their name e.g. `TestCategoryAttribute`, but most people never type it. I figured in this case it was more likley to exist than to have another attribute starting with `TestCategory`. I don't think there is an elegant way to avoid using `StartsWith` in the syntactic analyser, I would have had to switch to the sematic analyser and that would have made this a much more complicated solution. 
 
@@ -119,10 +119,10 @@ Once the nodes that match are found, it checks if the number of attributes on a 
 
 If there are some attributes that do not need removing, then just the matching one should be removed. For example:
 
-{% highlight c# %}
+```c#
 [TestMethod, TestCategory("Atomic")]
 public void OnOneLine() { }
-{% endhighlight %}
+```
 
 When the visitor reaches the attributes on this method, it will populate the `newAttributes` list with just the attributes we want to keep and then update the method so that it has just the remaining attributes its trivia.
 
