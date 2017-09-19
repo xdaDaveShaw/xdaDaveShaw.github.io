@@ -367,7 +367,7 @@ is designed and what works best. The next exmaple looks at keeping the behaviour
 
 I've fleshed the following code out a little more, to highlight one of the drawbacks of the approach.
 In all previous examples, I've left out how you might test the entire operation - passing in test doubles
-for `Console.WriteLine` into the program from the composition root would be trivial. 
+for `Console.WriteLine` into the program from the composition root would be trivial.
 
 However, in this case I wanted to show the extra effort needed to keep things testable.
 
