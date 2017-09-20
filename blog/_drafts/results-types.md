@@ -9,9 +9,10 @@ categories:
 - C#
 ---
 
-In this article I am going to look at a number of different approaches to model the results of a complex operation in C#.
+In this article I am going to look at a number of different approaches to model the results of a complex operation in C#,
+starting with some naive and potentially problematic approaches, before looking at two options that look more promising.
 
-I'll be using the following logic in all my scenarios:
+I'll be using the following logic in all my scenarios as the requirement for my "complex operation":
 
 ``` c
 if length(s) is even
@@ -20,7 +21,7 @@ else
     return "Length is odd";
 ```
 
-And there is a requirement for exception handling too, all errors in the complex operation are to be captured and returned.
+There is also a requirement that any exceptions in the "complex operation" will be handled in a suitable way.
 
 This is actually something I have had to implement at work in a number of cases.
 I want to try an operation, then depending on the outcome handle it in the most appropriate way.
@@ -64,7 +65,7 @@ void ComplexOperation(String input)
 }
 ```
 
-OK, this meets our requirements, but lets see if we can see a few issues with it.
+This meets our requirements, but lets see if we can see a few issues with it.
 
 Firstly, it isn't possible to test the Complex Operation on it's own, you have no way to mock out the dependencies.
 Secondly, you're mixing business logic, with side effects. Readers of Mark Seemann's [blog][1] will know that this
@@ -86,11 +87,13 @@ class Result
 }
 ```
 
-I call it Implicit because if I passed you an instance of it, you have no obvious way of knowing what the result is,
-or how to figure out what happened. You could check that `EvenLength` is not null and assume success, but what's to
-say I didn't put set it to `0` and populate `FailureMessage`.
+I call it Implicit because if I passed you an instance of it, you have no obvious way of knowing what the result is
+or how to figure out what happened during the complex operation.
+You could check that `EvenLength` is not null and assume success, but what's to
+say I didn't put set it to `0` and populate `FailureMessage` instead? It it mostly guess work and assumptions to know what
+this result contains.
 
-Here's the complex operation:
+Here's the new program and complex operation using this type:
 
 ``` csharp
 void Main()
@@ -126,13 +129,15 @@ Result ComplexOperation(String input)
 
 Now you see the implementation you know there is no funny business, but I made you read the complex operation to be sure.
 
-There are some other problems with this too. The type is mutable, meaning something might change the result after the operation.
-When the type is constructed, it is half-full, some members will have values, some won't. You have to know how to process a
-result, I'd find myself asking *can an error also have a message?*. This also violates the [Open/closed principle][2] because
-changes to Success, Failure or Error require a change to this one type.
+There are some other problems with this too:
+
+- The type is mutable, meaning something might change the result after the operation.
+- When the type is constructed, it is half-full, some members will have values, some won't.
+- You have to know how to process a result, I'd find myself asking *can an error also have a message?*.
+- It violates the [Open/closed principle][2] because changes to Success, Failure or Error require a change to this one type.
 
 This does, however, separate the operation from the outputs, making the operation testable without it needing any *additional*
-depencies for the output. The operation is now Pure, which is why I'm using `Select` on each input to return the result.
+depencies for the output. The operation is now Pure, which is why I can use `Select` on each input to return the result.
 
 # 3. Explicit Results
 
@@ -208,7 +213,7 @@ So, whilst it is a little better, it can still lead to unreasonable code.
 
 # 4. Explicit - with factory methods
 
-To solve the problem of people creating a "mixed bag" of properties and them been mutable, a factory method could be created
+To solve the problem of people creating a "mixed bag" of mutable properties, a factory method could be created
 on the type to initialise the result in the correct state depending on the outcome of the operation.
 
 ``` csharp
@@ -264,7 +269,85 @@ and this requires additional factory methods for every state.
 I've seen a number of people stop at this level, and call it "good enough" to avoid having to go to the next level.
 You still have unreasonable code, and have to understand things in the operation.
 
-# 5. Type per Result
+# 5. Exceptions for control flow
+
+This is another approach I have seen used, I do not like it, but I thought I would include it, as I *almost* used it
+years ago before using one of the approaches in the following sections.
+
+``` csharp
+void Main()
+{
+    var inputs = new[] { "Food", "Foo", null, };
+
+    foreach (var input in inputs)
+    {
+        try
+        {
+            var result = ComplexOperation(input);
+            Console.WriteLine($"Even length: {result}.");
+        }
+        catch (BusinessException be)
+        {
+            switch (be)
+            {
+                case FailureException f:
+                    Console.WriteLine(f.Message);
+                    break;
+                case ErrorException e:
+                    Console.WriteLine(e.InnerException);
+                    break;
+                default:
+                    throw;
+            }
+        }
+    }
+}
+
+Int32 ComplexOperation(String input)
+{
+    try
+    {
+        if (input.Length % 2 == 0)
+            return input.Length;
+        else
+            throw new FailureException("Length is odd.");
+    }
+    catch (Exception ex) when (!(ex is BusinessException))
+    {
+        throw new ErrorException(ex);
+    }
+}
+
+class FailureException : BusinessException
+{
+    public FailureException(String message) : base(message) { }
+}
+
+class ErrorException : BusinessException
+{
+    public ErrorException(Exception inner) : base(inner) { }
+}
+
+abstract class BusinessException : Exception
+{
+    public BusinessException(String message) : base(message) { }
+    public BusinessException(Exception inner) : base("Something bad happened", inner) { }
+}
+```
+
+I hope by looking at this code you can see it isn't an ideal appraoch.
+
+I've introduced the concept of a `BusinessException` that the program will handle in a `try...catch` block.
+All problems in the complex operation will throw some sort of exception derived from `BusinessException`,
+which the program will then type match on. I've used [pattern matching][3] here, but I've see other approaches such
+as a `Dictionary<Exception, Action<Exception>>` that has a list of exceptions and the delegate to call.
+
+Using exceptions like this is the equivelent of `goto`, many people have said it before, so I won't go into detail on
+that aspect. I did notice when writing this how hard it is to not accidentally catch your own `BusinessException`, this
+is why I have an exception filter to not handle them twice: `catch (Exception ex) when (!(ex is BusinessException))`. I
+could imagine the case where one stray `try...catch` could cause a lot of problems.
+
+# 6. Type per Result
 
 I've now harped one enough about not knowing what to do with results. This example removes the ambiguity and uses a
 separate type for each result.
@@ -341,8 +424,7 @@ cast into the correct type, so `s` will be an instance of `Success`, and `Succes
 
 To me this is very clear what I can do next after a complex operation and what happened in the operation.
 
-I do use this in places where I feel it is suitable. It is reassuring to know
-that if I have a `Success` type I can only see properties relating to a successful operation, I can pass the result to another method,
+It is reassuring to know that if I have a `Success` type I can only see properties relating to a successful operation, I can pass the result to another method,
 that accepts an instance of `Success` knowing it can't be called with an `Error` by mistake - the type safety in the language is
 on your side.
 
@@ -363,7 +445,7 @@ Another consideration is that the result's "next step" logic - what happens next
 Sometimes this could be desirable, other times you might want it contained in a single place, it depends on how your application
 is designed and what works best. The next exmaple looks at keeping the behaviour with the result.
 
-# 6. Types with Behaviour
+# 7. Types with Behaviour
 
 I've fleshed the following code out a little more, to highlight one of the drawbacks of the approach.
 In all previous examples, I've left out how you might test the entire operation - passing in test doubles
@@ -481,92 +563,16 @@ var result = ComplexOperation(input);
 resut.Process();
 ```
 
-It is nice to be able to look at all result handling in one place. If you need to add a new result, type (e.g. Timeout) you can do so by
+If you need to add a new result, type (e.g. Timeout) you can do so by
 just deriving a new type from `Result` and implementing all the logic there. The only other place that needs a change is the
 complex operation to return `new Timeout(processor)`, the program doesn't have to change.
-
-# 7. Exceptions for control flow
-
-This is another approach I have seen used, I do not like it, but I thought I would include it, as I *almost* used it
-years ago before using one of the above.
-
-``` csharp
-void Main()
-{
-    var inputs = new[] { "Food", "Foo", null, };
-
-    foreach (var input in inputs)
-    {
-        try
-        {
-            var result = ComplexOperation(input);
-            Console.WriteLine($"Even length: {result}.");
-        }
-        catch (BusinessException be)
-        {
-            switch (be)
-            {
-                case FailureException f:
-                    Console.WriteLine(f.Message);
-                    break;
-                case ErrorException e:
-                    Console.WriteLine(e.InnerException);
-                    break;
-                default:
-                    throw;
-            }
-        }
-    }
-}
-
-Int32 ComplexOperation(String input)
-{
-    try
-    {
-        if (input.Length % 2 == 0)
-            return input.Length;
-        else
-            throw new FailureException("Length is odd.");
-    }
-    catch (Exception ex) when (!(ex is BusinessException))
-    {
-        throw new ErrorException(ex);
-    }
-}
-
-class FailureException : BusinessException
-{
-    public FailureException(String message) : base(message) { }
-}
-
-class ErrorException : BusinessException
-{
-    public ErrorException(Exception inner) : base(inner) { }
-}
-
-abstract class BusinessException : Exception
-{
-    public BusinessException(String message) : base(message) { }
-    public BusinessException(Exception inner) : base("Something bad happened", inner) { }
-}
-```
-
-I've introduced the concept of a `BusinessException` that the program will handle in a `try...catch` block.
-All problems in the complex operation will throw some sort of exception derived from `BusinessException`,
-which the program will then type match on. I've used pattern matching again, but I've see other approaches such
-as a `Dictionary<Exception, Action<Exception>>` that has a list of exceptions and the delegate to call.
-
-Using exceptions like this is the equivelent of `goto`, many people have said it before, so I won't go into detail on
-that aspect. I did notice when writing this how hard it is to not accidentally catch your own `BusinessException`, this
-is why I have an exception filter to not handle them twice: `catch (Exception ex) when (!(ex is BusinessException))`. I
-could imagine the case where one stray `try...catch` could cause a lot of problems.
 
 # 8. Bonus F# version
 
 I am a big fan of F# so I thought I would model the same problem in F#.
 
 I've deliberately kept it similar to the C# examples to avoid it getting too functional. This is quite close
-to example #5 above.
+to example #6 above.
 
 ``` fsharp
 type Result =
@@ -610,10 +616,10 @@ that is isn't handled in the `match`.
 # Conclusion
 
 This won't be an exhaustive list of ways to handle results, but it does provide some different approaches to the problem
-that should help keep your code base a little cleaner. Options 5 and 6 are ones I would use in C#, the rest create
+that should help keep your code base a little cleaner. Options 6 and 7 are ones I would use in C#, the rest create
 unreasonable code that I would not like to have to think about. The complex operation is never going to be a few lines
-of code like below, it might be many classes working to do many different operations, building a final result. I like it
-when I don't have to know the operation to know what the behaviour is for a given outcome.
+of code like in my scenario, it might be many classes working to do many different operations, building one final result.
+I like it when I don't have to know the implementation details of an operation to know what the behaviour is for a given outcome.
 
   [1]: http://blog.ploeh.dk/2017/02/02/dependency-rejection/
   [2]: https://en.wikipedia.org/wiki/Open/closed_principle
