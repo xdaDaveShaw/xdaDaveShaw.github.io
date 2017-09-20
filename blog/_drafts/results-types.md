@@ -37,6 +37,9 @@ Inputs:
 - `"Foo"` (returns *Length is odd.*)
 - `null` (returns *NullReferenceException*)
 
+All the code for the following is available in my GitHub repo [ResultType-blog][5] - these are [Linqpad][6]
+scripts, but can easily be modified by removing the first line.
+
 # 1. Just do it
 
 Here's the most trivial approach to solve the issue:
@@ -625,3 +628,5 @@ I like it when I don't have to know the implementation details of an operation t
   [2]: https://en.wikipedia.org/wiki/Open/closed_principle
   [3]: https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-7#pattern-matching
   [4]: https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/discriminated-unions
+  [5]: https://github.com/xdaDaveShaw/ResultType-Blog
+  [6]: http://www.linqpad.net/
