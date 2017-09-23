@@ -9,10 +9,11 @@ categories:
 - C#
 ---
 
-In this article I am going to look at a number of different approaches to model the results of a complex operation in C#,
-starting with some naive and potentially problematic approaches, before looking at two options that look more promising.
+In this article I am going to look at a number of different approaches to model the results of a complex operation in C#.
+This is a technique I find useful when I have to perform some logic, and it can return different types of results,
+depending on the outcome. I'll start with some naive approaches, before looking at two options that look more promising.
 
-I'll be using the following logic in all my scenarios as the requirement for my "complex operation":
+I'll be using the following logic for my "complex operation":
 
 ``` c
 if length(s) is even
@@ -21,13 +22,13 @@ else
     return "Length is odd";
 ```
 
-There is also a requirement that any exceptions in the "complex operation" will be handled in a suitable way.
+With an additional a requirement that any exceptions in the "complex operation" will be handled in a suitable way.
 
-This is actually something I have had to implement at work in a number of cases.
-I want to try an operation, then depending on the outcome handle it in the most appropriate way.
+This is actually something I have had to implement at work in a number of cases; try an operation, then depending on
+the outcome handle it in the most appropriate way.
 
 In the examples I'll be using `Console.WriteLine` for simplicity, but in the real world there could be database
-calls, UI updates, HTML rendering, service calls, whatever makes testing hard.
+calls, UI updates, HTML rendering, service calls, whatever usually makes testing hard.
 
 The inputs to and outputs from every example will be the same.
 
@@ -38,7 +39,7 @@ Inputs:
 - `null` (returns *NullReferenceException*)
 
 All the code for the following is available in my GitHub repo [ResultType-blog][5] - these are [Linqpad][6]
-scripts, but can easily be modified by removing the first line.
+scripts, but can easily be modified to be C# by removing the first line.
 
 # 1. Just do it
 
@@ -612,7 +613,7 @@ main ()
 ```
 
 I've modelled the result as a [Discriminated Union][4] with 3 cases, one for each outcome. The complex operation, like the
-C# version returns one of these 3 cases. What is nice in F# is that in `processResult` where I take in a single result
+C# version returns 1 of these 3 cases. What is nice in F# is that in `processResult` where I take in a single result
 and handle it, the pattern match must be complete. If I added another case to the `Result` type, the compiler will complain
 that is isn't handled in the `match`.
 
@@ -623,6 +624,9 @@ that should help keep your code base a little cleaner. Options 6 and 7 are ones 
 unreasonable code that I would not like to have to think about. The complex operation is never going to be a few lines
 of code like in my scenario, it might be many classes working to do many different operations, building one final result.
 I like it when I don't have to know the implementation details of an operation to know what the behaviour is for a given outcome.
+
+Above I have only used Success, Failure and Error as the outcomes of my operation, but I could have modelled different states
+for success too: a MatchFound/NoMatch result could be suitable for a result type.
 
   [1]: http://blog.ploeh.dk/2017/02/02/dependency-rejection/
   [2]: https://en.wikipedia.org/wiki/Open/closed_principle
