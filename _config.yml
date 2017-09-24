@@ -10,7 +10,12 @@ github_username:  xdaDaveShaw
 stackoverflow_link: users/383710/daveshaw
 
 # Build settings
-markdown: kramdown
 permalink: /blog/:title/
 contenturl: "/blog/Content/"
 
+#Highlighting
+highlighter: rouge
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
