@@ -1,10 +1,10 @@
 ---
 layout: post
-status: draft
-published: false
+status: publish
+published: true
 title: Handling results from complex operations
-date: '2017-03-28 10:20:00 +0100'
-date_gmt: '2017-03-28 10:20:00 +0100'
+date: '2017-09-24 19:41:00 +0100'
+date_gmt: '2017-09-24 19:41:00 +0100'
 categories:
 - C#
 ---
