@@ -578,7 +578,7 @@ I am a big fan of F# so I thought I would model the same problem in F#.
 I've deliberately kept it similar to the C# examples to avoid it getting too functional. This is quite close
 to example #6 above.
 
-``` fsharp
+```f#
 type Result =
     | Success of int
     | Failure of string
