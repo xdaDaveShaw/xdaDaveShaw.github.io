@@ -625,7 +625,7 @@ unreasonable code that I would not like to have to think about. The complex oper
 of code like in my scenario, it might be many classes working to do many different operations, building one final result.
 I like it when I don't have to know the implementation details of an operation to know what the behaviour is for a given outcome.
 
-Above I have only used Success, Failure and Error as the outcomes of my operation, but I could have modelled different states
+Above, I have only used Success, Failure and Error as the outcomes of my operation, but I could have modelled different states
 for success too: a MatchFound/NoMatch result could be suitable for a result type.
 
   [1]: http://blog.ploeh.dk/2017/02/02/dependency-rejection/
