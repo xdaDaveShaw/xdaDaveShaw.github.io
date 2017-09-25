@@ -584,7 +584,7 @@ type Result =
     | Failure of string
     | Error of Exception
 
-//Unchecked.defaultof<String> is used for null to make it crash - F# doesn't do null really.
+(* Unchecked.defaultof<String> is used for null to make it crash - F# doesn't do null really. *)
 let inputs = [ "Food"; "Foo"; Unchecked.defaultof<String>; ]
 
 let complexOp (input: string) =
