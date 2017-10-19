@@ -20,7 +20,7 @@ then prints the contents using the [`TYPE`][2] command and then `PAUSE`'s.
 
 ```cmd
 @echo off
-echo Listing the contents of %1?
+echo Listing the contents of %1
 echo.
 type %1
 echo.
