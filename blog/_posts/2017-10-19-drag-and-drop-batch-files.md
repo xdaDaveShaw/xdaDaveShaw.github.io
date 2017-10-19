@@ -3,8 +3,8 @@ layout: post
 status: publish
 published: true
 title: Drag and Drop Batch Files
-date: '2017-10-19 10:20:00 +0100'
-date_gmt: '2017-10-19 10:20:00 +0100'
+date: '2017-10-19 21:46:00 +0100'
+date_gmt: '2017-10-19 21:46:00 +0100'
 categories:
 - Development
 ---
