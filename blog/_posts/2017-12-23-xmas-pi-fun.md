@@ -16,7 +16,7 @@ I've had a few days off over XMAS, so I decided to have a play with my Raspberry
 With my (very) basic Python skills I managed to come up with a way of using a [Status Board][3]
 on one Pi to control the four different light settings on the XMAS Tree, running on another Pi (the "tree-berry").
 
-<iframe width="560" height="315" src="https://youtu.be/l4qUhXMrNwo" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/l4qUhXMrNwo" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
 
 *(sorry about the camera work, I just shot it on my phone on the floor)*
 
@@ -42,4 +42,4 @@ There's a lot I need to learn about Python, but this is only for a few weeks a y
  [2]:https://thepihut.com
  [3]:https://thepihut.com/products/status-board-pro
  [4]:https://github.com/xdaDaveShaw/rasp-projects/tree/master/tree-berry
- [5]:{{ site.contenturl }}xmas-console.png
+ [5]:{{ site.contenturl }}xmas-consoles.png
