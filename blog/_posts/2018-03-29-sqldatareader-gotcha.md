@@ -170,6 +170,8 @@ The results are as follows:
 |ExecuteReader Look For Another ResultSet       |ThrowSecond| ✅             |
 |ExecuteReader Look For Another ResultSet       |Works      | n/a            |
 
+### Explained
+
 The two problematic examples have a ❌ against them.
 
 Those are when you call `ExecuteReader` with the `ThrowSecond` stored procedure, and don't go near the
