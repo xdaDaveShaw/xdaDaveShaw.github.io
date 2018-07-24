@@ -26,7 +26,7 @@ new Uri(@"\\server\share\file.txt").AbsoluteUri
 
 The rules around converting UNC paths to URI's gets a little tricky when you have paths with spaces and
 special characters in them, so I thought I would Google/Bing for an online UNC to URI Path Converter...
-turns out I couldn't find one, so I did what every software developer does, [writes one](http://pathconverter.azurewebsites.net/).
+turns out I couldn't find one, so I did what every software developer does, [writes one](https://pathconverter.azurewebsites.net/).
 
 ![Path Converter]({{ site.contenturl }}PathConverter.png)
 
@@ -43,6 +43,6 @@ if it succeeded the site was updated within a few minutes.
 The site works by making a quick AJAX HTTP GET when you click the Convert button to a ASP.NET MVC site to use the
 [`URI`](http://msdn.microsoft.com/en-us/library/system.uri(v=vs.110).aspx) class in .NET. That's about it.
 
-Here's the link to anyone who want's to use it: **[http://pathconverter.azurewebsites.net/](http://pathconverter.azurewebsites.net/)**
+Here's the link to anyone who want's to use it: **[https://pathconverter.azurewebsites.net/](https://pathconverter.azurewebsites.net/)**
 
 This has since made it into the online training material for our users.
