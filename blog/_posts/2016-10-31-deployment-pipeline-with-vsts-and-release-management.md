@@ -102,7 +102,7 @@ in Azure and consolidate all my related resources into an Azure RM Resource Grou
  [3]:{{ site.contenturl }}deployment-pipeline-build-steps.png
  [4]:https://docs.asp.net/en/latest/publishing/vsts-continuous-deployment.html
  [5]:http://martinfowler.com/bliki/DeploymentPipeline.html
- [6]:http://pathconverter-pp.azurewebsites.net
+ [6]:https://pathconverter-pp.azurewebsites.net
  [7]:{{ site.contenturl }}deployment-pipeline-flowchart.png
  [8]:{{ site.contenturl }}deployment-pipeline-release.png
  [9]:{{ site.contenturl }}deployment-pipeline-release-vars.png
