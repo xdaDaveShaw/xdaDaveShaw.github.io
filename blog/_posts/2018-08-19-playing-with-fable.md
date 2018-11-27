@@ -30,6 +30,8 @@ help me add features.
 
 ![Monster Splatter][4]
 
+### [Play it now][3] / [View Code][9]
+
 ## Why do I love SAFE?
 
 There are a number of awesome features of this whole stack that I want to shout about:
@@ -80,6 +82,8 @@ code this way all the time.
 
 I'm already looking to push F# at work, and this would be a great compliment.
 
+### [Play it now][3] / [View Code][9]
+
  [1]: http://fable.io
  [2]: https://github.com/CompositionalIT/SAFE-Dojo
  [3]: {{site.baseurl}}/MonsterSplatter
@@ -88,3 +92,4 @@ I'm already looking to push F# at work, and this would be a great compliment.
  [6]: https://mangelmaxime.github.io/Fulma/
  [7]: https://bulma.io/
  [8]: https://safe-stack.github.io/
+ [9]: https://github.com/xdaDaveShaw/MonsterSplatter
