@@ -91,5 +91,127 @@ And the functions:
 
 There's no need to go into implementation of the Domain, it's pretty basic, but it is worth pointing out that Adding an item to a Nice child, also adds an item to `SantasList`, or increments the quantity of an existing item.
 
+### Reuse-Reuse-Reuse
+
+The main take away here is that the Domain module contains pure F#, no Fable, no Elmish, just my Domain code. This means if I wanted to run it on my F# Services I could use the exact same file and be guaranteed the exact same results.
+
+Full source can be [seen here][4].
+
+## Testing
+
+I just said I could be guaranteed the exact same results if I ran this code on my Services... but how...
+
+Fable transpiles my F# into JavaScript and runs it in the browser, how can I know this works the same in .NET Core on the server?
+
+The answer as **Testing** - the only way you can be sure of anything in software.
+
+Using the Fable Compiler's tests as inspiration and the [Fable bindings for Jest][3], I've managed to create a suite of tests that can be run against the generated JavaScript and the compiled .NET code.
+
+The trick is to `FABLE_COMPILER` compiler directive to produce different code under Fable and .NET.
+
+For example the `testCase` funciton is declared as:
+
+```fsharp
+let testCase (msg: string) (test: unit->unit) =
+  msg, box test
+```
+
+in Fable, but as:
+
+```fsharp
+open Expecto
+
+let testList (name: string) (tests : Test list) =
+  testList name tests
+```
+
+Full source can be [seen here][5].
+
+But a test can now be written once and run many times depending how the code is compiled:
+
+```fsharp
+testCase "Adding children works" <| fun () ->
+    let child1 = "Dave"
+    let child2 = "Shaw"
+
+    let newModel =
+        addChild child1 defaultModel
+        |> addChild child2
+
+    let expected = [
+        { Name = child1; NaughtyOrNice = Undecided }
+        { Name = child2; NaughtyOrNice = Undecided } ]
+
+    newModel.ChildrensList == expected
+```
+
+What I found amazing was the way I could run these tests. The JS Tests took 2 different tools to get running:
+
+- fable-splitter
+- Jest
+
+Both of these operated in "Watch Mode", so I could write a failing test, Ctrl+S, watch it fail a second later. Then write the code to make it pass, Ctrl+S again, and watch it pass. No building, no run tests, just write and Save.
+
+As the .NET tests are in Expecto, I can have the same workflow for them too with `dotnet watch run`.
+
+I have all 3 tasks setup in VS Code and can run them a simple command.
+
+[SCREEN SHOT]
+
+## Event Sourcing
+
+As I decided to avoid building a back end for this I wanted a way to maintain the state on the client by persisting it into Local Storage in the browser.
+
+To do this I create a simple discriminated union for the Event and used type aliases for all the strings:
+
+```fsharp
+type Name = string
+type Item = string
+type Review = string
+
+type Event =
+  | AddedChild of Name
+  | AddedItem of Name * Item
+  | ReviewedChild of Name * Review
+```
+
+These are what are returned from the Domain model representing what has just changed. They are exactly what the user input, no cleaning strings.
+
+The "Event Store" in this case is a simple `ResizeArray<Event>` (`List<T>`) that each event is added to the end of.
+
+Storing these in Local Storage uses the Fable bindings for the browser and `Thoth.Json` in Auto mode for serialization. Deserialization is the same process in reverse, Load from Local Storage, pass to `Thoth.Json` decoder in Auto mode.
+
+Once all the events are loaded we need to some how convert them back into the Model with the state that was there before.
+
+In F# this is actually really easy.
+
+```fsharp
+let fromEvents : FromEvents =
+  fun editorState events ->
+
+    let processEvent m ev =
+      let model, _ =
+        match ev with
+        | EventStore.AddedChild name -> m |> addChild name
+        | EventStore.ReviewedChild (name, non) -> m |> reviewChild name (stringToNon non)
+        | EventStore.AddedItem (name, item) -> m |> addItem name { Description = item }
+      model
+
+    let model =
+      createDefaultModel editorState
+
+    events
+    |> List.fold processEvent model
+```
+
+Start by getting an empty `model` from the function `createDefaultModel`.
+
+Then you use a `fold` to iterate over each event passing in the current state and returning a new state. Each time the fold goes through an event in the list, the updated state from the previous iteration is passed in, this is why you need to start with an empty model.
+
+The `processEvent` function matches and deconstructs the values from the event and passes them to the correct Domain function - which already returns the updated model, so it works perfectly with the `fold`.
+
  [1]: https://sergeytihon.com/2018/10/22/f-advent-calendar-in-english-2018/
  [2]: {{site.url}}/blog/playing-with-fable/
+ [3]: https://github.com/jgrund/fable-jest
+ [4]: https://github.com/xdaDaveShaw/XmasList/blob/master/src/Domain.fs
+ [5]: https://github.com/xdaDaveShaw/XmasList/blob/master/tests/Util.fs
