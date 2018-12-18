@@ -161,9 +161,12 @@ I have a CI/CD Pipeline setup in Azure Dev Ops running these tests on both Windo
 
 ## Event Sourcing
 
-As I decided to avoid building a back end for this I wanted a way to maintain the state on the client by persisting it into Local Storage in the browser.
+As I decided to avoid building a back-end for this I wanted a way to maintain the state on the client by persisting it into Local Storage in the browser.
 
-To do this I create a simple discriminated union for the Event and used type aliases for all the strings:
+Instead of just serializing the current Model into JSON and storing it, I thought I'd try out storing each of the users actions as an Event and 
+then playing them back when the user (re)loads the page.
+
+To do this I create a simple discriminated union for the Event and also used type aliases for all the strings, just to keep things separte:
 
 ```fsharp
 type Name = string
@@ -176,13 +179,25 @@ type Event =
   | ReviewedChild of Name * Review
 ```
 
-These are what are returned from the Domain model representing what has just changed. They are exactly what the user input, no cleaning strings.
+These are what are returned from the Domain model representing what has just changed. They are exactly what the user input, no normalising strings
+for example.
 
-The "Event Store" in this case is a simple `ResizeArray<Event>` (`List<T>`) that each event is added to the end of.
+The "Event Store" in this case is a simple `ResizeArray<Event>` (the same as `List<T>`) that has each event appended onto.
 
-Storing these in Local Storage uses the Fable bindings for the browser and `Thoth.Json` in Auto mode for serialization. Deserialization is the same process in reverse, Load from Local Storage, pass to `Thoth.Json` decoder in Auto mode.
+Every time an event is appended to the Store, the entire store is persisted into Local Storage. Fable has "bindings" for access local storage which
+mean you only need to call:
 
-Once all the events are loaded we need to some how convert them back into the Model with the state that was there before.
+```fsharp
+//Save
+Browser.localStorage.setItem(key, json)
+
+//Load
+let json = Browser.localStorage.getItem(key)
+```
+
+For serialization and deserialization I used [Thoth.Json][10] and just used the "Auto mode" on the list of Events.
+
+When the page is loaded all the Events are loaded back into the EventStore, but now we need to some how convert them back into the Model and recreate the state that was there before.
 
 In F# this is actually really easy.
 
@@ -205,9 +220,9 @@ let fromEvents : FromEvents =
     |> List.fold processEvent model
 ```
 
-Start by getting an empty `model` from the function `createDefaultModel`.
+It starts by declaring a function to process the events, then getting an empty `model` from the function `createDefaultModel`.
 
-Then you use a `fold` to iterate over each event passing in the current state and returning a new state. Each time the fold goes through an event in the list, the updated state from the previous iteration is passed in, this is why you need to start with an empty model.
+Then it uses a `fold` to iterate over each event, passing in the current state and returning a new state. Each time the fold goes through an event in the list, the updated state from the previous iteration is passed in, this is why you need to start with an empty model.
 
 The `processEvent` function matches and deconstructs the values from the event and passes them to the correct Domain function - which already returns the updated model, so it works perfectly with the `fold`.
 
@@ -220,3 +235,4 @@ The `processEvent` function matches and deconstructs the values from the event a
  [7]: https://github.com/xdaDaveShaw/XmasList/blob/master/.vscode/tasks.json
  [8]: https://github.com/xdaDaveShaw/XmasList/blob/master/package.json
  [9]: {{site.contenturl}}advent-2018-tests.png
+ [10]: https://mangelmaxime.github.io/Thoth/json/v2/decode.html
