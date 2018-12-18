@@ -9,10 +9,10 @@ categories:
 - FSharp
 ---
 
-> This post is part of the [F# Advent Calendar 2018][1].
+> This post is part of the [F# Advent Calendar 2018][1]. Many thanks to Sergey Tihon for organizing these.
 
 So this year I decided to write something for the F# Advent Calendar, and even though I picked a date far enough in the future, panic still set in.
-I'm not one for "ideas on demand", and after a bit of deliberating about Xmas themed games, I finally settled on something that let me explore my favourite parts of F#:
+I'm not one for "ideas on demand", and after a bit of deliberating about Xmas themed games, I finally settled on something that let me explore my favourite parts of F# at the moment:
 
 - Domain Modelling
 - Testing
@@ -28,7 +28,7 @@ My initial design was for something a bit more complicated, but I scaled it down
 - What presents Nice children are getting,
 - See an overall list of all the presents he needs to sent to the elves.
 
-[SCREEN SHOT]
+![Screen shot][6]
 
 The app is written in F#, using Fable, Elmish and Fulma (which I also used to write [Monster Splatter][2]) and all the associated tooling in SAFE stack. I decided to leave out a back end to keep things simple.
 
@@ -215,3 +215,4 @@ The `processEvent` function matches and deconstructs the values from the event a
  [3]: https://github.com/jgrund/fable-jest
  [4]: https://github.com/xdaDaveShaw/XmasList/blob/master/src/Domain.fs
  [5]: https://github.com/xdaDaveShaw/XmasList/blob/master/tests/Util.fs
+ [6]: {{site.contenturl}}advent-2018-screen.png
