@@ -3,8 +3,8 @@ layout: post
 status: publish
 published: true
 title: Santa's Xmas List in F# and Fable
-date: '2018-12-21 22:49:00 +0100'
-date_gmt: '2018-12-21 22:49:00 +0100'
+date: '2018-11-21 22:49:00 +0100'
+date_gmt: '2018-11-21 22:49:00 +0100'
 categories:
 - FSharp
 ---
@@ -25,18 +25,18 @@ My initial design was for something a bit more complicated, but I scaled it down
 
 - Record children's names
 - Who's been Naughty and who's been Nice
-- What presents Nice children are getting,
-- See an overall list of all the presents he needs to sent to the elves.
+- What presents Nice children are getting
+- See an overall list of all the presents he needs to sent to the elves
 
 ![Screen shot][6]
 
-The app is written in F#, using Fable, Elmish and Fulma (which I also used to write [Monster Splatter][2]) and all the associated tooling in SAFE stack. I decided to leave out a back end to keep things simple.
+The app is written in F#, using Fable, Elmish and Fulma (which I also used to write [Monster Splatter][2]) and all the associated tooling in SAFE stack. I did consider writing a back-end for it, but decided to keep things simple.
 
 ## The Domain Model
 
-My problem with any Model-View-`X` architecture is that everything that isn't a POCO or UI related goes in `X`, so I look for ways to make sure the Domain logic can be quickly broken out and separated from `X`. 
+A common problem with any Model-View-*X* architecture is that everything that isn't POCO (Model) or UI (View) related ends up *X*, so I look for ways to make sure the Domain logic can be quickly broken out and separated from *X*.
 
-With Elmish, this was very easy. I created began my modelling the Domain and the Operations that can be performed on it:
+With Elmish, this was very easy. I began my modelling the Domain and the Operations that can be performed on it:
 
 ```fsharp
 type Item = {
@@ -58,14 +58,8 @@ type SantasItem = {
   Quantity: int
 }
 
-type CurrentEditorState = {
-  EditingChildName: string
-  CurrentItem: (string * string) option
-  ClearingStorage: bool
-}
-
 type Model = {
-  CurrentEditor: CurrentEditorState
+  CurrentEditor: CurrentEditorState //Not shown
   ChildrensList: Child list
   SantasList: SantasItem list
 }
@@ -84,10 +78,10 @@ There's a few things above, so let's go through the types:
 
 And the functions:
 
-1. Add child, takes in a name as a String and the current state and returns an updated model and Event (see below)
-1. Add item, takes in a child's name, an item and the current state and also returns an updated model and Event.
-1. Review child, also takes in a child's name and if they are naughty or nice, as well as the current state, and guess what, returns an updated model and Event.
-1. The Event is explained in the Event Sourcing section, but is simple a Union Case representing what just happened.
+1. `AddChild` takes in a `string` for the childs name as well as the current model and returns an updated model and `Event` (see below)
+1. `AddItem` takes in a child's name, an item, and the current state and also returns an updated model and `Event`.
+1. `ReviewChild` also takes in a child's name and if they are naughty or nice, as well as the current state, and guess what, returns an updated model and `Event`.
+1. The `Event` is explained in the Event Sourcing section below, but is simple a Union Case representing what just happened.
 
 There's no need to go into implementation of the Domain, it's pretty basic, but it is worth pointing out that Adding an item to a Nice child, also adds an item to `SantasList`, or increments the quantity of an existing item.
 
@@ -99,15 +93,15 @@ Full source can be [seen here][4].
 
 ## Testing
 
-I just said I could be guaranteed the exact same results if I ran this code on my Services... but how...
+I just said I could be *guaranteed the exact same results* if I ran this code on my Services... but how?
 
-Fable transpiles my F# into JavaScript and runs it in the browser, how can I know this works the same in .NET Core on the server?
+Fable transpiles my F# into JavaScript and runs it in the browser, how could I know this works the same in .NET Core when run on the server?
 
-The answer as **Testing** - the only way you can be sure of anything in software.
+The answer is **Testing** - the only way you can be sure of anything in software.
 
-Using the Fable Compiler's tests as inspiration and the [Fable bindings for Jest][3], I've managed to create a suite of tests that can be run against the generated JavaScript and the compiled .NET code.
+Using the Fable Compiler's tests as inspiration and the [Fable bindings for Jest][3], I've created a suite of tests that can be run against the generated JavaScript and the compiled .NET code.
 
-The trick is to `FABLE_COMPILER` compiler directive to produce different code under Fable and .NET.
+The trick is to use the `FABLE_COMPILER` compiler directive to produce different code under Fable and .NET.
 
 For example the `testCase` funciton is declared as:
 
@@ -121,13 +115,15 @@ in Fable, but as:
 ```fsharp
 open Expecto
 
-let testList (name: string) (tests : Test list) =
-  testList name tests
+let testCase (name: string) (test: unit -> unit) : Test =
+  testCase name test
 ```
+
+in .NET Code.
 
 Full source can be [seen here][5].
 
-But a test can now be written once and run many times depending how the code is compiled:
+What this gives me is a test can now be written once and run many times depending how the code is compiled:
 
 ```fsharp
 testCase "Adding children works" <| fun () ->
@@ -145,7 +141,9 @@ testCase "Adding children works" <| fun () ->
     newModel.ChildrensList == expected
 ```
 
-What I found amazing was the way I could run these tests. The JS Tests took 2 different tools to get running:
+What's really cool, is how you can run these tests.
+
+The JS Tests took 2 different NPM packages to get running:
 
 - fable-splitter
 - Jest
@@ -154,9 +152,12 @@ Both of these operated in "Watch Mode", so I could write a failing test, Ctrl+S,
 
 As the .NET tests are in Expecto, I can have the same workflow for them too with `dotnet watch run`.
 
-I have all 3 tasks setup in VS Code and can run them a simple command.
+I have all 3 tasks setup in VS Code and can set them running with the "Run Test Task" command.
+See my [tasks.json][7] and [packages.json][8] files for how these are configured.
 
-[SCREEN SHOT]
+![Test Terminals][9]
+
+I have a CI/CD Pipeline setup in Azure Dev Ops running these tests on both Windows and Ubuntu build agents. That takes 25 written tests to 100 running tests.
 
 ## Event Sourcing
 
@@ -216,3 +217,6 @@ The `processEvent` function matches and deconstructs the values from the event a
  [4]: https://github.com/xdaDaveShaw/XmasList/blob/master/src/Domain.fs
  [5]: https://github.com/xdaDaveShaw/XmasList/blob/master/tests/Util.fs
  [6]: {{site.contenturl}}advent-2018-screen.png
+ [7]: https://github.com/xdaDaveShaw/XmasList/blob/master/.vscode/tasks.json
+ [8]: https://github.com/xdaDaveShaw/XmasList/blob/master/package.json
+ [9]: {{site.contenturl}}advent-2018-tests.png
