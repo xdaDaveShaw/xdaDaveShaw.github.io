@@ -202,7 +202,7 @@
     list-style: none;
 
     > li {
-        margin-bottom: $spacing-unit;
+        margin-bottom: $spacing-unit * 1.5;
         border-bottom: 6px double $brand-color-dark;
     }
      &.archive {
@@ -230,7 +230,7 @@
         .post-meta {
             display: block;
             width: 100px;
-            margin-bottom: $spacing-unit / 2;
+            margin-top: $spacing-unit / 2;
         }
         > h2 {
             margin-bottom: 0;
@@ -245,7 +245,7 @@
 
 .post-link {
     display: block;
-    font-size: 28px;
+    font-size: 2em;
     font-weight: bold;
 }
 
