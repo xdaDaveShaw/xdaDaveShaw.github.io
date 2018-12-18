@@ -244,7 +244,8 @@ There's a lot more I could have talked about here:
 
 But I think this post has gone on too long already.
 
-I really wanted to highlight the power of the SAFE-Stack for building apps that are using the same methods people are currently using, like
+I really wanted to highlight and show off the power of the SAFE-Stack for building apps that
+are using the same methods people are currently using, like
 React for UI and Jest for Testing, but show how Fable enables developers to do so much more:
 
 - 100% re-usable code
@@ -257,7 +258,7 @@ React for UI and Jest for Testing, but show how Fable enables developers to do s
 I also wanted to share my solutions to some of the problems I've had, like running the tests, or setting up webpack, or using FAKE.
 
 It doesn't do everything that the SAFE Demo applications do, but I hope someone can find it a useful starting point for doing
-more than just TODO lists. Please go checkout the [source][12].
+more than just TODO lists. Please go checkout the [source][12], clone it and have a play.
 
 If anyone has any questions or comments, you can find me on Twitter, or open an [Issue in the Repo][12].
 
