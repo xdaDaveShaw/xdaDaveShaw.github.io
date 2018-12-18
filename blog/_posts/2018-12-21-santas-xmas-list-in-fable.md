@@ -30,6 +30,8 @@ My initial design was for something a bit more complicated, but I scaled it down
 
 ![Screen shot][6]
 
+### [Click here to have a play][13]
+
 The app is written in F#, using Fable, Elmish and Fulma (which I also used to write [Monster Splatter][2]) and all the associated tooling in SAFE stack. I did consider writing a back-end for it, but decided to keep things simple.
 
 ## The Domain Model
@@ -100,6 +102,8 @@ Fable transpiles my F# into JavaScript and runs it in the browser, how could I k
 The answer is **Testing** - the only way you can be sure of anything in software.
 
 Using the Fable Compiler's tests as inspiration and the [Fable bindings for Jest][3], I've created a suite of tests that can be run against the generated JavaScript and the compiled .NET code.
+
+> As of writing there is a [Bug][11] with Fable 2 and the Jest Bindings, but you can work around them.
 
 The trick is to use the `FABLE_COMPILER` compiler directive to produce different code under Fable and .NET.
 
@@ -195,6 +199,8 @@ Browser.localStorage.setItem(key, json)
 let json = Browser.localStorage.getItem(key)
 ```
 
+![Local Storage][14]
+
 For serialization and deserialization I used [Thoth.Json][10] and just used the "Auto mode" on the list of Events.
 
 When the page is loaded all the Events are loaded back into the EventStore, but now we need to some how convert them back into the Model and recreate the state that was there before.
@@ -226,6 +232,37 @@ Then it uses a `fold` to iterate over each event, passing in the current state a
 
 The `processEvent` function matches and deconstructs the values from the event and passes them to the correct Domain function - which already returns the updated model, so it works perfectly with the `fold`.
 
+## Summing Up
+
+There's a lot more I could have talked about here:
+
+- How I used Fulma / Font Awesome for the Styling.
+- How I used Fable React for the UI.
+- How I used Azure Pipelines for the CI/CD Pipeline to S3.
+- How I never needed to run a Debugger once.
+- How I used FAKE for x-plat build scripts.
+
+But I think this post has gone on too long already.
+
+I really wanted to highlight the power of the SAFE-Stack for building apps that are using the same methods people are currently using, like
+React for UI and Jest for Testing, but show how Fable enables developers to do so much more:
+
+- 100% re-usable code
+- Type safe code
+- Domain modelling using Algebraic Data Types
+- Event Sourcing
+- Familiarity with .NET
+- Functional Architecture (Elmish).
+
+I also wanted to share my solutions to some of the problems I've had, like running the tests, or setting up webpack, or using FAKE.
+
+It doesn't do everything that the SAFE Demo applications do, but I hope someone can find it a useful starting point for doing
+more than just TODO lists. Please go checkout the [source][12].
+
+If anyone has any questions or comments, you can find me on Twitter, or open an [Issue in the Repo][12].
+
+### [Don't forget to have a play][13] ;)
+
  [1]: https://sergeytihon.com/2018/10/22/f-advent-calendar-in-english-2018/
  [2]: {{site.url}}/blog/playing-with-fable/
  [3]: https://github.com/jgrund/fable-jest
@@ -236,3 +273,7 @@ The `processEvent` function matches and deconstructs the values from the event a
  [8]: https://github.com/xdaDaveShaw/XmasList/blob/master/package.json
  [9]: {{site.contenturl}}advent-2018-tests.png
  [10]: https://mangelmaxime.github.io/Thoth/json/v2/decode.html
+ [11]: https://github.com/jgrund/fable-jest/issues/13
+ [12]: https://github.com/xdaDaveShaw/XmasList/
+ [13]: https://s3-eu-west-1.amazonaws.com/xmaslist/index.html
+ [14]: {{site.contenturl}}advent-2018-storage.png
