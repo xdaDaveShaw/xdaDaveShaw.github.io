@@ -217,25 +217,27 @@ let fromEvents : FromEvents =
   fun editorState events ->
 
     let processEvent m ev =
-      let model, _ =
+      let updatedModel, _ =
         match ev with
         | EventStore.AddedChild name -> m |> addChild name
         | EventStore.ReviewedChild (name, non) -> m |> reviewChild name (stringToNon non)
         | EventStore.AddedItem (name, item) -> m |> addItem name { Description = item }
-      model
+      updatedModel
 
-    let model =
+    let state0 =
       createDefaultModel editorState
 
-    (model, events)
+    (state0, events)
     ||> List.fold processEvent
 ```
 
-It starts by declaring a function to process the events, then getting an empty `model` from the function `createDefaultModel`.
+It starts by declaring a function to process each event, which will be used by the `fold` function.
 
-Then it uses a `fold` to iterate over each event, passing in the current state (`model`) and returning a new state. Each time the fold goes through an event in the list, the updated state from the previous iteration is passed in, this is why you need to start with an empty model, which is then built up from the events.
+The `processEvent` function takes in the current state `m` and the event to process `ev`, matches and deconstructs the values from `ev` and passes them to the correct Domain function, along with the current model (`m`) and returns the updated model (ignoring the returned event as we don't need them here).
 
-The `processEvent` function matches and deconstructs the values from the event and passes them to the correct Domain function - which already returns the updated model, so it works perfectly with the `fold`.
+Next it creates `state0` using the `createDefaultModel` function - you can ignore the `editorState`, as I mentioned above, it has leaked in a little.
+
+Then it uses a `fold` to iterate over each event, passing in the initial state (`state0`) and returning a new state. Each time the fold goes through an event in the list, the updated state from the previous iteration is passed in, this is why you need to start with an empty model, which is then built up on with the events.
 
 ## Summing Up
 
