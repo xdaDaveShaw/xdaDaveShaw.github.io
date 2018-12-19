@@ -222,13 +222,13 @@ let fromEvents : FromEvents =
     let model =
       createDefaultModel editorState
 
-    events
-    |> List.fold processEvent model
+    (model, events)
+    ||> List.fold processEvent
 ```
 
 It starts by declaring a function to process the events, then getting an empty `model` from the function `createDefaultModel`.
 
-Then it uses a `fold` to iterate over each event, passing in the current state and returning a new state. Each time the fold goes through an event in the list, the updated state from the previous iteration is passed in, this is why you need to start with an empty model.
+Then it uses a `fold` to iterate over each event, passing in the current state (`model`) and returning a new state. Each time the fold goes through an event in the list, the updated state from the previous iteration is passed in, this is why you need to start with an empty model.
 
 The `processEvent` function matches and deconstructs the values from the event and passes them to the correct Domain function - which already returns the updated model, so it works perfectly with the `fold`.
 
