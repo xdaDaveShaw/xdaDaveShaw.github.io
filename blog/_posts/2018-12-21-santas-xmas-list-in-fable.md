@@ -177,8 +177,6 @@ Most of the application is operating on the "View / Projection" of the events, i
 
 To model each event I create a simple discriminated union for the `Event` and also used type aliases for all the strings, just to make it clearer what all these strings are:
 
-
-
 ```fsharp
 type Name = string
 type Item = string
