@@ -107,7 +107,7 @@ Using the Fable Compiler's tests as inspiration and the [Fable bindings for Jest
 
 The trick is to use the `FABLE_COMPILER` compiler directive to produce different code under Fable and .NET.
 
-For example the `testCase` funciton is declared as:
+For example the `testCase` function is declared as:
 
 ```fsharp
 let testCase (msg: string) (test: unit->unit) =
@@ -167,10 +167,17 @@ I have a CI/CD Pipeline setup in Azure Dev Ops running these tests on both Windo
 
 As I decided to avoid building a back-end for this I wanted a way to maintain the state on the client by persisting it into Local Storage in the browser.
 
-Instead of just serializing the current Model into JSON and storing it, I thought I'd try out storing each of the users actions as an Event and 
+Instead of just serializing the current Model into JSON and storing it, I thought I'd try out storing each of the users actions as an Event and
 then playing them back when the user (re)loads the page.
 
-To do this I create a simple discriminated union for the Event and also used type aliases for all the strings, just to keep things separte:
+This isn't a *pure* event sourcing implementation, but one that uses events instead of CRUD for persistence. If you want to read a more
+complete introduction to F# and Event Sourcing, try [Roman Provazník's Advent Post][16].
+
+Most of the application is operating on the "View / Projection" of the events, instead of the Stream of events.
+
+To model each event I create a simple discriminated union for the `Event` and also used type aliases for all the strings, just to make it clearer what all these strings are:
+
+
 
 ```fsharp
 type Name = string
@@ -186,7 +193,7 @@ type Event =
 These are what are returned from the Domain model representing what has just changed. They are exactly what the user input, no normalising strings
 for example.
 
-The "Event Store" in this case is a simple `ResizeArray<Event>` (the same as `List<T>`) that has each event appended onto.
+The "Event Store" in this case is a simple `ResizeArray<Event>` (aka  `List<T>`), and each event is appended onto it.
 
 Every time an event is appended to the Store, the entire store is persisted into Local Storage. Fable has "bindings" for access local storage which
 mean you only need to call:
@@ -203,7 +210,7 @@ let json = Browser.localStorage.getItem(key)
 
 For serialization and deserialization I used [Thoth.Json][10] and just used the "Auto mode" on the list of Events.
 
-When the page is loaded all the Events are loaded back into the EventStore, but now we need to some how convert them back into the Model and recreate the state that was there before.
+When the page is loaded all the Events are loaded back into the "Event Store", but now we need to some how convert them back into the Model and recreate the state that was there before.
 
 In F# this is actually really easy.
 
@@ -228,7 +235,7 @@ let fromEvents : FromEvents =
 
 It starts by declaring a function to process the events, then getting an empty `model` from the function `createDefaultModel`.
 
-Then it uses a `fold` to iterate over each event, passing in the current state (`model`) and returning a new state. Each time the fold goes through an event in the list, the updated state from the previous iteration is passed in, this is why you need to start with an empty model.
+Then it uses a `fold` to iterate over each event, passing in the current state (`model`) and returning a new state. Each time the fold goes through an event in the list, the updated state from the previous iteration is passed in, this is why you need to start with an empty model, which is then built up from the events.
 
 The `processEvent` function matches and deconstructs the values from the event and passes them to the correct Domain function - which already returns the updated model, so it works perfectly with the `fold`.
 
@@ -280,3 +287,4 @@ If anyone has any questions or comments, you can find me on Twitter, or open an 
  [13]: https://s3-eu-west-1.amazonaws.com/xmaslist/index.html
  [14]: {{site.contenturl}}advent-2018-storage.png
  [15]: https://skillsmatter.com/skillscasts/11439-keynote-f-sharp-code-i-love
+ [16]: https://medium.com/@dzoukr/event-sourcing-step-by-step-in-f-be808aa0ca18
