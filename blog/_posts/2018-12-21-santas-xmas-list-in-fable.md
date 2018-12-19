@@ -244,9 +244,10 @@ There's a lot more I could have talked about here:
 
 But I think this post has gone on too long already.
 
-I really wanted to highlight and show off the power of the SAFE-Stack for building apps that
-are using the same methods people are currently using, like
-React for UI and Jest for Testing, but show how Fable enables developers to do so much more:
+But, what I really wanted to highlight and show off are the parts of [F# I love][15].
+Along with that, the power of the SAFE-Stack for building apps that are using the same tech stacks people
+are currently using, like React for UI and Jest for Testing, but show how Fable enables
+developers to do so much more:
 
 - 100% re-usable code
 - Type safe code
@@ -278,3 +279,4 @@ If anyone has any questions or comments, you can find me on Twitter, or open an 
  [12]: https://github.com/xdaDaveShaw/XmasList/
  [13]: https://s3-eu-west-1.amazonaws.com/xmaslist/index.html
  [14]: {{site.contenturl}}advent-2018-storage.png
+ [15]: https://skillsmatter.com/skillscasts/11439-keynote-f-sharp-code-i-love
