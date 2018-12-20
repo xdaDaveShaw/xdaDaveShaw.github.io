@@ -15,11 +15,16 @@
       </a>
 
       <div id="nav-link-panel" class="site-nav-links">
-        {% for page in site.pages %} {% if page.title %}
-          <a class="page-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
-          {% endif %} 
-        {% endfor %}
-        <a class="page-link" href="{{site.baseurl}}/MonsterSplatter">Monster Splatter</a>
+        <div>
+          <a class="page-link" href="{{site.baseurl}}">Blog</a>
+          {% for page in site.pages %} {% if page.title %}
+            <a class="page-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
+            {% endif %} 
+          {% endfor %}
+          <a class="page-link" href="https://pathconverter.azurewebsites.net">Path Converter</a>
+          <a class="page-link" href="{{site.baseurl}}/MonsterSplatter">Monster Splatter</a>
+          <a class="page-link" href="https://s3-eu-west-1.amazonaws.com/xmaslist/index.html">F# Advent Xmas List</a>
+        </div>
         {% include social.html %}
       </div>      
     </nav>
