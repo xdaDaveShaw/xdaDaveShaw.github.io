@@ -249,9 +249,9 @@ There's a lot more I could have talked about here:
 - How I never needed to run a Debugger once.
 - How I used FAKE for x-plat build scripts.
 
-But I think this post has gone on too long already.
+But, I think this post has gone on too long already.
 
-But, what I really wanted to highlight and show off are the parts of [F# I love][15].
+What I really wanted to highlight and show off are the parts of [F# I love][15].
 Along with that, the power of the SAFE-Stack for building apps that are using the same tech stacks people
 are currently using, like React for UI and Jest for Testing, but show how Fable enables
 developers to do so much more:
