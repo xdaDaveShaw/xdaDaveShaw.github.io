@@ -46,7 +46,11 @@
 
         // Gaps between nav items, but not on the first one
         &:not(:first-child) {
-            margin-left: 20px;
+            margin-left: 10px;
+        }
+        &:not(:last-child) {
+            padding-right: 10px;
+            border-right: solid 1px black;
         }
     }
     .social-list {
@@ -201,6 +205,10 @@
     margin-left: 0;
     list-style: none;
 
+    h2 {
+        margin-bottom: 0px;
+    }
+
     > li {
         margin-bottom: $spacing-unit * 1.5;
         border-bottom: 6px double $brand-color-dark;
@@ -231,6 +239,7 @@
             display: block;
             width: 100px;
             margin-top: $spacing-unit / 2;
+            margin-bottom: 0;
         }
         > h2 {
             margin-bottom: 0;
@@ -241,6 +250,7 @@
 .post-meta {
     font-size: $small-font-size;
     color: $grey-color;
+    margin-bottom: $spacing-unit / 2;
 }
 
 .post-link {
