@@ -26,6 +26,7 @@ Write-Output 'Performing Compressing, please wait...'
 
 Get-ChildItem -Filter *.png -Recurse | 
     Where-Object { $_.fullname -notmatch "\\_site\\?" } | 
+    Sort-Object { $_.CreationTime } -Descending |
     Select-Object FullName | 
     ForEach-Object { .\tools\pngout.exe $_.Fullname /c2 /f0 }
 
