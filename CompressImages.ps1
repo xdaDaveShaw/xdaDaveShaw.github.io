@@ -24,7 +24,10 @@ if (!(Test-Path -Path tools\pngout.exe))
 Write-Output ""
 Write-Output 'Performing Compressing, please wait...'
 
-Get-ChildItem *.png -Recurse | Select-Object FullName | ForEach-Object { .\tools\pngout.exe $_.Fullname /c2 /f0 }
+Get-ChildItem -Filter *.png -Recurse | 
+    Where-Object { $_.fullname -notmatch "\\_site\\?" } | 
+    Select-Object FullName | 
+    ForEach-Object { .\tools\pngout.exe $_.Fullname /c2 /f0 }
 
 $finalSize = GetSize
 
