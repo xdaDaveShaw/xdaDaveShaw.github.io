@@ -12,5 +12,13 @@
     ],
     "spellchecker.ignoreRegExp": [],
     "spellchecker.ignoreFileExtensions": [],
-    "spellchecker.checkInterval": 5000
+    "spellchecker.checkInterval": 5000,
+    "spellright.language": [
+        "English (British)"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ]
 }
