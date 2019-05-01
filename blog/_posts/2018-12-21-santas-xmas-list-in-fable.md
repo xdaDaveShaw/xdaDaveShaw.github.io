@@ -284,7 +284,7 @@ If anyone has any questions or comments, you can find me on Twitter, or open an 
  [10]: https://mangelmaxime.github.io/Thoth/json/v2/decode.html
  [11]: https://github.com/jgrund/fable-jest/issues/13
  [12]: https://github.com/xdaDaveShaw/XmasList/
- [13]: https://s3-eu-west-1.amazonaws.com/xmaslist/index.html
+ [13]: https://xmaslist.s3-eu-west-1.amazonaws.com/index.html
  [14]: {{site.contenturl}}advent-2018-storage.png
  [15]: https://skillsmatter.com/skillscasts/11439-keynote-f-sharp-code-i-love
  [16]: https://medium.com/@dzoukr/event-sourcing-step-by-step-in-f-be808aa0ca18
