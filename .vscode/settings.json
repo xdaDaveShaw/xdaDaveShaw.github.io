@@ -14,7 +14,7 @@
     "spellchecker.ignoreFileExtensions": [],
     "spellchecker.checkInterval": 5000,
     "spellright.language": [
-        "English (British)"
+        "en"
     ],
     "spellright.documentTypes": [
         "markdown",
