@@ -27,7 +27,7 @@ I won’t go into detail of the process of how I changed the activities because 
 
 # Using the template
 
- - To use the tempalte you need to have the Global Lists file checked into Version Control, you can follow the advice in the [Wrox Professional Team Foundation Server 2013](http://www.amazon.co.uk/gp/product/1118836340/ref=as_li_tl?ie=UTF8&camp=1634&creative=19450&creativeASIN=1118836340&linkCode=as2&tag=taeguk-21&linkId=FQHQQKVQQIYAHRT6) book to create a Team Project for your all your Process artefacts, or if you just want to keep it simple:
+ - To use the tempalte you need to have the Global Lists file checked into Version Control, you can follow the advice in the **Wrox Professional Team Foundation Server 2013** book to create a Team Project for your all your Process artefacts, or if you just want to keep it simple:
    - Use witadmin to export the global list file:
    - `witadmin exportgloballist /collection:http://tfs:8080/tfs/DefaultCollection /f:GlobalList.xml`
    - Check that file into its own folder somewhere in souce control, in this example we will use `$/TFS/GlobalList/GlobalList.xml` (having it in its own folder helps).
