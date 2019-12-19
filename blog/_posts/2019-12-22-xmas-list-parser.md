@@ -3,8 +3,8 @@ layout: post
 status: publish
 published: true
 title: Xmas List Parser
-date: '2019-12-22 09:30:00 +0000'
-date_gmt: '2019-12-22 09:30:00 +0000'
+date: '2019-12-2 09:30:00 +0000'
+date_gmt: '2019-2-22 09:30:00 +0000'
 categories:
 - FSharp
 ---
@@ -15,7 +15,7 @@ categories:
 of the world.
 
 Sadly, the development team didn't do proper research into Santa's requirements; they couldn't be bothered with
-a trek to The North Pole and just sat at home watching "The Santa Claus" and then reckoned they knew it all.
+a trek to the North Pole and just sat at home watching "The Santa Clause" and then reckoned they knew it all.
 Luckily no harm came to Christmas 2018.
 
 Good news is, Santa's been in touch and the additional requirements for this year are:
@@ -30,13 +30,14 @@ Good news is, Santa's been in touch and the additional requirements for this yea
 This year I'm going to walk through how you can solve Santa's problem using something I've recently
 began playing with - [FParsec][5].
 
-FParsec is parser combinator library for F#, simplified as a library that lets you write a parser by
-combining functions.
+> FParsec is parser combinator library for F#.
+
+I'd describe it as: a library that lets you write a parser by combining functions.
 
 This is only my second go at using it, my first was to solve [Mike Hadlow's "Journeys" coding challenge][6].
-So this might not be the most idiomatic way to solve write a parser.
+So this might not be the most idiomatic way to write a parser.
 
-We'll assume that Santa has bought some off the shelf OCR software and has scanned in some Xmas Lists into
+We'll assume that Santa has bought some off the shelf OCR software and has scanned in some Christmas lists into
 a text file.
 
 ### Example
@@ -61,11 +62,11 @@ Dave : Naughty
 ```
 
 As you can see the OCR software hasn't done too well with the whitespace. We need a parser that is able
-to parse this into some nice F# Records and handle the lack of perfect structure.
+to parse this into some nice F# records and handle the lack of perfect structure.
 
 ### Domain
 
-With F# solutions I like to model the Domain first:
+When writing solutions in F# I like to model the domain first:
 
 ```fsharp
 module Domain =
@@ -83,10 +84,12 @@ module Domain =
     }
 ```
 
-There is Discriminated Union to model the behaviour, either naughty or nice. A record for the
-Gift that holds the name of the gift and the quantity. And finally a Child to model the name of the child,
-their behaviour and a list of Gifts they are getting. The overall output of a successful parse will be a
-`Child list`.
+First the `Behaviour` is modelled as a discriminated union: either `Naughty` or `Nice`.
+
+A record for the `Gift` holds the name of a gift and the quantity.
+
+The `Child` record models the name of the child, their behaviour and a list of gifts they are getting.
+The overall output of a successfully parsing the text will be a list of `Child` records.
 
 ### Parsing
 
@@ -103,7 +106,7 @@ type Line =
 A `Child` line represents a child and their `Behaviour` this year. A `QuantifiedGift` represents a gift that was specified
 with a quantity (e.g. "Bike * 2") and a `SingleGift` represents a gift without a quantity.
 
-Modelling this way avoids putting domain logic into your parser - for example, what is the quantity of a Single Gift?
+Modelling this way avoids putting domain logic into your parser - for example, what is the quantity of a single gift?
 It might seem trivial, but the less the parser knows about your domain the easier it is to create.
 
 Before we get into the actual parsing of the lines, there's a helper I added called `wsAround`:
@@ -122,7 +125,7 @@ FParsec's custom operators for combining parsers.
 
 So `wsAround ':'` lets me parse `:` with potential whitespace either side of it.
 
-IT can be used as part of parsing any of the following:
+It can be used as part of parsing any of the following:
 
 ```plain
 a : b
@@ -152,12 +155,16 @@ let pName =
     many1CharsTill anyChar endOfName |>> string
 ```
 
-`many1CharsTill` is a parser that parses some characters until it reaches and instance of another one. Here it parses
-any character using `anyChar` until it reaches the `endOfName` parser, which is a function that looks for
-`:` with whitespace around it. The result of the parser is then converted into a `string` using the `|>>`
+`many1CharsTill` is a parser that runs two other parsers. The first argument is the parser it will look
+for "many chars" from, the second argument is the parser that tells it when to stop.
+
+Here it parses any character using `anyChar` until it reaches the `endOfName` parser, which is a function that looks for
+`:` with whitespace around it.
+
+The result of the parser is then converted into a `string` using the `|>>`
 operator.
 
-The `pBehaviour` function parses naughty or nice into the Discriminated Union:
+The `pBehaviour` function parses naughty or nice into the discriminated union:
 
 ```fsharp
 let pBehaviour =
@@ -170,7 +177,7 @@ This defines 2 parsers, one for each case, and uses the `<|>` operator to choose
 `pstringCI "nice"` is looking to parse the string `nice` case-insensitive and then the `>>%` operator discards the
 parsed string and just returns `Domain.Nice`.
 
-These 2 functions are combined to create the pChild function that can parse the full line of text into a `Child` line.
+These 2 functions are combined to create the `pChild` function that can parse the full line of text into a `Child` line.
 
 ```fsharp
 let pChild =
@@ -234,12 +241,13 @@ let pLine =
     pChild
 ```
 
-This uses the `<|>` that was used for the Behaviour, but it also requires the `attempt` function before the first two parsers.
-This is because these parsers consume some of the input stream as they execute Without the `attempt` it would start on
-a Quantified Gift, then realise it is actually a single gift and have no way to go into the next choice.
+This uses the `<|>` that was used for the `Behaviour`, but it also requires the `attempt` function before the first two parsers.
+This is because these parsers consume some of the input stream as they execute. Without the `attempt` it would start on
+a quantified gift, then realise it is actually a single gift and have no way to go into the next choice.
 Using `attempt` allows the parser to "rewind" when it has a problem - like a quantified gift missing a `*`.
 
 If you want to see how this works, you need to decorate your parser functions with the `<!>` operator that is defined [here][9].
+This shows the steps the parser takes and allows you to see that it has "gone the wrong way".
 
 Finally a helper method called `parseInput` is used to parse the entire file:
 
@@ -248,8 +256,7 @@ let parseInput input =
     run (sepBy pLine newline) input
 ```
 
-This calls the `run` function passing in a `sepBy` parser for each `pLine` separated by a `newline`. This way each line is processed
-on it's own.
+This calls the `run` function passing in a `sepBy` parser for each `pLine` separated by a `newline`. This way each line is processed on it's own.
 
 That is the end of the parser module.
 
@@ -258,13 +265,16 @@ That is the end of the parser module.
 The current output of `parseInput` is a `ParserResult<Line list, unit>`. Assuming success there is now a list of `Line` union cases
 that need to be mapped into a list of `Child` from the domain.
 
-These have separate structures, a Child contains a list of Gifts, whereas the Lines are just flat.
+These have separate structures:
+
+- A `Child` record is hierarchical - it contains a list of `Gift`s.
+- The list of `Line`s has structure defined by the order of elements, `Gift`s follow the `Child` they relate to.
 
 Initially I thought about using a `fold` to go through each line, if the line was a child, add a child to the head of
 the results, if the line was a gift add it to the head of the list of gifts of the first child in the list, this was the code:
 
 ```fsharp
-let folder (state: Child list) (line : Line) : Child list = 
+let folder (state: Child list) (line : Line) : Child list =
 
     let addGift nm qty =
         let head::tail = state
@@ -278,12 +288,13 @@ let folder (state: Child list) (line : Line) : Child list =
 ```
 
 This worked, but because F# lists are implemented as singly linked lists you add to the head of the list instead of the tail. This
-had the annoying feature that the Children were backwards - not so bad, but then the list of gifts in each child was backwards too.
-I could have sorted both lists, but it would require recreating the results.
+had the annoying feature that the `Child` items were revered in the list - not so bad, but then the list of gifts in each child was backwards too.
+I could have sorted both lists, but it would require recreating the results as the lists are immutable and I wanted to keep to idiomatic F# as
+much as I could.
 
 A `foldBack` on the other hand works backwards "up" the list, which meant I could get the results in the order I wanted, but there
-was a complication. When going forward, the first line was always a child, so I always had a child to add Gifts to. Going backwards
-there is just gifts until you get to a Child, so you have to maintain a list of gifts, until you reach a child line, then you can
+was a complication. When going forward, the first line was always a child, so I always had a child to add gifts to. Going backwards
+there is just gifts until you get to a child, so you have to maintain a list of gifts, until you reach a child line, then you can
 create a child assign the gifts, then clear the list.
 
 This is how I implemented it:
@@ -313,20 +324,20 @@ module Translation =
 The `state` is a tuple of lists, the first for the `Child list` (the result we want) and the second for keeping track of the gifts
 that are not yet assigned to children.
 
-First, this function deconstructs `state` into the child and gift lists (`cList` and `gList` respectively).
+First this function deconstructs `state` into the child and gift lists - `cList` and `gList` respectively.
 
 Next I've declared some helper functions for adding to either the `Child` or `Gift` list:
 
 - `addChild` creates a new `Child` with the `Gifts` set to the accumulated list of Gifts (`gList`) and prepends it onto `cList`.
-- `addGift` just creates a new `Gift` at the head of `gList`.
+- `addGift` creates a new `Gift` and prepends it onto `gList`.
 
 Then the correct function is called based on the type of Line.
 
-- Children return a new Child list with a *Empty* Gift list.
-- The gifts return the existing Child list, with the current item added to the Gift list.
+- Children return a new `Child list` with a *Empty* `Gift list`.
+- The gifts return the existing `Child list`, with the current item added to the `Gift list`.
 
-The overall result is a tuple of all the Children correctly populated, and an empty list of gifts, as the last item will be the
-first row and that will be a Child.
+The overall result is a tuple of all the `Child` records correctly populated, and an empty list of `Gift` records, as the last item will be the
+first row and that will be a `Child`.
 
 ```fsharp
 let mapLinesToDomain lines = //ParserResult<Line list, unit> -> Child list
@@ -366,7 +377,8 @@ Then I wrote a parser for the Child's name and `:` and tested it on "Dave : Nice
 Then I could write a function to combine the two together and check that the results were correct again. The whole development
 process was done this way, just add a bit more code, bit more example, test in the REPL and repeat.
 
-The whole code for this is sat GitHub - it is only 115 lines long, including the printing code.
+The whole code for this is on [GitHub][10] - it is only 115 lines long, including code to print the list of Children
+back out so I could see the results.
 
  [1]: https://sergeytihon.com/2019/11/05/f-advent-calendar-in-english-2019/
  [2]: {{site.url}}/blog/santas-xmas-list-in-fable/
