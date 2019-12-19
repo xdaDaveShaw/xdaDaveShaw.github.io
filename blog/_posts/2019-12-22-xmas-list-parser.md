@@ -3,8 +3,8 @@ layout: post
 status: publish
 published: true
 title: Xmas List Parser
-date: '2019-12-2 09:30:00 +0000'
-date_gmt: '2019-2-22 09:30:00 +0000'
+date: '2019-12-22 09:30:00 +0000'
+date_gmt: '2019-12-22 09:30:00 +0000'
 categories:
 - FSharp
 ---
@@ -356,7 +356,7 @@ Finally, the output of `parseInput` can be piped into `mapLinesToDomain` to get 
 ```fsharp
 let childList =
     Parser.parseInput input  //Input is just a string from File.ReadAllText
-    |> Translation.mapLinesToDomain 
+    |> Translation.mapLinesToDomain
 ```
 
 ## Summing up
