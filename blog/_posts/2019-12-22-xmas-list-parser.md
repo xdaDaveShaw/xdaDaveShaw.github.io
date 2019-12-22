@@ -3,8 +3,8 @@ layout: post
 status: publish
 published: true
 title: Xmas List Parser
-date: '2019-12-22 09:30:00 +0000'
-date_gmt: '2019-12-22 09:30:00 +0000'
+date: '2019-12-22 11:00:00 +0000'
+date_gmt: '2019-12-22 11:00:00 +0000'
 categories:
 - FSharp
 ---
