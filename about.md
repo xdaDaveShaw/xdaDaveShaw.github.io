@@ -6,10 +6,9 @@ permalink: /about/
 
 I work full-time as a lead developer for a health care software firm.
 
-- Primarily I've worked with C#, WinForms, and Microsoft SQL Server on an enterprise scale.
-- Currently looking at Web Development in TypeScript (and the usual React etc) as well as golang
-for developing an AWS based solution using Lambdas and DynamoDB amongst other services.
-- I'm also learning (and loving) F# and finding excuses to use it at work.
+- My role focussed on using C#, WinForms, and Microsoft SQL Server for many years.
+- I'm also learning (and loving) F# and functional programming and
+finding excuses to use it at work.
 - In a past life, I've also spend a lot of time managing Team Foundation Server / Azure Devops.
 
 [![StackOverflow](https://stackoverflow.com/users/flair/383710.png)](http://stackoverflow.com/users/383710/daveshaw)
