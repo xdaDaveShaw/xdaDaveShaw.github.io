@@ -1,8 +1,8 @@
 ---
 layout: post
-status: draft
-published: false
-title: SnowPi in fsharp
+status: publish
+published: true
+title: SnowPi in F#
 date: '2020-12-11 08:00:00 +0000'
 date_gmt: '2020-12-11 08:00:00 +0000'
 categories:
@@ -15,23 +15,25 @@ categories:
 
 ## SnowPi RGB
 
-Back in *July* I got an email from KickStarter about a project for RGB Snowman for Raspberry Pi and
-BBC micro:bit, I instantly backed it, knowing of my daughters love of her micro:bit and all things Christmas.
+Back in *July* I got an email from KickStarter about a project for [RGB Snowman][3] for Raspberry Pi and
+BBC micro:bit; Knowing of my daughters love of her micro:bit and all things Christmas, I instantly backed it.
 
 ![SnowPi RGB][2]
 
 *image from the KickStarter campaign*
 
-A few months later (and now in Winter) it has arrived, and my daughter has had
-her fun programming it for the micro:bit, now it is my turn using the Raspberry Pi.
+A few months later (and now in Winter) my daughter has had her fun programming it for the micro:bit.
+Now it is my turn, and I thought it would make a good Christmassy post if I could do it in F# and get it
+running on a Raspberry Pi.
 
 Unfortunately, most of my Raspberry Pi programming has previously been with cobbled
-together python scripts with little attention for detail or correctness.
+together Python scripts with little attention for detail or correctness.
 
 This is my journey to getting it working with F# 5 / .NET 5 and running on a Raspberry Pi.
 
  [1]: https://sergeytihon.com/2020/10/22/f-advent-calendar-in-english-2020/
  [2]: {{site.contenturl}}snowpi-rgb.png
+ [3]: https://snowpi.xyz/
 
 ----
 
