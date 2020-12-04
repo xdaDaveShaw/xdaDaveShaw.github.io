@@ -3,8 +3,8 @@ layout: post
 status: publish
 published: true
 title: SnowPi in F#
-date: '2020-12-11 08:00:00 +0000'
-date_gmt: '2020-12-11 08:00:00 +0000'
+date: '2020-11-11 08:00:00 +0000'
+date_gmt: '2020-11-11 08:00:00 +0000'
 categories:
 - FSharp
 - Xmas
@@ -31,9 +31,193 @@ together Python scripts with little attention for detail or correctness.
 
 This is my journey to getting it working with F# 5 / .NET 5 and running on a Raspberry Pi.
 
+## Getting going
+
+After my initial idea, next came the question, "can I actually do it?". I took a look at the
+Python [demo application][4] that was build for the SnowPi and saw it used `rpi_ws281x`, a quick
+google for "rpi_ws281x .net" and, yep, this looks possible.
+
+However, that wasn't to be. I first tried the [ws281x.Net][5] package from nuget, and
+despite following the instructions to setup the native dependencies, I managed to get from
+`Seg Fault!` to `WS2811_ERROR_HW_NOT_SUPPORTED`, which seemed to indicate that my RPi 4 wasn't
+supported and that I needed to update the native libraries. I couldn't figure this out and gave up.
+I then tried [rpi-ws281x-csharp][6] which looked newer, and compiling everything from source,
+but I still couldn't get it working.
+
+### Getting there
+
+After some more digging I found Ken Sampson had done a [fork of rpi-ws281x-csharp][7] with a [nuget
+package][8].
+
+This one worked, I could finally interact with the SnowPi from F# running in .NET 5.
+
+## Developing
+
+The problem with developing on a desktop PC and testing on an RPi is that it takes a while to build,
+publish, copy and test the programs.
+
+I needed a way to test these easier, so I decided to redesign my app to use [Command Objects][9] and
+decouple the instructions from the execution. Now I could provide an alternate executor for the Console
+and see how it worked (within reason).
+
+### Types
+
+First I needed a type to describe where each LED is:
+
+```fsharp
+type Position =
+    | BottomLeft
+    | MiddleLeft
+    | TopLeft
+    | BottomRight
+    | MiddleRight
+    | TopRight
+    | Nose
+    | LeftEye
+    | RightEye
+    | BottomMiddle
+    | MiddleMiddle
+    | TopMiddle
+    static member All =
+        Reflection.FSharpType.GetUnionCases(typeof<Position>)
+        |> Seq.map (fun u -> Reflection.FSharpValue.MakeUnion(u, Array.empty) :?> Position)
+        |> Seq.toList
+```
+
+The `All` member is useful when you need to access all positions at once.
+
+I then created a Pixel record to store the state of a LED (this name was from the Python API to avoid
+conflicts with the `rpi_ws281x` type LED), and a Command union to hold each of the commands you can do
+with the SnowPi:
+
+```fsharp
+type Pixel = {
+    Position: Position
+    Color : Color
+}
+
+type Command =
+    | SetLed of Pixel
+    | SetLeds of Pixel list
+    | Display
+    | SetAndDisplayLeds of Pixel list
+    | Sleep of int
+    | Clear
+```
+
+Some of the Commands (`SetLed` vs `SetLeds` and `SetAndDisplayLeds` vs `SetLeds; Display`) are there for
+convenience when constructing commands.
+
+### Programs
+
+With these types I could now model a basic program:
+
+```fsharp
+let simpleProgram = [
+        SetLeds [ redNose; greenEyeL; greenEyeR ]
+        Display
+        Sleep 1000
+        SetLeds [ redNose; greenEyeL; greenEyeR; topMiddle ]
+        Display
+        Sleep 1000
+        SetLeds [ redNose; greenEyeL; greenEyeR; topMiddle; midMiddle; ]
+        Display
+        Sleep 1000
+        SetLeds [ redNose; greenEyeL; greenEyeR; topMiddle; midMiddle; bottomMiddle; ]
+        Display
+        Sleep 1000
+    ]
+```
+
+This is an F# List with 12 elements, each one corresponding to a Command to be run by _something_.
+At the moment nothing happens until the program is executed:
+
+The `execute` function takes a list of commands then examines the config to determine which
+interface to execute it on.
+
+Both Real and Mock versions of `execute` have the same signature, so I can create a list of each
+of those functions and iterate through each one calling it with the `cmds` arguments.
+
+```fsharp
+let execute config cmds name =
+    [
+        if config.UseSnowpi then
+            Real.execute
+        if config.UseMock then
+            Mock.execute
+    ] // (Command list -> Unit) list
+    |> List.iter (fun f ->
+        Colorful.Console.WriteLine((sprintf "Executing: %s" name), Color.White)
+        f cmds)
+```
+
+The `config` argument is partially applied so you don't have to pass it every time:
+
+```fsharp
+let config = createConfigFromArgs argv
+
+let execute = execute config
+
+// I would have used `nameof` but Ionide doesn't support it at time of writing.
+execute simpleProgram "simpleProgram"
+```
+
+### Mock
+
+The "Mock" draws a Snowman on the console, then does a write to each of the "Pixels" in the correct colour
+using the console using [Colorful.Console][10] library to help.
+
+```fsharp
+[<Literal>]
+let Snowman = """
+    
+    ###############
+     #############
+      ###########
+       #########
+   #################
+     /           \
+    /  [ ]   [ ]  \
+   |               |
+    \     [ ]     /
+     \           /
+     /           \
+    /     [ ]     \
+   / [ ]       [ ] \
+  /       [ ]       \
+ |  [ ]         [ ]  |
+  \       [ ]       /
+   \[ ]         [ ]/
+    \_____________/
+"""
+```
+
+The implementation is quite imperative, as I needed to match the behaviour of the Native library in "Real".
+The `SetLed` and `SetLeds` commands push a `Pixel` into a `ResizeArray<Command>` (`System.Collections.Generic.List<Command>`) and then a `Render` command iterates over each item in the collection, draws the appropriate "X" on the Snowman in the prescribed colour, and then clears the list.
+
+This is one of the things I really like about F#, it is a Functional First language, but I can drop
+into imperative code whenever I need to. I'll combe back to this point again later.
+
+Using `dotnet watch run` I can now write and test a program really quickly.
+
+![SnowPi simple program][11]
+
+
+
+
+Sum up how nice it is to have pure Programs created from commands, but executed by very imperative AND impure executor functions.
+
  [1]: https://sergeytihon.com/2020/10/22/f-advent-calendar-in-english-2020/
  [2]: {{site.contenturl}}snowpi-rgb.png
  [3]: https://snowpi.xyz/
+ [4]: https://github.com/ryanteck/snowpirgb-python/blob/main/demo.py
+ [5]: https://www.nuget.org/packages/ws281x.Net/
+ [6]: https://github.com/rpi-ws281x/rpi-ws281x-csharp
+ [7]: https://github.com/kenssamson/rpi-ws281x-csharp
+ [8]: https://www.nuget.org/packages/kenssamson.rpi-ws281x-csharp/
+ [9]: https://fsharpforfunandprofit.com/posts/13-ways-of-looking-at-a-turtle/#way9
+ [10]: http://colorfulconsole.com/
+ [11]: {{site.contenturl}}snowpi-simple.gif
 
 ----
 
