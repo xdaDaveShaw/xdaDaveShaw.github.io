@@ -347,11 +347,27 @@ let colorWipeProgram = [
 The `colorWipe` function sets each Led in turn to a specified colour, displays it, waits 50ms, and moves
 onto the next pixel. `List.collect` is used to flatten the list of lists of commands into just a list of commands.
 
-The `colorWipeProgram` repeats this 5 times, but each time uses a different colour in the wipe. Whilst it may look imperative, (it is using list comprehensions) it is still just building commands to execute later.
+The `colorWipeProgram` repeats this 5 times, but each time uses a different colour in the wipe. Whilst it may look imperative, it is using list comprehensions and is still just building commands to execute later.
 
----
+### Full project
 
-Sum up how nice it is to have pure Programs created from commands, but executed by very imperative AND impure executor functions.
+The entire project is on GitHub [here][12] if you want to have a look at the full source code and maybe
+even get a [SnowPi][3] and try it out.
+
+### Summing up
+
+The project started out fully imperative, and proved quite hard to implement correctly, especially as I wrote
+the mock first, and implemented the real SnowPi.
+
+Once I moved to using Commands and got the right set of commands, I didn't have to worry about refactoring
+the programs as I tweaked implementation details.
+
+The building of programs from commands is purely functional and referentially transparent. You can see
+what a program will do before you even run it. This allowed me to use functional principals building up
+the programs, despite both implementations being rather imperative and side effect driven.
+
+Going further, if I were to write tests for this, the important part would be the programs, which I could
+assert were formed correctly, without ever having to render them.
 
  [1]: https://sergeytihon.com/2020/10/22/f-advent-calendar-in-english-2020/
  [2]: {{site.contenturl}}snowpi-rgb.png
@@ -364,55 +380,4 @@ Sum up how nice it is to have pure Programs created from commands, but executed 
  [9]: https://fsharpforfunandprofit.com/posts/13-ways-of-looking-at-a-turtle/#way9
  [10]: http://colorfulconsole.com/
  [11]: {{site.contenturl}}snowpi-simple.gif
-
-----
-
-Notes:
-
-Publishing
-
-dotnet publish -o publish --self-contained -r linux-arm
-
-Copying
-scp -rp publish/ pi@raspberrypi:/home/pi/snowpi
-
-on Pi
-
-cd ~/snowpi/
-
-./install
-
-cd publish/
-./snowpi
-
-
-First Run, Seg Fault!
-95350a3b0b7ac46c8271491fa86f0780f644932f
-
-Then:
-WS2811_ERROR_HW_NOT_SUPPORTED
-
-Fixing by install and building the native lib on the pi...
-
-cloned https://github.com/jgarff/rpi_ws281x
-scons (from as per above)
-copied rpi_ws281x.i and rpi_ws281x_wrap.c from https://github.com/klemmchr/rpi_ws281x.Net/tree/master/src/ws281x.Net/Native
-gcc -c -fpic ws2811.c rpi_ws281x_wrap.c (as per .NET)
-gcc -shared ws2811.o rpi_ws281x_wrap.o -o librpi_ws281x.so
-sudo ldconfig
-
-Running...
-./snowpi: symbol lookup error: /usr/local/lib/librpi_ws281x.so: undefined symbol: rpi_hw_detect
-
-Better...
-https://github.com/kenssamson/rpi-ws281x-csharp/tree/master/src/rpi_ws281x
-Using this lib and the latest build of native libs from https://github.com/jgarff/rpi_ws281x
-But these instructions
-$ sudo apt-get install build-essential git scons
-$ git clone https://github.com/jgarff/rpi_ws281x.git
-$ cd rpi_ws281x
-$ scons
-$ gcc -shared -o ws2811.so *.o
-$ sudo cp ws2811.so /usr/lib
-
-Also copied to /usr/local/lib/ NOT sure if this helped though ;)
+ [12]: https://github.com/xdaDaveShaw/snowpi/
