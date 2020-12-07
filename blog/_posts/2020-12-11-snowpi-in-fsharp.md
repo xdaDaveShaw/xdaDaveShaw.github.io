@@ -170,7 +170,7 @@ using the console using [Colorful.Console][10] library to help.
 ```fsharp
 [<Literal>]
 let Snowman = """
-    
+
     ###############
      #############
       ###########
@@ -193,7 +193,20 @@ let Snowman = """
 ```
 
 The implementation is quite imperative, as I needed to match the behaviour of the Native library in "Real".
-The `SetLed` and `SetLeds` commands push a `Pixel` into a `ResizeArray<Command>` (`System.Collections.Generic.List<Command>`) and then a `Render` command iterates over each item in the collection, draws the appropriate "X" on the Snowman in the prescribed colour, and then clears the list.
+The `SetLed` and `SetLeds` commands push a `Pixel` into a `ResizeArray<Command>` (`System.Collections.Generic.List<Command>`) and then a `Render` command iterates over each item in the collection, draws the appropriate "X" on the Snowman in the prescribed colour, and then clears the list ready for the next
+render.
+
+```fsharp
+let private drawLed led =
+    Console.SetCursorPosition (mapPosToConsole led.Position)
+    Console.Write('X', led.Color)
+
+let private render () = 
+    try
+        Seq.iter drawLed toRender
+    finally
+        Console.SetCursorPosition originalPos
+```
 
 This is one of the things I really like about F#, it is a Functional First language, but I can drop
 into imperative code whenever I need to. I'll combe back to this point again later.
@@ -202,8 +215,141 @@ Using `dotnet watch run` I can now write and test a program really quickly.
 
 ![SnowPi simple program][11]
 
+### Real SnowPi
 
+Implementing the "real" SnowPi turned out to be trivial, albeit imperative.
 
+Just following the examples from the GitHub repo of the [rpi-ws281x-csharp][7] in C# was enough.
+
+For example:
+
+```fsharp
+open rpi_ws281x
+open System.Drawing
+
+let settings = Settings.CreateDefaultSettings();
+let controller =
+    settings.AddController(
+        controllerType = ControllerType.PWM0,
+        ledCount = NumberOfLeds,
+        stripType = StripType.WS2811_STRIP_GRB,
+        brightness = 255uy,
+        invert = false)
+
+let rpi = new WS281x(settings)
+
+//Call once at the start
+let setup() =
+    controller.Reset();
+
+//Call once at the end
+let teardown() =
+    rpi.Dispose()
+
+let private setLeds pixels =
+    let toLedTuple pixel =
+       (posToLedNumber pixel.Position, pixel.Color)
+
+    pixels
+    |> List.map toLedTuple
+    |> List.iter controller.SetLED
+
+let private render() =
+    rpi.Render()
+```
+
+The above snipped gives most of the functions you need to execute the commands against:
+
+```fsharp
+let rec private executeCmd cmd =
+    match cmd with
+    | SetLed p -> setLeds [p]
+    | SetLeds ps -> setLeds ps
+    | Display -> render ()
+    | SetAndDisplayLeds ps -> 
+        executeCmd (SetLeds ps)
+        executeCmd Display
+    | Sleep ms -> System.Threading.Thread.Sleep(ms)
+    | Clear -> clear ()
+```
+
+### Other Programs
+
+Just to illustrate composing a few programs, I'll post a two more, one simple traffic light I created
+and one I copied from the Demo app in the Python repository:
+
+#### Lights
+
+This displays the traditional British traffic light sequence. First by creating lists for each of the
+pixels and their associated colours (`createPixels` is a simple helper method).
+By appending the red and amber lists together, I can combine both red and amber pixels into a
+new list that will display red and amber at the same time.
+
+```fsharp
+let red =
+    [ LeftEye; RightEye; Nose]
+    |> createPixels Color.Red
+
+let amber =
+    [ TopLeft; TopMiddle; TopRight; MiddleMiddle ]
+    |> createPixels Color.Yellow
+
+let green =
+    [ MiddleLeft; BottomLeft; BottomMiddle; MiddleRight; BottomRight ]
+    |> createPixels Color.LimeGreen
+
+let redAmber =
+    List.append red amber
+
+let trafficLights = [
+    Clear
+    SetAndDisplayLeds green
+    Sleep 3000
+    Clear
+    SetAndDisplayLeds amber
+    Sleep 1000
+    Clear
+    SetAndDisplayLeds red
+    Sleep 3000
+    Clear
+    SetAndDisplayLeds redAmber
+    Sleep 1000
+    Clear
+    SetAndDisplayLeds green
+    Sleep 1000
+]
+
+```
+
+The overall program is just a set of commands to first clear then set the Leds and Display them at the
+same time, then sleep for a prescribed duration, before moving onto the next one.
+
+#### Colour Wipe
+
+This program is ported directly from the Python sample:
+
+```fsharp
+let colorWipe col =
+    Position.All
+    |> List.sortBy posToLedNumber
+    |> List.collect (
+        fun pos ->
+            [ SetLed { Position = pos; Color = col }
+              Display
+              Sleep 50 ])
+
+let colorWipeProgram = [
+    for _ in [1..5] do
+        for col in [ Color.Red; Color.Green; Color.Blue; ] do
+            yield! colorWipe col
+```
+
+The `colorWipe` function sets each Led in turn to a specified colour, displays it, waits 50ms, and moves
+onto the next pixel. `List.collect` is used to flatten the list of lists of commands into just a list of commands.
+
+The `colorWipeProgram` repeats this 5 times, but each time uses a different colour in the wipe. Whilst it may look imperative, (it is using list comprehensions) it is still just building commands to execute later.
+
+---
 
 Sum up how nice it is to have pure Programs created from commands, but executed by very imperative AND impure executor functions.
 
