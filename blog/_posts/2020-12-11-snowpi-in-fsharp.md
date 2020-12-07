@@ -3,8 +3,8 @@ layout: post
 status: publish
 published: true
 title: SnowPi in F#
-date: '2020-11-11 08:00:00 +0000'
-date_gmt: '2020-11-11 08:00:00 +0000'
+date: '2020-12-11 08:00:00 +0000'
+date_gmt: '2020-12-11 08:00:00 +0000'
 categories:
 - FSharp
 - Xmas
@@ -15,41 +15,46 @@ categories:
 
 ## SnowPi RGB
 
-Back in *July* I got an email from KickStarter about a project for [RGB Snowman][3] for Raspberry Pi and
-BBC micro:bit; Knowing of my daughters love of her micro:bit and all things Christmas, I instantly backed it.
+Back in *July* I got an email from KickStarter about a project for an [RGB Snowman][3] that works on Raspberry Pi's
+and BBC micro:bits. My daughter loves building things on her micro:bit, and loves all things Christmassy, so I
+instantly backed it...
 
 ![SnowPi RGB][2]
 
 *image from the KickStarter campaign*
 
-A few months later (and now in Winter) my daughter has had her fun programming it for the micro:bit.
-Now it is my turn, and I thought it would make a good Christmassy post if I could do it in F# and get it
-running on a Raspberry Pi.
+A few months later (and now in the proper season) my daughter has had her fun programming it for the micro:bit.
+Now it is my turn, and I thought it would make a good Christmas post if I could do it in F# and get it
+running on a Raspberry Pi with .NET Core / .NET.
 
-Unfortunately, most of my Raspberry Pi programming has previously been with cobbled
-together Python scripts with little attention for detail or correctness.
+Most of my Raspberry Pi programming so far has been with cobbled together Python scripts with
+little attention for detail or correctness, I've never run anything .NET on a Raspberry Pi.
 
 This is my journey to getting it working with F# 5 / .NET 5 and running on a Raspberry Pi.
 
 ## Getting going
 
 After my initial idea, next came the question, "can I actually do it?". I took a look at the
-Python [demo application][4] that was build for the SnowPi and saw it used `rpi_ws281x`, a quick
+Python [demo application][4] that was created for the SnowPi and saw it used `rpi_ws281x`, a quick
 google for "rpi_ws281x .net" and, yep, this looks possible.
 
-However, that wasn't to be. I first tried the [ws281x.Net][5] package from nuget, and
+However, that wasn't to be. I first tried the popular [ws281x.Net][5] package from nuget, and
 despite following the instructions to setup the native dependencies, I managed to get from
 `Seg Fault!` to `WS2811_ERROR_HW_NOT_SUPPORTED`, which seemed to indicate that my RPi 4 wasn't
 supported and that I needed to update the native libraries. I couldn't figure this out and gave up.
-I then tried [rpi-ws281x-csharp][6] which looked newer, and compiling everything from source,
-but I still couldn't get it working.
+
+I then tried [rpi-ws281x-csharp][6] which looked newer, and even with compiling everything from source,
+I still couldn't get it working.
 
 ### Getting there
 
-After some more digging I found Ken Sampson had done a [fork of rpi-ws281x-csharp][7] with a [nuget
-package][8].
+After some more digging I finally found Ken Sampson had a [fork of rpi-ws281x-csharp][7] which looked
+newer than the once I used before, and it had a [nuget package][8].
 
-This one worked, I could finally interact with the SnowPi from F# running in .NET 5.
+This one worked!
+
+I could finally interact with the SnowPi from F# running in .NET 5. But so far all I had was "turn
+on all the lights".
 
 ## Developing
 
@@ -58,11 +63,14 @@ publish, copy and test the programs.
 
 I needed a way to test these easier, so I decided to redesign my app to use [Command Objects][9] and
 decouple the instructions from the execution. Now I could provide an alternate executor for the Console
-and see how it worked (within reason).
+and see how it worked (within reason) without deploying to the Raspberry Pi.
 
 ### Types
 
-First I needed a type to describe where each LED is:
+As with most F# projects, first, I needed some types.
+
+The first one I created was the Position to describe in English where each LED was so I didn't have
+to think too hard when I wanted to light one up.
 
 ```fsharp
 type Position =
@@ -113,23 +121,34 @@ convenience when constructing commands.
 With these types I could now model a basic program:
 
 ```fsharp
+let redNose =
+    { Position = Nose
+      Color = Color.Red }
+let greenEyeL =
+    { Position = LeftEye
+      Color = Color.LimeGreen }
+// etc. Rest hidden for brevity
+
 let simpleProgram = [
-        SetLeds [ redNose; greenEyeL; greenEyeR ]
-        Display
-        Sleep 1000
-        SetLeds [ redNose; greenEyeL; greenEyeR; topMiddle ]
-        Display
-        Sleep 1000
-        SetLeds [ redNose; greenEyeL; greenEyeR; topMiddle; midMiddle; ]
-        Display
-        Sleep 1000
-        SetLeds [ redNose; greenEyeL; greenEyeR; topMiddle; midMiddle; bottomMiddle; ]
-        Display
-        Sleep 1000
-    ]
+    SetLeds [ redNose; greenEyeL; greenEyeR ]
+    Display
+    Sleep 1000
+    SetLeds [ redNose; greenEyeL; greenEyeR; topMiddle ]
+    Display
+    Sleep 1000
+    SetLeds [ redNose; greenEyeL; greenEyeR; topMiddle; midMiddle; ]
+    Display
+    Sleep 1000
+    SetLeds [ redNose; greenEyeL; greenEyeR; topMiddle; midMiddle; bottomMiddle; ]
+    Display
+    Sleep 1000
+]
 ```
 
 This is an F# List with 12 elements, each one corresponding to a Command to be run by _something_.
+
+It is quite east to read what will happen, and I've given each of the Pixel values a nice name for reuse.
+
 At the moment nothing happens until the program is executed:
 
 The `execute` function takes a list of commands then examines the config to determine which
@@ -164,8 +183,9 @@ execute simpleProgram "simpleProgram"
 
 ### Mock
 
-The "Mock" draws a Snowman on the console, then does a write to each of the "Pixels" in the correct colour
-using the console using [Colorful.Console][10] library to help.
+The "Mock" draws a Snowman on the console, then does a write to each of the "Pixels" (in this case
+the Cursor is set to the correct X and Y position for each `[ ]`) in the correct colour
+using [Colorful.Console][10] library to help.
 
 ```fsharp
 [<Literal>]
@@ -193,15 +213,16 @@ let Snowman = """
 ```
 
 The implementation is quite imperative, as I needed to match the behaviour of the Native library in "Real".
-The `SetLed` and `SetLeds` commands push a `Pixel` into a `ResizeArray<Command>` (`System.Collections.Generic.List<Command>`) and then a `Render` command iterates over each item in the collection, draws the appropriate "X" on the Snowman in the prescribed colour, and then clears the list ready for the next
-render.
+The `SetLed` and `SetLeds` commands push a `Pixel` into a `ResizeArray<Command>` (`System.Collections.Generic.List<Command>`)
+and then a `Render` command instructs it to iterates over each item in the collection, draws the appropriate "X" on the Snowman
+in the desired colour, and then clear the list ready for the next render.
 
 ```fsharp
 let private drawLed led =
     Console.SetCursorPosition (mapPosToConsole led.Position)
     Console.Write('X', led.Color)
 
-let private render () = 
+let private render () =
     try
         Seq.iter drawLed toRender
     finally
@@ -219,9 +240,10 @@ Using `dotnet watch run` I can now write and test a program really quickly.
 
 Implementing the "real" SnowPi turned out to be trivial, albeit imperative.
 
-Just following the examples from the GitHub repo of the [rpi-ws281x-csharp][7] in C# was enough.
+Just following the examples from the GitHub repo of the [rpi-ws281x-csharp][7] in C# and porting it to
+F## was enough to get me going with what I needed.
 
-For example:
+For example, the following snippet is nearly the full implementation:
 
 ```fsharp
 open rpi_ws281x
@@ -266,7 +288,7 @@ let rec private executeCmd cmd =
     | SetLed p -> setLeds [p]
     | SetLeds ps -> setLeds ps
     | Display -> render ()
-    | SetAndDisplayLeds ps -> 
+    | SetAndDisplayLeds ps ->
         executeCmd (SetLeds ps)
         executeCmd Display
     | Sleep ms -> System.Threading.Thread.Sleep(ms)
@@ -278,9 +300,9 @@ let rec private executeCmd cmd =
 Just to illustrate composing a few programs, I'll post a two more, one simple traffic light I created
 and one I copied from the Demo app in the Python repository:
 
-#### Lights
+#### Traffic Lights
 
-This displays the traditional British traffic light sequence. First by creating lists for each of the
+This displays the traditional British traffic light sequence. First, by creating lists for each of the
 pixels and their associated colours (`createPixels` is a simple helper method).
 By appending the red and amber lists together, I can combine both red and amber pixels into a
 new list that will display red and amber at the same time.
@@ -326,7 +348,7 @@ same time, then sleep for a prescribed duration, before moving onto the next one
 
 #### Colour Wipe
 
-This program is ported directly from the Python sample:
+This program is ported directly from the Python sample with a slight F# twist:
 
 ```fsharp
 let colorWipe col =
@@ -345,19 +367,20 @@ let colorWipeProgram = [
 ```
 
 The `colorWipe` function sets each Led in turn to a specified colour, displays it, waits 50ms, and moves
-onto the next pixel. `List.collect` is used to flatten the list of lists of commands into just a list of commands.
+onto the next one. `List.collect` is used to flatten the list of lists of commands into just a list of commands.
 
 The `colorWipeProgram` repeats this 5 times, but each time uses a different colour in the wipe. Whilst it may look imperative, it is using list comprehensions and is still just building commands to execute later.
 
 ### Full project
 
-The entire project is on GitHub [here][12] if you want to have a look at the full source code and maybe
+The entire project is on GitHub [here][12], if you want to have a look at the full source code and maybe
 even get a [SnowPi][3] and try it out.
 
 ### Summing up
 
 The project started out fully imperative, and proved quite hard to implement correctly, especially as I wrote
-the mock first, and implemented the real SnowPi.
+the mock first, and implemented the real SnowPi. The mock was written with different semantics to the the
+real SnowPi interface, and had to be rewritten a few times.
 
 Once I moved to using Commands and got the right set of commands, I didn't have to worry about refactoring
 the programs as I tweaked implementation details.
