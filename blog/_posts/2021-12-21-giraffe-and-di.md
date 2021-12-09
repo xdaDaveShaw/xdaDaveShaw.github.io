@@ -36,41 +36,43 @@ I'm going to show...
 [Dev Containers][dc] are a feature of VS Code I was introduced to earlier this year and have since taken to using
 in all my projects.
 
-They allow you to have a self contained development environment in DockerFile, including all dependencies your
-application requires and extensions for Visual Studio code.
+They allow you to have a self contained development environment in DockerFile, including all the dependencies your
+application requires and extensions for Visual Studio Code.
 
 If you have ever looked at the amount of things you have installed for various projects and wondered where it all came
-from and if you still need it - Dev Containers remove all that. They also give you a very simple way to share things
-with your collaborators, no longer do I need a 10-step installation guide. Once you are setup for Dev Containers,
-getting everything setup to work on a repo is much simpler.
+from and if you still need it - Dev Containers solves that problem. They also give you a very simple way to share things
+with your collaborators, no longer do I need a 10-step installation guide in a Readme file. 
+Once you are setup for Dev Containers, getting going with a project that uses them is easy.
 
-This blog is a GitHub Pages Site, and to develop and test it locally I had to install Ruby and a bunch of Gems. Installing
-those on Windows is tricky, installing on WSL works, but if you rebuild or change machine, you are starting again.
-Now I use a Dev Container, and everything is ready to go whenever I clone the repo.
+This blog is a GitHub Pages Site, and to develop and test it locally I had to install Ruby and a bunch of Gems, and 
+Installing those on Windows is tricky at best.
+VS Code comes with some pre-defined Dev Container templates, so I just used the Jekyll one, and now I don't have to
+install anything on my PC.
 
 ### Dev Container for .NET
 
-To get started, I first check VS Code has the Remote Development Tools pack installed.
+To get started, you will need WSL2 and the [Remote Development Tools pack][rd] VS Code extension installed.
 
-Then it just a matter of launching VS Code from the Git Repo in my WSL2 instance:
+Then it just a matter of launching VS Code from in my WSL2 instance:
 
 ```sh
 cd ~/xmas-2021
 code .
 ```
-Then in the VS Code Command Palette I select **Remote Containers: Add Development Container Configuration Files...**
+
+Now in the VS Code **Command Palette** I select **Remote Containers: Add Development Container Configuration Files...**
 A quick search for "F#" helps get the extensions I need installed. In this case I just picked the defaults.
 
 Once the DockerFile was created I changed the `FROM` to use the standard .NET format that Microsoft uses (the F# template
 may have changed by the time you read this) to pull in the latest .NET 6 Bullseye base image.
 
-Before
+**Before**
 
 ```docker
 FROM mcr.microsoft.com/vscode/devcontainers/dotnet:0-5.0-focal
 ```
 
-After
+**After**
 
 ```docker
 # [Choice] .NET version: 6.0, 5.0, 3.1, 6.0-bullseye, 5.0-bullseye, 3.1-bullseye, 6.0-focal, 5.0-focal, 3.1-focal
@@ -78,7 +80,8 @@ ARG VARIANT=6.0-bullseye
 FROM mcr.microsoft.com/vscode/devcontainers/dotnet:0-${VARIANT}
 ```
 
-VS Code prompts me to reopen in the Dev Container, and will then build the docker file. Once complete, we're good to go.
+VS Code will then prompt to Repen in the Dev Container, selecting this will relaunch VS Code and build the docker file. 
+Once complete, we're good to go.
 
 ### Creating the Projects
 
@@ -117,7 +120,7 @@ dotnet run --project site/
 dotnet test
 ```
 
-Next I'm going to rip out most of the code from the Giraffe template, just to give a simpler site to play with.
+Next, I'm going to rip out most of the code from the Giraffe template, just to give a simpler site to play with.
 
 Excluding the `open`'s it is only a few lines:
 
@@ -154,7 +157,7 @@ let main args =
 
 I could have trimmed it further, but I'm going to use some of the constructs later.
 
-When run you can perform a `curl` against the site and get a "hello world" response.
+When run you can perform a `curl localhost:5000` against the site and get a "hello world" response.
 
 ### Testing
 
@@ -182,7 +185,6 @@ let createTestHost () =
 let ``First test`` () =
     task {
         use server = new TestServer(createTestHost())
-
         use msg = new HttpRequestMessage(HttpMethod.Get, "/")
 
         use client = server.CreateClient()
@@ -190,7 +192,6 @@ let ``First test`` () =
         let! content = response.Content.ReadAsStringAsync()
 
         let expected = "hello test"
-
         Assert.Equal(expected, content)
     }
 ```
@@ -200,9 +201,8 @@ However, you have now invoked your Server from your tests.
 
 ### Dependencies
 
-With this approach you can configure the site's dependencies how you like.
-
-As an example I'm going to show two different types of dependencies.
+With this approach you can configure the site's dependencies how you like, but as an example 
+I'm going to show two different types of dependencies:
 
 1. App Settings
 1. Service Lookup
@@ -251,7 +251,7 @@ If you run the tests now, you get "hello world 0" returned.
 
 However, if you `dotnet run` the site, and use `curl` you will see `hello world 100` returned.
 
-This proves the configuration is loaded and read, however, it isn't used by the tests - simply because the 
+This proves the configuration is loaded and read, however, it isn't used by the tests - because the 
 `appsettings.json` file isn't part of the tests. You could copy the file into the tests and that would solve the problem,
 but if you wanted different values for the tests you could create your own appsettings.json file for the tests
 
@@ -293,7 +293,7 @@ If you would like to use the same value from the config file in your tests you c
 ```fsharp
 let config = server.Services.GetService(typeof<IConfiguration>) :?> IConfiguration
 
-let expectedNumber = config.["MySite:MyValue"] |> int
+let expectedNumber = config["MySite:MyValue"] |> int
 
 let expected = sprintf "hello world %d" expectedNumber
 ```
@@ -303,7 +303,7 @@ let expected = sprintf "hello world %d" expectedNumber
 In F# it's nice to keep everything pure and functional, but sooner or later you will realise you need to interact with
 the outside world, and when testing from the outside like this, you may need to control those things.
 
-Here I'm going to show you the same approach you would use for a C# ASP.NET site - using the build in dependency
+Here I'm going to show you the same approach you would use for a C# ASP.NET site - using the built in dependency
 injection framework.
 
 ```fsharp
@@ -367,7 +367,15 @@ let expected = sprintf "hello world %d %d" expectedNumber luckyNumber
 
 And everything passes.
 
+## Conclusion
+
+TODO: MORE
+
+You can see the full source code for this blog post [here][gh].
+
  [adv]: https://sergeytihon.com/2021/10/18/f-advent-calendar-2021/
+ [rd]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
  [dc]: https://code.visualstudio.com/docs/remote/containers
  [bl]: https://github.com/xdaDaveShaw/xdaDaveShaw.github.io
  [sh]: https://blog.ploeh.dk/2021/01/25/self-hosted-integration-tests-in-aspnet/
+ [gh]: https://github.com/xdaDaveShaw/xmas-2021
