@@ -22,6 +22,10 @@ As per [this section](https://help.github.com/en/articles/setting-up-your-github
 bundle update github-pages
 ```
 
+## Google Analytics 4
+
+GA is used to monitor site usage. It's setup using Zaraz in Cloudflare.
+
 ## Thanks
 
 - [Nick Craver](https://github.com/NickCraver/nickcraver.github.com) whose transition to Jekyll inspired me to move my blog. I've borrowed a few things from Nick's source to get my blog working.
