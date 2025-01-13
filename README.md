@@ -7,7 +7,7 @@ It is rendered via Jekyll and hosted on [GitHub pages](https://xdadaveshaw.githu
 You can run the site locally by running the following in a bash terminal:
 
 ```bash
-./run.sh
+make run
 ```
 
 ### Prerequisites
@@ -19,7 +19,7 @@ These can be found on [GH Pages](https://help.github.com/en/articles/setting-up-
 As per [this section](https://help.github.com/en/articles/setting-up-your-github-pages-site-locally-with-jekyll#keeping-your-site-up-to-date-with-the-github-pages-gem) run:
 
 ```bash
-bundle update github-pages
+make update-bundle
 ```
 
 ## Google Analytics 4
