@@ -28,6 +28,16 @@
     line-height: 26px;
 }
 
+.site-light-dark {
+    float: right;
+    padding-left: 25px;
+
+    a {
+        text-decoration: none;
+        cursor: pointer;
+    }
+}
+
 .site-nav {
     margin-top: 10px;
     line-height: 40px;
@@ -36,6 +46,7 @@
     border-radius: 4px;
     padding-left: 10px;
     position: relative;
+
     .menu-icon {
         display: none;
     }
@@ -48,27 +59,32 @@
         &:not(:first-child) {
             margin-left: 10px;
         }
+
         &:not(:last-child) {
             padding-right: 10px;
             border-right: solid 1px black;
         }
     }
+
     .social-list {
         position: absolute;
         right: 4px;
         top: 3px;
+
         a {
             margin-left: 2px;
+
             &:hover {
                 svg {
-                    -webkit-filter: drop-shadow( 0px 0px 3px #fff);
-                    filter: drop-shadow( 0px 0px 3px #fff);
-                    }
-                text-decoration: none;
+                    -webkit-filter: drop-shadow(0px 0px 3px #fff);
+                    filter: drop-shadow(0px 0px 3px #fff);
                 }
+
+                text-decoration: none;
             }
         }
-    
+    }
+
     @include media-query($on-palm) {
         position: absolute;
         top: 9px;
@@ -88,7 +104,7 @@
             padding-top: 10px;
             text-align: center;
 
-            > svg {
+            >svg {
                 width: 18px;
                 height: 15px;
 
@@ -101,7 +117,7 @@
         .social-list {
             display: none;
         }
-        
+
         .site-nav-links {
             clear: both;
             display: none;
@@ -154,29 +170,30 @@
 
 .footer-col-1 {
     width: -webkit-calc(35% - (#{$spacing-unit} / 2));
-    width:         calc(35% - (#{$spacing-unit} / 2));
+    width: calc(35% - (#{$spacing-unit} / 2));
 }
 
 .footer-col-2 {
     width: -webkit-calc(20% - (#{$spacing-unit} / 2));
-    width:         calc(20% - (#{$spacing-unit} / 2));
+    width: calc(20% - (#{$spacing-unit} / 2));
 }
 
 .footer-col-3 {
     width: -webkit-calc(45% - (#{$spacing-unit} / 2));
-    width:         calc(45% - (#{$spacing-unit} / 2));
+    width: calc(45% - (#{$spacing-unit} / 2));
 }
 
 @include media-query($on-laptop) {
+
     .footer-col-1,
     .footer-col-2 {
         width: -webkit-calc(50% - (#{$spacing-unit} / 2));
-        width:         calc(50% - (#{$spacing-unit} / 2));
+        width: calc(50% - (#{$spacing-unit} / 2));
     }
 
     .footer-col-3 {
         width: -webkit-calc(100% - (#{$spacing-unit} / 2));
-        width:         calc(100% - (#{$spacing-unit} / 2));
+        width: calc(100% - (#{$spacing-unit} / 2));
     }
 }
 
@@ -184,7 +201,7 @@
     .footer-col {
         float: none;
         width: -webkit-calc(100% - (#{$spacing-unit} / 2));
-        width:         calc(100% - (#{$spacing-unit} / 2));
+        width: calc(100% - (#{$spacing-unit} / 2));
     }
 }
 
@@ -209,39 +226,47 @@
         margin-bottom: 0px;
     }
 
-    > li {
+    >li {
         margin-bottom: $spacing-unit * 1.5;
         border-bottom: 6px double $brand-color-dark;
     }
-     &.archive {
-        > ul {
+
+    &.archive {
+        >ul {
             list-style: none;
             margin-left: 0;
-            > li {
+
+            >li {
                 margin-bottom: 5px;
+
                 &.year {
                     margin-bottom: 10px;
+
                     &:not(:first-of-type) {
                         margin-top: 20px;
                     }
                 }
+
                 h2 {
                     margin-bottom: 0;
                 }
             }
         }
+
         .post-link {
             display: inline;
             font-size: 16px;
             font-weight: normal;
         }
+
         .post-meta {
             display: block;
             width: 100px;
             margin-top: $spacing-unit / 2;
             margin-bottom: 0;
         }
-        > h2 {
+
+        >h2 {
             margin-bottom: 0;
         }
     }
@@ -277,7 +302,8 @@
     }
 }
 
-.post-content, .page-content {
+.post-content,
+.page-content {
     margin-bottom: $spacing-unit;
 
     h2 {
@@ -304,6 +330,7 @@
         }
     }
 }
+
 .page-content {
     img {
         border: none;

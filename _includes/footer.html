@@ -2,10 +2,27 @@
   <div class="wrapper">
     <div class="footer-col-wrapper">
       <p>
-        Disclaimer: <br /> 
+        Disclaimer: <br />
         The opinions expressed herein are my own personal opinions and do not represent my employer's view in any way.
       </p>
       © Copyright {{ site.time | date: '%Y' }} - Dave Shaw
     </div>
   </div>
+
+  <script>
+
+    const iconDark = document.getElementById('icon-dark');
+    const iconLight = document.getElementById('icon-light');
+    const darkModeButton = document.getElementsByClassName('dark-mode-button')[0]
+    const darkModePreferred = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+    window.onload = function () {
+      checkDarkMode()
+    }
+
+    darkModeButton.onclick = function () {
+      toggleDarkMode()
+    }
+
+  </script>
 </footer>
