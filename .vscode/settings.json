@@ -1,18 +1,4 @@
 {
-    "spellchecker.language": "en_GB-ise",
-    "spellchecker.ignoreWordsList": [
-        "LINQ",
-        "LINQpad",
-        "taeguk"
-    ],
-    "spellchecker.documentTypes": [
-        "markdown",
-        "latex",
-        "plaintext"
-    ],
-    "spellchecker.ignoreRegExp": [],
-    "spellchecker.ignoreFileExtensions": [],
-    "spellchecker.checkInterval": 5000,
     "spellright.language": [
         "en"
     ],
