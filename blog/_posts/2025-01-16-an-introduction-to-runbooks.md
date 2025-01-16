@@ -32,11 +32,10 @@ During this time I've been looking into a lot of things in the DevOps and Site
 Reliability Engineering (SRE) space to ensure that the service I am responsible
 for does what I want it to.
 
-Whilst on a call with another team where they were having some issues one of their
-developers mentioned executing a "Runbook" to resolve a problem.
-
-I had previously only heard of Runbooks in the context of 
-[Microsoft System Centre][system-centre] and was amazed that teams were using 
+I happened to be on a call with another team, and one of their developers 
+mentioned executing a "runbook" to resolve a problem. I had previously only 
+heard of runbooks in the context of [Microsoft System Centre][system-centre]
+and was amazed that teams were using 
 similar approaches on an AWS native service that didn't use any Microsoft stuff.
 Hoping to bring some of these into my service, I reached out for more information,
 expecting some code or configuration for AWS, but instead I was told none of them
@@ -44,23 +43,30 @@ were automated, these were just documented processes that people followed.
 
 ## Understanding the value
 
-I was a little crest fallen. Then, I realised that this actually a really valuable
-thing to have. I started to look at the problems I might have with my service and
-what processes I might follow to resolve them. There were a few things I knew,
-but had never written down. How would someone else deal with it if I was on holiday?
-Would I remember what to do in 12 months time? These were all things I should put
-into a Runbook.
+I was a little crest fallen, anyone can write a manual process, it wasn't hard.
+
+But, I'd not done it! I had no processes documented for such situations.
+
+I began to realise that this could actually be a really valuable thing to have, 
+even if it was a manual process.
+I started to look at the problems I might have with my service and
+what steps I might take to resolve them. There were a few things I knew,
+but had never written down. "How would someone else deal with it if I was on holiday?",
+"Would I remember what to do in 12 months time?". These were all things I should put
+into a runbook.
 
 Now I needed somewhere to store them. We use Atlassian Confluence, but any shared
-team documentation would suffice, OneNote, Wikis on ADO or GitHub, Google Docs, 
-any shared place your team keeps their documentation. I first setup a parent page
-and then created my first Runbook. Anytime I think of a process that involves 
-changing production, I document it in a Runbook.
+team documentation would suffice: OneNote, ADO or GitHub Wikis, Google Docs, 
+any place your team keeps their documentation. 
+
+I setup a "parent" page with a quick intro and a table of contents, and then created
+my first runbook. Any process that involves changing production, I now document it
+in a runbook.
 
 Just because it is a manual process doesn't mean there's no automation. It may
 be as simple as updating a line in a JSON configuration file in your repository and
-performing a standard deployment, the point is to have a process documented when
-and how you do this so that it is clear.
+performing a standard deployment. The point is, to have a process documented telling
+you when and how you do it, and that it is clear.
 
 ## Structure
 
@@ -69,7 +75,7 @@ some metadata such as who owns it, when was it last updated, etc.
 
 ### Triggers
 
-Triggers explain when to invoke a Runbook. For example, it could be as simple as
+Triggers explain when to invoke a runbook. For example, it could be as simple as
 "If a server dies". Or something a bit more involved "If X job fails, check the 
 logs for A event, then follow process 1, otherwise follow process 2". I often nest
 runbooks so top level ones cover the overall scenario and child runbooks cover 
@@ -83,8 +89,8 @@ e.g.
 
 ### Process
 
-The process is a list of steps you need to follow. So far I've not had the need
-for flowcharts, just using bulleted lists is enough. I ensure each step is clear
+The process is a list of steps you need to follow. I've not needed to use flowcharts
+yet, just using bulleted lists is enough. I ensure each step is clear
 and has examples of things you expect to find.
 
 e.g.
@@ -101,7 +107,7 @@ To resolve the issue with the Server follow these steps:
 
 ## Types of runbooks
 
-There are two main types of Runbook I have created:
+There are two main types of runbook I have created:
 
 - Business as Usual (BAU)
 - There's a problem
@@ -134,7 +140,7 @@ Here are my best practices for runbooks.
 
 On a Friday afternoon, or that boring meeting you can't get out of, have a browse
 through and make sure they still make sense. When you write things you often do it from
-a position of understanding, and only in time, do you realise you have missed a vital
+a position of understanding, and only in time do you realise you have missed a vital
 instruction. "Reboot the server" may be a valid instruction, but if you are SSH'd
 into a Linux server, do you know the exact command to trigger an immediate reboot?
 
@@ -145,10 +151,11 @@ going to help you when you need it. If possible, test your process by following
 the steps, or better yet, have someone else follow it whilst you observe.
 
 However, sometimes you cannot test them if they require outside coordination.
+In these cases it is still better to have them than not (see "Prepare for the Worst").
 
 ### Prepare for the worst
 
-I have a number of Runbooks I have never run, for events that I hope never happen.
+I have a number of runbooks I have never run, for events that I hope never happen.
 These are for scenarios that are rare but would be a big problem if they triggered.
 By writing down the most likely steps needed to resolve the problem, I give myself
 a head start.
@@ -164,8 +171,8 @@ to create a runbook.
 Runbooks should be:
 
 - All in one place - don't have them all over the place, they should be easy to find.
-- All for the same purpose - runbooks are for production related processes, they 
-don't explain how to setup a new laptop.
+- All for the same purpose - runbooks are for production related processes - they 
+don't explain how you setup a new laptop.
 - Focused - Each runbook should be one trigger that explains if this need running,
 and a process that explains what to do. Create nested runbooks if needed.
 
