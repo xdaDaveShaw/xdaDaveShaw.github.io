@@ -4,7 +4,7 @@ title: About me
 permalink: /about/
 ---
 
-I work as a Lead Developer working on Healthcare Software for over 20 years.
+Lead Developer working on Healthcare Software for over 20 years.
 
 I've worked in [Micronetics Standard MUMPS 4 (MSM)][msm], [Delphi 6][delphi], then C#, WinForms, and Microsoft SQL 
 Server.
