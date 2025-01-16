@@ -20,6 +20,5 @@
         "markdown",
         "latex",
         "plaintext"
-    ],
-    "editor.formatOnSave": true
+    ]
 }
