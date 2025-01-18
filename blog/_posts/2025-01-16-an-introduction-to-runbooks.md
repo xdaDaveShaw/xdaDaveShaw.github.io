@@ -10,14 +10,15 @@ categories:
 ---
 
 > It has been a long time since I've written anything just due to how busy I've
-> been. I have a few articles planned, and hopefully can get back to writing.
+> been. I have a few articles planned, and hopefully can get back to writing
+> at a regular cadence.
 
-I'm going to take a look at runbooks, I'll be covering
+I'm going to take a look at runbooks, I'll be covering:
 
 - What is a Runbook?
-- How do you create them?
-- How do you use them?
-- Should you use them?
+- When should you create them?
+- How do you organise them?
+- What should be in them?
 
 ----
 
@@ -25,61 +26,88 @@ I'm going to take a look at runbooks, I'll be covering
 
 I've been working for the last two years on transitioning a service from running
 somewhere deep inside a data centre, where it was managed by an Ops Team and 
-updates were scheduled through a release management team, to running in AWS where
-the development team manage, monitor and regularly update it.
+updates were scheduled through a Release Management team, to running in AWS where
+the development team deploy, manage, monitor and update it.
 
 During this time I've been looking into a lot of things in the DevOps and Site
 Reliability Engineering (SRE) space to ensure that the service I am responsible
-for does what I want it to.
+is up and running at all times.
 
-I happened to be on a call with another team, and one of their developers 
-mentioned executing a "runbook" to resolve a problem. I had previously only 
-heard of runbooks in the context of [Microsoft System Centre][system-centre]
-and was amazed that teams were using 
-similar approaches on an AWS native service that didn't use any Microsoft stuff.
+Whilst on a call someone mentioned mentioned "executing a runbook" to resolve a
+problem. I had previously only heard of runbooks in the context of 
+[Microsoft System Centre][system-centre] and was amazed that teams were using 
+similar approaches on an AWS native service without any Microsoft stuff.
 Hoping to bring some of these into my service, I reached out for more information,
 expecting some code or configuration for AWS, but instead I was told none of them
 were automated, these were just documented processes that people followed.
 
+<figure>
+  <img src="{{ site.contenturl }}runbook.png" alt="Three ring binder"/>
+  <figcaption>
+    Image by <a href="https://www.flickr.com/photos/jkfid/">jkfid</a> from 
+    <a href="https://www.flickr.com/photos/jkfid/4333767484">flickr</a> -
+    Attribution (CC BY 2.0)
+  </figcaption>
+</figure>
+
 ## Understanding the value
 
-I was a little crest fallen, anyone can write a manual process, it wasn't hard.
+I was a little crest fallen, "anyone can write a manual process, it wasn't hard",
+I thought.
 
-But, I'd not done it! I had no processes documented for such situations.
+But, I'd not done it! 
 
-I began to realise that this could actually be a really valuable thing to have, 
-even if it was a manual process.
+I had no processes documented for such situations!
+
 I started to look at the problems I might have with my service and
 what steps I might take to resolve them. There were a few things I knew,
-but had never written down. "How would someone else deal with it if I was on holiday?",
+but had never written down. 
+"How would someone else deal with it if I was on holiday?",
 "Would I remember what to do in 12 months time?". These were all things I should put
 into a runbook.
 
-Now I needed somewhere to store them. We use Atlassian Confluence, but any shared
+Now, I needed somewhere to store them. We use Atlassian Confluence, but any shared
 team documentation would suffice: OneNote, ADO or GitHub Wikis, Google Docs, 
-any place your team keeps their documentation. 
+any place your team keeps their documentation and can easily collaborate. 
 
-I setup a "parent" page with a quick intro and a table of contents, and then created
-my first runbook. Any process that involves changing production, I now document it
-in a runbook.
+I setup a "parent" page for "Runbooks" with a quick intro and a table of contents,
+and then created my first runbook.
 
 Just because it is a manual process doesn't mean there's no automation. It may
 be as simple as updating a line in a JSON configuration file in your repository and
 performing a standard deployment. The point is, to have a process documented telling
 you when and how you do it, and that it is clear.
 
+## When to create one
+
+I only create runbooks for processes that relate to production systems and things
+I don't do every day.
+
+**Good candidates**: Servers dying, certificates rotating, overnight jobs failing, etc.
+
+**Poor candidates**: How to setup a development laptop, how to perform a release -
+these **are** documented, but they don't meet the bar for creating a runbook - 
+put them in another section.
+
+If you don't set the bar high, you have processes for anything and everything, and
+managing them becomes onerous. Keeping them focused means you have a small selection
+of procedures that cover the most important processes.
+
 ## Structure
 
-A runbook has a simple structure. There is a Trigger and a Process, but I also have
+My runbooks have a simple structure. There is a Trigger and a Process, but I also have
 some metadata such as who owns it, when was it last updated, etc.
+
+Sometimes I will maintain a log of when it was last run, for example, certificate
+rotation has a log of when it was rotated, and when it will next expire.
 
 ### Triggers
 
 Triggers explain when to invoke a runbook. For example, it could be as simple as
 "If a server dies". Or something a bit more involved "If X job fails, check the 
-logs for A event, then follow process 1, otherwise follow process 2". I often nest
-runbooks so top level ones cover the overall scenario and child runbooks cover 
-different solutions to the same problem.
+logs for A event, then follow process 1, otherwise follow process 2". I will nest
+runbooks so top level ones cover a scenario and child runbooks cover 
+different solutions to the same overall problem.
 
 e.g.
 
@@ -101,8 +129,8 @@ To resolve the issue with the Server follow these steps:
    1. Start, Run, cmd.exe
    1. Type `ipconfig` and press Enter
    1. Look for `IPv4 Address. . . . . . . . . . . : 192.168.0.1` 
-   1. If there is more than one `IPv4 Address` you want the one starting `192.168.0.`
-1. Enter the server IP from step `#2` into the box labelled "Server IP"
+      1. If there is more than one `IPv4 Address` you want the one starting `192.168.0.`
+1. Enter the server IP from step `#3` into the box labelled "Server IP"
 1. Etc.
 
 ## Types of runbooks
@@ -131,6 +159,61 @@ increase, or an overnight process doesn't run.
 The trigger should be some alert from your monitoring solution. The process is
 a list of steps to identify what has gone wrong and what needs to be done to 
 remedy the problem.
+
+## Examples
+
+Above I've mentioned the structure of the pages and the structure of a runbook.
+I can't replicate my runbooks, but I'll show some hypothetical examples.
+
+### Example pages
+
+- Production Runbooks
+  - Runbook - Server Dies
+  - Runbook - Job X Fails
+    - Runbook - X.1 Failed
+    - Runbook - X.2 Failed
+  - Runbook - [BAU] Rotate SSH keys
+- Architecture Documents
+- Project Documents
+
+----
+
+*An example of the structure of a team's documentation site*
+
+### Example runbook
+
+| **Name** | Server Dies |
+| **Description** | Process to follow when a server dies |
+| **Date** | 15-Jan-2025 |
+| **Version** | 2 |
+| **Owner** | Dave |
+
+**Trigger**
+
+This runbook is to be executed when a email alert is received informing you a
+server has died, or if you notice a server isn't responding.
+
+> NOTE: if this is because of maintenance, you don't need to do anything as the
+> engineer will restart it when they are done.
+
+**Process**
+
+1. Check the email alert for the name of the server (it will be after the heading
+**Server:** - e.g. **Server**: sv01)
+1. Run the "Restart Server Tool"
+1. Enter the name of the server from step `#1` into the box labelled "Server to restart"
+1. Press the "Restart" button. 
+1. Read the logs looking for "Server xx online" (where xx is the server name).
+  1. If this doesn't appear in 10 minutes, raise an incident (link here).
+
+**References**
+
+- Documentation for "Restart Server Tool"
+- Process for Raising an Incident
+
+----
+
+*An example, to show what I might have in a runbook.*
 
 ## Best practices
 
@@ -184,10 +267,11 @@ issues.
 
 ## Road to automation
 
-I said I was crest fallen when I found out these were manual processes, and not
-some amazing feat of automation, so why am I espousing the values of manual runbooks?
+Above, I said I was "crest fallen" when I found out these were manual processes, and not
+some amazing feat of automation, so why am I espousing the values of manual runbooks
+and not trying to just automated them all?
 
-Well, [Perfect is the enemy of good][perfect].
+Simple. [Perfect is the enemy of good][perfect].
 
 If I waited until I could automate every process, I wouldn't have any runbooks yet.
 
@@ -204,12 +288,15 @@ the right approach.
 
 ## Conclusion
 
-Since I started adding runbooks to my service, I feel much more secure in the
-knowledge that if I need to perform a process involving production, it is documented
-both for myself and my team.
-
 The lack of automation was a surprise at first, but once I got over myself, I
-realise how beneficial manual runbooks are.
+realise how beneficial manual runbooks can be. It's relatively simple to set them
+up using the tools you already have, and then if something goes wrong, you are 
+prepared.
+
+These sort of things may be common in Ops led services, but where the development
+team owns and operates them, this level of maturity is definitely still needed.
+[DevOps][devops] must include the benefits of Development and Operations.
 
  [system-centre]: https://learn.microsoft.com/en-us/system-center/orchestrator/design-and-build-runbooks?view=sc-orch-2025
  [perfect]: https://en.wikipedia.org/wiki/Perfect_is_the_enemy_of_good
+ [devops]: https://www.donovanbrown.com/post/what-is-devops

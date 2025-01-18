@@ -2,7 +2,7 @@
  * Reset some basic elements
  */
 body, h1, h2, h3, h4, h5, h6,
-p, blockquote, pre, hr,
+p, blockquote, pre,
 dl, dd, ol, ul, figure {
     margin: 0;
     padding: 0;
@@ -22,15 +22,18 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
-
-
 /**
  * Set `margin-bottom` to maintain vertical rhythm
  */
 h1, h2, h3, h4, h5, h6,
-p, blockquote, pre, hr,
-ul, ol, dl, figure
+p, blockquote, pre, 
+ol, dl, figure
 %vertical-rhythm {
+    margin-bottom: $spacing-unit / 2;
+}
+
+hr {
+    margin-top: $spacing-unit / 2;
     margin-bottom: $spacing-unit / 2;
 }
 
@@ -56,6 +59,8 @@ figure > img {
 
 figcaption {
     font-size: $small-font-size;
+    text-align: center;
+    font-style: italic;
 }
 
 
