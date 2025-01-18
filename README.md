@@ -22,6 +22,14 @@ As per [this section](https://help.github.com/en/articles/setting-up-your-github
 make update-bundle
 ```
 
+### Compressing Images
+
+To compress the PNG images to optimise them for the web:
+
+```bash
+make compress-images
+```
+
 ## Google Analytics 4
 
 GA is used to monitor site usage. It's setup using Zaraz in Cloudflare.

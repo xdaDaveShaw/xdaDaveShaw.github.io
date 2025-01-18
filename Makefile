@@ -11,3 +11,6 @@ run: ## Run the website locally
 
 update-bundle: ## Update the GH pages gem bundles
 	@./update-bundle.sh
+
+compress-images: ## Compress images
+	@./compress-images.sh
