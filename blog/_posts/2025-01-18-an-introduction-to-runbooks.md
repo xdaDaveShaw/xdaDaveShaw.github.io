@@ -3,8 +3,8 @@ layout: post
 status: publish
 published: true
 title: An Introduction to runbooks
-date: '2021-12-22 09:00:00 +0000'
-date_gmt: '2021-12-22 09:00:00 +0000'
+date: '2025-01-18 20:27:00 +0000'
+date_gmt: '2025-01-18 20:27:00 +0000'
 categories:
 - DevOps
 ---
