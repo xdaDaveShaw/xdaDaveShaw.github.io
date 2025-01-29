@@ -8,11 +8,11 @@
         <meta name="twitter:site" content="@xdaDaveShaw">
         <meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
         <meta name="twitter:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | normalize_whitespace | truncate: 160 }}{% else %}{{ site.meta_description }}{% endif %}">
-        <meta name="twitter:image" content="{{site.url}}/images/site-icon.png">
+        <meta name="twitter:image" content="{% if page.image %}{{ page.image }} {% else %} {{site.url}}/images/site-icon.png {% endif %}">
         
         <meta name="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
         <meta name="og:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | normalize_whitespace | truncate: 160 }}{% else %}{{ site.meta_description }}{% endif %}">
-        <meta name="og:image" content="{{site.url}}/images/site-icon.png">
+        <meta name="og:image" content="{% if page.image %}{{ page.image }} {% else %} {{site.url}}/images/site-icon.png {% endif %}">
         
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -5,6 +5,7 @@ published: true
 title: Using Dependabot to Maintain Docker Image Dependencies
 date: '2025-01-29 20:27:00 +0000'
 date_gmt: '2025-01-29 20:27:00 +0000'
+image: https://imgs.xkcd.com/comics/dependency.png
 categories:
 - DevOps
 - GitHub
