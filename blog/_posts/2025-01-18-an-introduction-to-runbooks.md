@@ -2,7 +2,7 @@
 layout: post
 status: publish
 published: true
-title: An Introduction to runbooks
+title: An Introduction to Runbooks
 date: '2025-01-18 20:27:00 +0000'
 date_gmt: '2025-01-18 20:27:00 +0000'
 categories:
