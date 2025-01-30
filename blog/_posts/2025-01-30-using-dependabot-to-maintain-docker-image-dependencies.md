@@ -3,21 +3,20 @@ layout: post
 status: publish
 published: true
 title: Using Dependabot to Maintain Docker Image Dependencies
-date: '2025-01-29 20:27:00 +0000'
-date_gmt: '2025-01-29 20:27:00 +0000'
+date: '2025-01-30 21:54:00 +0000'
+date_gmt: '2025-01-30 21:54:00 +0000'
 image: https://imgs.xkcd.com/comics/dependency.png
 categories:
 - DevOps
 - GitHub
 ---
 
-One of the common challenges in modern software development, is keeping on 
+One of the challenges in modern software development is keeping on 
 top of your dependencies. 
 
-There are many tools out there to help you wrangle your dependencies; if you use GitHub
-you most likely have come across [Dependabot][gh-intro]. This post isn't an introduction to Dependabot. 
-
-It presents a way to 
+There are many tools out there to help you wrangle your dependencies; if you use GitHub,
+you have most likely come across [Dependabot][gh-intro]. This post isn't an 
+introduction to Dependabot. It presents a way to 
 automatically maintain Docker image versions referenced by your infrastructure,
 without giving up control of when those updates happen.
 
@@ -59,8 +58,8 @@ WORKDIR /app
 # COPY files/install things, etc
 ```
 
-I can then review the Pull Request, read the release notes, check for any issues, 
-and accept the new version of Ubuntu, if all is well.
+I can review the Pull Request, read the release notes, check for any issues, 
+and, if all is well, accept the new version of Ubuntu.
 
 This all works out of the box, but having a clear understanding of this will help
 me explain the solution later.
@@ -79,13 +78,13 @@ version.
 
 For example, an abridged deployment might be:
 
-1. Container Service Running `MyApp:v1`
-1. Build and Publish `MyApp:v2` (e.g. docker build and push)
-1. Instruct Container Service to run `MyApp:v2` (e.g. update via terraform)
-1. Container Service Running `MyApp:v2`
+1. Container service running `MyApp:v1`
+1. Build and publish `MyApp:v2` (e.g. docker build and push)
+1. Instruct container service to run `MyApp:v2` (e.g. update via terraform)
+1. Container service running `MyApp:v2`
 
-However, there are cases where you are running some public image in your Container
-Service. It might be [nginx][nginx] acting as a reverse proxy, or 
+However, there are cases where you are running some public image in your container
+service. It might be [nginx][nginx] acting as a reverse proxy, or 
 [fluentbit][fluentbit] in a sidecar configuration to provide advanced logging
 capabilities.
 
@@ -131,7 +130,7 @@ version number.
 
 The benefit of Dependabot is that it just tells you when there's a new version. 
 Wouldn't it be good if you could still reference a specific version tag, but also
-have Dependabot tell you when there is an update available via a Pull Request.
+have Dependabot tell you when there is an update available via a Pull Request?
 
 ## The Solution
 
@@ -171,7 +170,7 @@ This will be a "Fake DockerFile" who's only purpose is to be monitored and updat
 by Dependabot. You don't need to do anything else with it, but adding some comments
 or a readme file will help.
 
-If you have other images, add another folder in `./third-party-docker-images/`
+If you have other images, add another folder in `./third-party-docker-images/whatever`
 with another `DockerFile`.
 
 ### Configure Dependabot
@@ -197,7 +196,7 @@ version of `nginx`.
 
 ### Wiring the Version
 
-The next step is to get the image tag from the DockerFile so that you can 
+The final step is to get the image tag from the DockerFile so that you can 
 reference it in your infrastructure as code.
 
 Use whatever scripting language you are comfortable to read the file and
